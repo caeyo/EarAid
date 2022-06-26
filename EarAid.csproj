@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net452</TargetFrameworks>
+    <AssemblyName>EarAid</AssemblyName>
+    <RootNamespace>Celeste.Mod.EarAid</RootNamespace>
+    <LangVersion>10.0</LangVersion>
+    <OutputPath>C:\Program Files (x86)\Steam\steamapps\common\Celeste\Mods\EarAid</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CelesteGamePath Condition="'$(CELESTEGAMEPATH)' == ''">..\..</CelesteGamePath>
+  </PropertyGroup>
+
+  <!--Disable "Copy Local" for all references-->
+  <ItemDefinitionGroup>
+    <PackageReference PrivateAssets="all" ExcludeAssets="runtime" />
+    <Reference Private="false" />
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <Reference Include="Celeste" HintPath="$(CELESTEGAMEPATH)\Celeste.exe" />
+    <Reference Include="FNA" HintPath="$(CELESTEGAMEPATH)\FNA.dll" />
+    <Reference Include="MMHOOK_Celeste" HintPath="$(CELESTEGAMEPATH)\MMHOOK_Celeste.dll" />
+    <Reference Include="Mono.Cecil" HintPath="$(CELESTEGAMEPATH)\Mono.Cecil.dll" />
+    <Reference Include="MonoMod.RuntimeDetour" HintPath="$(CELESTEGAMEPATH)\MonoMod.RuntimeDetour.dll" />
+    <Reference Include="MonoMod.Utils" HintPath="$(CELESTEGAMEPATH)\MonoMod.Utils.dll" />
+    <Reference Include="System.ValueTuple" HintPath="$(CELESTEGAMEPATH)\System.ValueTuple.dll" />
+    <Reference Include="YamlDotNet" HintPath="$(CELESTEGAMEPATH)\YamlDotNet.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="everest.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+	<Content Include="Dialog\**">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+  </ItemGroup>
+
+</Project>
