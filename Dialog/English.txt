@@ -46,3 +46,6 @@ EAR_AID_LIGHTNING_STRIKE_SUBTEXT=	The crashing sound used when lightning strikes
 
 EAR_AID_GOLDEN_DEATH=				Golden Death
 EAR_AID_GOLDEN_DEATH_SUBTEXT=		The death gong sound used when the player dies with a golden berry.
+
+EAR_AID_FIREBALL_IDLE=				Fireball
+EAR_AID_FIREBALL_IDLE_SUBTEXT=		The sound used when a fireball is present.

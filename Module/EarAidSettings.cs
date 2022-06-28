@@ -7,18 +7,11 @@ namespace Celeste.Mod.EarAid.Module
     public class EarAidSettings : EverestModuleSettings
     {
         public bool Enabled { get; set; } = true;
-
-        [SettingSubText(DialogIds.MenuRidgeWindSubtext)]
         public int RidgeWind { get; set; } = 10;
-
-        [SettingSubText(DialogIds.MenuFarewellWindSubtext)]
         public int FarewellWind { get; set; } = 10;
-
-        [SettingSubText(DialogIds.MenuLightningStrikeSubtext)]
         public int LightningStrike { get; set; } = 10;
-
-        [SettingSubText(DialogIds.MenuGoldenDeathSubtext)]
         public int GoldenDeath { get; set; } = 10;
+        public int FireballIdle { get; set; } = 10;
 
         private List<TextMenu.Item> options = new();
 
@@ -98,6 +91,19 @@ namespace Celeste.Mod.EarAid.Module
             item.Disabled = !Enabled;
             menu.Add(item);
             item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuGoldenDeathSubtext));
+            options.Add(item);
+        }
+
+        public void CreateFireballIdleEntry(TextMenu menu, bool inGame)
+        {
+            TextMenu.Item item = new TextMenuExt.IntSlider(Dialog.Clean(DialogIds.MenuFireballIdle), 0, 10, FireballIdle).Change(value =>
+            {
+                FireballIdle = value;
+                Mixer.MixExistingInstances(EventConsts.FireballIdle, value);
+            });
+            item.Disabled = !Enabled;
+            menu.Add(item);
+            item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuFireballIdleSubtext));
             options.Add(item);
         }
     }

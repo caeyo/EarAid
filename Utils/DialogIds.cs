@@ -17,5 +17,8 @@
 
         public const string MenuGoldenDeath = "EAR_AID_GOLDEN_DEATH";
         public const string MenuGoldenDeathSubtext = "EAR_AID_GOLDEN_DEATH_SUBTEXT";
+
+        public const string MenuFireballIdle = "EAR_AID_FIREBALL_IDLE";
+        public const string MenuFireballIdleSubtext = "EAR_AID_FIREBALL_IDLE_SUBTEXT";
     }
 }
