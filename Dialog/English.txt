@@ -41,11 +41,11 @@ EAR_AID_RIDGE_WIND_SUBTEXT=			The wind ambience used in Golden Ridge.
 EAR_AID_FAREWELL_WIND=				Farewell Wind
 EAR_AID_FAREWELL_WIND_SUBTEXT=		The wind ambience used in Farewell.
 
-EAR_AID_LIGHTNING_STRIKE=			Lightning Strike
-EAR_AID_LIGHTNING_STRIKE_SUBTEXT=	The crashing sound used when lightning strikes occur.
-
 EAR_AID_GOLDEN_DEATH=				Golden Death
 EAR_AID_GOLDEN_DEATH_SUBTEXT=		The death gong sound used when the player dies with a golden berry.
+
+EAR_AID_LIGHTNING_STRIKE=			Lightning Strike
+EAR_AID_LIGHTNING_STRIKE_SUBTEXT=	The crashing sound used when lightning strikes occur.
 
 EAR_AID_FIREBALL_IDLE=				Fireball
 EAR_AID_FIREBALL_IDLE_SUBTEXT=		The sound used when a fireball is present.
