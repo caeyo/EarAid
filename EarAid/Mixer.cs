@@ -2,44 +2,43 @@
 using FMOD;
 using FMOD.Studio;
 
-namespace Celeste.Mod.EarAid
+namespace Celeste.Mod.EarAid;
+
+public static class Mixer
 {
-    public static class Mixer
+    public static void Load()
     {
-        public static void Load()
+        On.FMOD.Studio.EventDescription.createInstance += MixNewInstances;
+    }
+
+    public static void Unload()
+    {
+        On.FMOD.Studio.EventDescription.createInstance -= MixNewInstances;
+    }
+
+    private static RESULT MixNewInstances(On.FMOD.Studio.EventDescription.orig_createInstance orig, EventDescription self, out EventInstance instance)
+    {
+        RESULT result = orig(self, out instance);
+        string path = Audio.GetEventName(self);
+
+        if (!string.IsNullOrEmpty(path) && EventConsts.Paths.Contains(path))
         {
-            On.FMOD.Studio.EventDescription.createInstance += MixNewInstances;
+            instance?.setVolume(EventConsts.PathToSetting(path) / 10f);
         }
 
-        public static void Unload()
-        {
-            On.FMOD.Studio.EventDescription.createInstance -= MixNewInstances;
-        }
+        return result;
+    }
 
-        private static RESULT MixNewInstances(On.FMOD.Studio.EventDescription.orig_createInstance orig, EventDescription self, out EventInstance instance)
-        {
-            RESULT result = orig(self, out instance);
-            string path = Audio.GetEventName(self);
+    public static void MixExistingInstances(string path, int volume)
+    {
+        EventDescription eventDesc = Audio.GetEventDescription(path);
 
-            if (!string.IsNullOrEmpty(path) && EventConsts.Paths.Contains(path))
+        if (eventDesc?.getInstanceList(out EventInstance[] instanceArray) is RESULT.OK)
+        {
+            eventDesc.getInstanceCount(out int instanceCount);
+            for (int i = 0; i < instanceCount; i++)
             {
-                instance?.setVolume(EventConsts.PathToSetting(path) / 10f);
-            }
-
-            return result;
-        }
-
-        public static void MixExistingInstances(string path, int volume)
-        {
-            EventDescription eventDesc = Audio.GetEventDescription(path);
-
-            if (eventDesc?.getInstanceList(out EventInstance[] instanceArray) is RESULT.OK)
-            {
-                eventDesc.getInstanceCount(out int instanceCount);
-                for (int i = 0; i < instanceCount; i++)
-                {
-                    instanceArray[i].setVolume(volume / 10f);
-                }
+                instanceArray[i].setVolume(volume / 10f);
             }
         }
     }
