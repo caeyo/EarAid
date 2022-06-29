@@ -33,5 +33,4 @@ public class EarAidModule : EverestModule
             Loaded = false;
         }
     }
-
 }
