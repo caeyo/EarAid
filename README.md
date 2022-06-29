@@ -1,5 +1,5 @@
 # EarAid
-A Celeste mod allowing the volume of certain (obnoxious) sounds to be adjusted. sorry kevin
+A Celeste mod allowing the volume of certain (generally obnoxious) sounds to be adjusted individually. sorry kevin
 
 Sounds currently supported:
 - *Ridge Wind:* The wind ambience used in Golden Ridge.
