@@ -265,11 +265,6 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
     private float Alpha;
     private float uneasedAlpha;
 
-    public void SetFadeVisible(int value)   
-    {
-        FadeVisible = EarAidModule.Settings.Enabled && (!EarAidModule.Settings.HideUnusedOptions || value < 10);
-    }
-
     public EaseInVolumeSlider(string label, TextMenu menu, int value) : base(label, 0, 10, value)
     {
         containingMenu = menu;
@@ -281,6 +276,11 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
         // Will remove option if scrolled to 10 and then cursor moves off while HideUnusedOptions
         // May not be necessary if people cry about it
         OnLeave = () => SetFadeVisible(Index);
+    }
+
+    public void SetFadeVisible(int value)
+    {
+        FadeVisible = EarAidModule.Settings.Enabled && (!EarAidModule.Settings.HideUnusedOptions || value < 10);
     }
 
     public override float Height() => MathHelper.Lerp(-containingMenu.ItemSpacing, base.Height(), Alpha);
