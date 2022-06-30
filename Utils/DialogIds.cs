@@ -33,6 +33,9 @@ public static class DialogIds
     public const string MenuOshiroBoss = "EAR_AID_OSHIRO_BOSS";
     public const string MenuOshiroBossSubtext = "EAR_AID_OSHIRO_BOSS_SUBTEXT";
 
+    public const string MenuTouchSwitchComplete = "EAR_AID_TOUCH_SWITCH_COMPLETE";
+    public const string MenuTouchSwitchCompleteSubtext = "EAR_AID_TOUCH_SWITCH_COMPLETE_SUBTEXT";
+
     public const string MenuFarewellWind = "EAR_AID_FAREWELL_WIND";
     public const string MenuFarewellWindSubtext = "EAR_AID_FAREWELL_WIND_SUBTEXT";
 

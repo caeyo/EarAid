@@ -21,6 +21,7 @@ public class EarAidSettings : EverestModuleSettings
     public int LightningStrike { get; set; } = 10;
     public int MoveBlock { get; set; } = 10;
     public int OshiroBoss { get; set; } = 10;
+    public int TouchSwitchComplete { get; set; } = 10;
     public int FarewellWind { get; set; } = 10;
     public int RidgeWind { get; set; } = 10;
     public int ZipMover { get; set; } = 10;
@@ -187,6 +188,20 @@ public class EarAidSettings : EverestModuleSettings
         });
         menu.Add(item);
         item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuOshiroBossSubtext));
+        options.Add(item);
+    }
+
+    public void CreateTouchSwitchCompleteEntry(TextMenu menu, bool inGame)
+    {
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuTouchSwitchComplete), menu, TouchSwitchComplete).Change(value =>
+        {
+            TouchSwitchComplete = value;
+            Mixer.MixExistingInstances(EventConsts.TouchSwitchLast, value);
+            Mixer.MixExistingInstances(EventConsts.TouchSwitchLastCutoff, value);
+            Mixer.MixExistingInstances(EventConsts.TouchSwitchLastOneshot, value);
+        });
+        menu.Add(item);
+        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuTouchSwitchCompleteSubtext));
         options.Add(item);
     }
 

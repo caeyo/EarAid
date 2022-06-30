@@ -35,6 +35,10 @@ public static class EventConsts
     public const string OshiroBossPrecharge = "event:/char/oshiro/boss_precharge";
     public const string OshiroBossReform = "event:/char/oshiro/boss_reform";
 
+    public const string TouchSwitchLast = "event:/game/general/touchswitch_last";
+    public const string TouchSwitchLastCutoff = "event:/game/general/touchswitch_last_cutoff";
+    public const string TouchSwitchLastOneshot = "event:/game/general/touchswitch_last_oneshot";
+
     public const string FarewellWind = "event:/new_content/env/10_voidspiral";
 
     public const string RidgeWind = "event:/env/amb/04_main";
@@ -66,6 +70,9 @@ public static class EventConsts
         OshiroBossEnterScreen,
         OshiroBossPrecharge,
         OshiroBossReform,
+        TouchSwitchLast,
+        TouchSwitchLastCutoff,
+        TouchSwitchLastOneshot,
         FarewellWind,
         RidgeWind,
         CityZipMover,
@@ -82,6 +89,7 @@ public static class EventConsts
         LightningStrike => EarAidModule.Settings.LightningStrike,
         MoveBlockActivate or MoveBlockBreak or MoveBlockMove or MoveBlockReappear or MoveBlockReform or MoveBlockDepress or MoveBlockRelease => EarAidModule.Settings.MoveBlock,
         OshiroBossCharge or OshiroBossEnterScreen or OshiroBossPrecharge or OshiroBossReform => EarAidModule.Settings.OshiroBoss,
+        TouchSwitchLast or TouchSwitchLastCutoff or TouchSwitchLastOneshot => EarAidModule.Settings.TouchSwitchComplete,
         FarewellWind => EarAidModule.Settings.FarewellWind,
         RidgeWind => EarAidModule.Settings.RidgeWind,
         CityZipMover or FarewellZipMover => EarAidModule.Settings.ZipMover,

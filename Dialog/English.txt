@@ -62,6 +62,9 @@ EAR_AID_MOVE_BLOCK_SUBTEXT=				The sounds used by move blocks.
 EAR_AID_OSHIRO_BOSS=					Oshiro Boss
 EAR_AID_OSHIRO_BOSS_SUBTEXT=			The sounds used when an Oshiro boss is active.
 
+EAR_AID_TOUCH_SWITCH_COMPLETE=			Touch Switch Complete
+EAR_AID_TOUCH_SWITCH_COMPLETE_SUBTEXT=	The sound used when the final touch switch is activated. Ding dong!
+
 EAR_AID_FAREWELL_WIND=					Farewell Wind
 EAR_AID_FAREWELL_WIND_SUBTEXT=			The wind ambience used in Farewell.
 
