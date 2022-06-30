@@ -7,17 +7,30 @@ public static class EventConsts
 {
     public const string Death = "event:/char/madeline/death";
     public const string PreDeath = "event:/char/madeline/predeath";
+
     public const string GoldenDeath = "event:/new_content/char/madeline/death_golden";
+
     public const string DreamBlockEnter = "event:/char/madeline/dreamblock_enter";
     public const string DreamBlockExit = "event:/char/madeline/dreamblock_exit";
     public const string DreamBlockTravel = "event:/char/madeline/dreamblock_travel";
+
     public const string FireballIdle = "event:/env/local/09_core/fireballs_idle";
+
     public const string BlueHeartCollect = "event:/game/general/crystalheart_blue_get";
     public const string RedHeartCollect = "event:/game/general/crystalheart_red_get";
     public const string GoldHeartCollect = "event:/game/general/crystalheart_gold_get";
+
+    public const string OshiroBossCharge = "event:/char/oshiro/boss_charge";
+    public const string OshiroBossEnterScreen = "event:/char/oshiro/boss_enter_screen";
+    public const string OshiroBossPrecharge = "event:/char/oshiro/boss_precharge";
+    public const string OshiroBossReform = "event:/char/oshiro/boss_reform";
+
     public const string LightningStrike = "event:/new_content/game/10_farewell/lightning_strike";
+
     public const string FarewellWind = "event:/new_content/env/10_voidspiral";
+
     public const string RidgeWind = "event:/env/amb/04_main";
+
     public const string CityZipMover = "event:/game/01_forsaken_city/zip_mover";
     public const string FarewellZipMover = "event:/new_content/game/10_farewell/zip_mover";
 
@@ -33,6 +46,10 @@ public static class EventConsts
         BlueHeartCollect,
         RedHeartCollect,
         GoldHeartCollect,
+        OshiroBossCharge,
+        OshiroBossEnterScreen,
+        OshiroBossPrecharge,
+        OshiroBossReform,
         LightningStrike,
         FarewellWind,
         RidgeWind,
@@ -47,6 +64,7 @@ public static class EventConsts
         DreamBlockEnter or DreamBlockExit or DreamBlockTravel => EarAidModule.Settings.DreamBlock,
         FireballIdle => EarAidModule.Settings.FireballIdle,
         BlueHeartCollect or RedHeartCollect or GoldHeartCollect => EarAidModule.Settings.HeartCollect,
+        OshiroBossCharge or OshiroBossEnterScreen or OshiroBossPrecharge or OshiroBossReform => EarAidModule.Settings.OshiroBoss,
         LightningStrike => EarAidModule.Settings.LightningStrike,
         FarewellWind => EarAidModule.Settings.FarewellWind,
         RidgeWind => EarAidModule.Settings.RidgeWind,

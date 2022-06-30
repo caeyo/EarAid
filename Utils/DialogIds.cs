@@ -27,6 +27,9 @@ public static class DialogIds
     public const string MenuLightningStrike = "EAR_AID_LIGHTNING_STRIKE";
     public const string MenuLightningStrikeSubtext = "EAR_AID_LIGHTNING_STRIKE_SUBTEXT";
 
+    public const string MenuOshiroBoss = "EAR_AID_OSHIRO_BOSS";
+    public const string MenuOshiroBossSubtext = "EAR_AID_OSHIRO_BOSS_SUBTEXT";
+
     public const string MenuFarewellWind = "EAR_AID_FAREWELL_WIND";
     public const string MenuFarewellWindSubtext = "EAR_AID_FAREWELL_WIND_SUBTEXT";
 
