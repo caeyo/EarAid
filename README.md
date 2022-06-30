@@ -7,8 +7,9 @@ Sounds currently supported:
 - *Dream Block:* The sounds used when the player travels through a dream block.
 - *Fireball:* The sound used when a fireball is present.
 - *Heart Collect:* The sound used when a crystal heart is collected.
-- *Oshiro Boss:* The sounds used when an Oshiro boss is active.
 - *Lightning Strike:* The sound used when lightning strikes occur.
+- *Move Block:* The sounds used by move blocks.
+- *Oshiro Boss:* The sounds used when an Oshiro boss is active.
 - *Farewell Wind:* The wind ambience used in Farewell.
 - *Ridge Wind:* The wind ambience used in Golden Ridge.
 - *Zip Mover:* The sound used when a zip mover is activated.

@@ -19,6 +19,7 @@ public class EarAidSettings : EverestModuleSettings
     public int FireballIdle { get; set; } = 10;
     public int HeartCollect { get; set; } = 10;
     public int LightningStrike { get; set; } = 10;
+    public int MoveBlock { get; set; } = 10;
     public int OshiroBoss { get; set; } = 10;
     public int FarewellWind { get; set; } = 10;
     public int RidgeWind { get; set; } = 10;
@@ -153,6 +154,24 @@ public class EarAidSettings : EverestModuleSettings
         });
         menu.Add(item);
         item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuLightningStrikeSubtext));
+        options.Add(item);
+    }
+
+    public void CreateMoveBlockEntry(TextMenu menu, bool inGame)
+    {
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuMoveBlock), menu, MoveBlock).Change(value =>
+        {
+            MoveBlock = value;
+            Mixer.MixExistingInstances(EventConsts.MoveBlockActivate, value);
+            Mixer.MixExistingInstances(EventConsts.MoveBlockBreak, value);
+            Mixer.MixExistingInstances(EventConsts.MoveBlockMove, value);
+            Mixer.MixExistingInstances(EventConsts.MoveBlockReappear, value);
+            Mixer.MixExistingInstances(EventConsts.MoveBlockReform, value);
+            Mixer.MixExistingInstances(EventConsts.MoveBlockDepress, value);
+            Mixer.MixExistingInstances(EventConsts.MoveBlockRelease, value);
+        });
+        menu.Add(item);
+        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuMoveBlockSubtext));
         options.Add(item);
     }
 

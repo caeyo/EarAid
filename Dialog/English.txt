@@ -56,6 +56,9 @@ EAR_AID_HEART_COLLECT_SUBTEXT=			The sound used when a crystal heart is collecte
 EAR_AID_LIGHTNING_STRIKE=				Lightning Strike
 EAR_AID_LIGHTNING_STRIKE_SUBTEXT=		The sound used when lightning strikes occur.
 
+EAR_AID_MOVE_BLOCK=						Move Block
+EAR_AID_MOVE_BLOCK_SUBTEXT=				The sounds used by move blocks.
+
 EAR_AID_OSHIRO_BOSS=					Oshiro Boss
 EAR_AID_OSHIRO_BOSS_SUBTEXT=			The sounds used when an Oshiro boss is active.
 

@@ -20,12 +20,20 @@ public static class EventConsts
     public const string RedHeartCollect = "event:/game/general/crystalheart_red_get";
     public const string GoldHeartCollect = "event:/game/general/crystalheart_gold_get";
 
+    public const string LightningStrike = "event:/new_content/game/10_farewell/lightning_strike";
+
+    public const string MoveBlockActivate = "event:/game/04_cliffside/arrowblock_activate";
+    public const string MoveBlockBreak = "event:/game/04_cliffside/arrowblock_break";
+    public const string MoveBlockMove = "event:/game/04_cliffside/arrowblock_move";
+    public const string MoveBlockReappear = "event:/game/04_cliffside/arrowblock_reappear";
+    public const string MoveBlockReform = "event:/game/04_cliffside/arrowblock_reform_begin";
+    public const string MoveBlockDepress = "event:/game/04_cliffside/arrowblock_side_depress";
+    public const string MoveBlockRelease = "event:/game/04_cliffside/arrowblock_side_release";
+
     public const string OshiroBossCharge = "event:/char/oshiro/boss_charge";
     public const string OshiroBossEnterScreen = "event:/char/oshiro/boss_enter_screen";
     public const string OshiroBossPrecharge = "event:/char/oshiro/boss_precharge";
     public const string OshiroBossReform = "event:/char/oshiro/boss_reform";
-
-    public const string LightningStrike = "event:/new_content/game/10_farewell/lightning_strike";
 
     public const string FarewellWind = "event:/new_content/env/10_voidspiral";
 
@@ -46,11 +54,18 @@ public static class EventConsts
         BlueHeartCollect,
         RedHeartCollect,
         GoldHeartCollect,
+        LightningStrike,
+        MoveBlockActivate,
+        MoveBlockBreak,
+        MoveBlockMove,
+        MoveBlockReappear,
+        MoveBlockReform,
+        MoveBlockDepress,
+        MoveBlockRelease,
         OshiroBossCharge,
         OshiroBossEnterScreen,
         OshiroBossPrecharge,
         OshiroBossReform,
-        LightningStrike,
         FarewellWind,
         RidgeWind,
         CityZipMover,
@@ -64,8 +79,9 @@ public static class EventConsts
         DreamBlockEnter or DreamBlockExit or DreamBlockTravel => EarAidModule.Settings.DreamBlock,
         FireballIdle => EarAidModule.Settings.FireballIdle,
         BlueHeartCollect or RedHeartCollect or GoldHeartCollect => EarAidModule.Settings.HeartCollect,
-        OshiroBossCharge or OshiroBossEnterScreen or OshiroBossPrecharge or OshiroBossReform => EarAidModule.Settings.OshiroBoss,
         LightningStrike => EarAidModule.Settings.LightningStrike,
+        MoveBlockActivate or MoveBlockBreak or MoveBlockMove or MoveBlockReappear or MoveBlockReform or MoveBlockDepress or MoveBlockRelease => EarAidModule.Settings.MoveBlock,
+        OshiroBossCharge or OshiroBossEnterScreen or OshiroBossPrecharge or OshiroBossReform => EarAidModule.Settings.OshiroBoss,
         FarewellWind => EarAidModule.Settings.FarewellWind,
         RidgeWind => EarAidModule.Settings.RidgeWind,
         CityZipMover or FarewellZipMover => EarAidModule.Settings.ZipMover,
