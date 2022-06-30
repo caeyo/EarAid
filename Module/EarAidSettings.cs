@@ -11,14 +11,15 @@ namespace Celeste.Mod.EarAid.Module;
 public class EarAidSettings : EverestModuleSettings
 {
     public bool Enabled { get; set; } = true;
-    public int RidgeWind { get; set; } = 10;
-    public int FarewellWind { get; set; } = 10;
+
     public int Death { get; set; } = 10;
     public int GoldenDeath { get; set; } = 10;
-    public int LightningStrike { get; set; } = 10;
+    public int DreamBlock { get; set; } = 10;
     public int FireballIdle { get; set; } = 10;
     public int HeartCollect { get; set; } = 10;
-    public int DreamBlock { get; set; } = 10;
+    public int LightningStrike { get; set; } = 10;
+    public int FarewellWind { get; set; } = 10;
+    public int RidgeWind { get; set; } = 10;
     public int ZipMover { get; set; } = 10;
 
     private readonly List<TextMenu.Item> options = new();
@@ -50,30 +51,6 @@ public class EarAidSettings : EverestModuleSettings
         }));
     }
 
-    public void CreateRidgeWindEntry(TextMenu menu, bool inGame)
-    {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuRidgeWind), 0, 10, Enabled, menu, RidgeWind).Change(value =>
-        {
-            RidgeWind = value;
-            Mixer.MixExistingInstances(EventConsts.RidgeWind, value);
-        });
-        menu.Add(item);
-        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuRidgeWindSubtext));
-        options.Add(item);
-    }
-
-    public void CreateFarewellWindEntry(TextMenu menu, bool inGame)
-    {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuFarewellWind), 0, 10, Enabled, menu, FarewellWind).Change(value =>
-        {
-            FarewellWind = value;
-            Mixer.MixExistingInstances(EventConsts.FarewellWind, value);
-        });
-        menu.Add(item);
-        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuFarewellWindSubtext));
-        options.Add(item);
-    }
-
     public void CreateDeathEntry(TextMenu menu, bool inGame)
     {
         TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuDeath), 0, 10, Enabled, menu, Death).Change(value =>
@@ -99,15 +76,17 @@ public class EarAidSettings : EverestModuleSettings
         options.Add(item);
     }
 
-    public void CreateLightningStrikeEntry(TextMenu menu, bool inGame)
+    public void CreateDreamBlockEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuLightningStrike), 0, 10, Enabled, menu, LightningStrike).Change(value =>
+        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuDreamBlock), 0, 10, Enabled, menu, DreamBlock).Change(value =>
         {
-            LightningStrike = value;
-            Mixer.MixExistingInstances(EventConsts.LightningStrike, value);
+            DreamBlock = value;
+            Mixer.MixExistingInstances(EventConsts.DreamBlockEnter, value);
+            Mixer.MixExistingInstances(EventConsts.DreamBlockExit, value);
+            Mixer.MixExistingInstances(EventConsts.DreamBlockTravel, value);
         });
         menu.Add(item);
-        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuLightningStrikeSubtext));
+        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuDreamBlockSubtext));
         options.Add(item);
     }
 
@@ -137,17 +116,39 @@ public class EarAidSettings : EverestModuleSettings
         options.Add(item);
     }
 
-    public void CreateDreamBlockEntry(TextMenu menu, bool inGame)
+    public void CreateLightningStrikeEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuDreamBlock), 0, 10, Enabled, menu, DreamBlock).Change(value =>
+        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuLightningStrike), 0, 10, Enabled, menu, LightningStrike).Change(value =>
         {
-            DreamBlock = value;
-            Mixer.MixExistingInstances(EventConsts.DreamBlockEnter, value);
-            Mixer.MixExistingInstances(EventConsts.DreamBlockExit, value);
-            Mixer.MixExistingInstances(EventConsts.DreamBlockTravel, value);
+            LightningStrike = value;
+            Mixer.MixExistingInstances(EventConsts.LightningStrike, value);
         });
         menu.Add(item);
-        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuDreamBlockSubtext));
+        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuLightningStrikeSubtext));
+        options.Add(item);
+    }
+
+    public void CreateFarewellWindEntry(TextMenu menu, bool inGame)
+    {
+        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuFarewellWind), 0, 10, Enabled, menu, FarewellWind).Change(value =>
+        {
+            FarewellWind = value;
+            Mixer.MixExistingInstances(EventConsts.FarewellWind, value);
+        });
+        menu.Add(item);
+        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuFarewellWindSubtext));
+        options.Add(item);
+    }
+
+    public void CreateRidgeWindEntry(TextMenu menu, bool inGame)
+    {
+        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuRidgeWind), 0, 10, Enabled, menu, RidgeWind).Change(value =>
+        {
+            RidgeWind = value;
+            Mixer.MixExistingInstances(EventConsts.RidgeWind, value);
+        });
+        menu.Add(item);
+        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuRidgeWindSubtext));
         options.Add(item);
     }
 
