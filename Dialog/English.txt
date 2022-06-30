@@ -31,33 +31,36 @@
 
 # ---------------------------------- Mod Options ----------------------------------
 
-EAR_AID=							EarAid
+EAR_AID=								EarAid
 
-EAR_AID_ENABLED=					Enabled
+EAR_AID_ENABLED=						Enabled
 
-EAR_AID_DEATH=						Death
-EAR_AID_DEATH_SUBTEXT=				The sound used when the player dies.
+EAR_AID_HIDE_UNUSED_OPTIONS=			Hide Unused Options
+EAR_AID_HIDE_UNUSED_OPTIONS_SUBTEXT=	Options set to 10 are considered unused.
 
-EAR_AID_GOLDEN_DEATH=				Golden Death
-EAR_AID_GOLDEN_DEATH_SUBTEXT=		The sound used when the player dies with a golden berry.
+EAR_AID_DEATH=							Death
+EAR_AID_DEATH_SUBTEXT=					The sound used when the player dies.
 
-EAR_AID_DREAM_BLOCK=				Dream Block
-EAR_AID_DREAM_BLOCK_SUBTEXT=		The sound used when the player travels through a dream block.
+EAR_AID_GOLDEN_DEATH=					Golden Death
+EAR_AID_GOLDEN_DEATH_SUBTEXT=			The sound used when the player dies with a golden berry.
 
-EAR_AID_FIREBALL_IDLE=				Fireball
-EAR_AID_FIREBALL_IDLE_SUBTEXT=		The sound used when a fireball is present.
+EAR_AID_DREAM_BLOCK=					Dream Block
+EAR_AID_DREAM_BLOCK_SUBTEXT=			The sound used when the player travels through a dream block.
 
-EAR_AID_HEART_COLLECT=				Heart Collect
-EAR_AID_HEART_COLLECT_SUBTEXT=		The sound used when a crystal heart is collected.
+EAR_AID_FIREBALL_IDLE=					Fireball
+EAR_AID_FIREBALL_IDLE_SUBTEXT=			The sound used when a fireball is present.
 
-EAR_AID_LIGHTNING_STRIKE=			Lightning Strike
-EAR_AID_LIGHTNING_STRIKE_SUBTEXT=	The sound used when lightning strikes occur.
+EAR_AID_HEART_COLLECT=					Heart Collect
+EAR_AID_HEART_COLLECT_SUBTEXT=			The sound used when a crystal heart is collected.
 
-EAR_AID_FAREWELL_WIND=				Farewell Wind
-EAR_AID_FAREWELL_WIND_SUBTEXT=		The wind ambience used in Farewell.
+EAR_AID_LIGHTNING_STRIKE=				Lightning Strike
+EAR_AID_LIGHTNING_STRIKE_SUBTEXT=		The sound used when lightning strikes occur.
 
-EAR_AID_RIDGE_WIND=					Ridge Wind
-EAR_AID_RIDGE_WIND_SUBTEXT=			The wind ambience used in Golden Ridge.
+EAR_AID_FAREWELL_WIND=					Farewell Wind
+EAR_AID_FAREWELL_WIND_SUBTEXT=			The wind ambience used in Farewell.
 
-EAR_AID_ZIP_MOVER=					Zip Mover
-EAR_AID_ZIP_MOVER_SUBTEXT=			The sound used when a zip mover is activated.
+EAR_AID_RIDGE_WIND=						Ridge Wind
+EAR_AID_RIDGE_WIND_SUBTEXT=				The wind ambience used in Golden Ridge.
+
+EAR_AID_ZIP_MOVER=						Zip Mover
+EAR_AID_ZIP_MOVER_SUBTEXT=				The sound used when a zip mover is activated.
