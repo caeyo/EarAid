@@ -20,6 +20,8 @@ public static class EventConsts
     public const string RedHeartCollect = "event:/game/general/crystalheart_red_get";
     public const string GoldHeartCollect = "event:/game/general/crystalheart_gold_get";
 
+    public const string ItemCrystalDeath = "event:/cherryhelper/itemcrystal_death";
+
     public const string LightningStrike = "event:/new_content/game/10_farewell/lightning_strike";
 
     public const string MoveBlockActivate = "event:/game/04_cliffside/arrowblock_activate";
@@ -58,6 +60,7 @@ public static class EventConsts
         BlueHeartCollect,
         RedHeartCollect,
         GoldHeartCollect,
+        ItemCrystalDeath,
         LightningStrike,
         MoveBlockActivate,
         MoveBlockBreak,
@@ -86,6 +89,7 @@ public static class EventConsts
         DreamBlockEnter or DreamBlockExit or DreamBlockTravel => EarAidModule.Settings.DreamBlock,
         FireballIdle => EarAidModule.Settings.FireballIdle,
         BlueHeartCollect or RedHeartCollect or GoldHeartCollect => EarAidModule.Settings.HeartCollect,
+        ItemCrystalDeath => EarAidModule.Settings.ItemCrystalDeath,
         LightningStrike => EarAidModule.Settings.LightningStrike,
         MoveBlockActivate or MoveBlockBreak or MoveBlockMove or MoveBlockReappear or MoveBlockReform or MoveBlockDepress or MoveBlockRelease => EarAidModule.Settings.MoveBlock,
         OshiroBossCharge or OshiroBossEnterScreen or OshiroBossPrecharge or OshiroBossReform => EarAidModule.Settings.OshiroBoss,

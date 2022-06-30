@@ -18,6 +18,7 @@ public class EarAidSettings : EverestModuleSettings
     public int DreamBlock { get; set; } = 10;
     public int FireballIdle { get; set; } = 10;
     public int HeartCollect { get; set; } = 10;
+    public int ItemCrystalDeath { get; set; } = 10;
     public int LightningStrike { get; set; } = 10;
     public int MoveBlock { get; set; } = 10;
     public int OshiroBoss { get; set; } = 10;
@@ -143,6 +144,18 @@ public class EarAidSettings : EverestModuleSettings
         });
         menu.Add(item);
         item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuHeartCollectSubtext));
+        options.Add(item);
+    }
+
+    public void CreateItemCrystalDeathEntry(TextMenu menu, bool inGame)
+    {
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuItemCrystalDeath), menu, ItemCrystalDeath).Change(value =>
+        {
+            ItemCrystalDeath = value;
+            Mixer.MixExistingInstances(EventConsts.ItemCrystalDeath, value);
+        });
+        menu.Add(item);
+        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuItemCrystalDeathSubtext));
         options.Add(item);
     }
 

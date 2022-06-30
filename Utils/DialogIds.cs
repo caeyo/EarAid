@@ -24,6 +24,9 @@ public static class DialogIds
     public const string MenuHeartCollect = "EAR_AID_HEART_COLLECT";
     public const string MenuHeartCollectSubtext = "EAR_AID_HEART_COLLECT_SUBTEXT";
 
+    public const string MenuItemCrystalDeath = "EAR_AID_ITEM_CRYSTAL_DEATH";
+    public const string MenuItemCrystalDeathSubtext = "EAR_AID_ITEM_CRYSTAL_DEATH_SUBTEXT";
+
     public const string MenuLightningStrike = "EAR_AID_LIGHTNING_STRIKE";
     public const string MenuLightningStrikeSubtext = "EAR_AID_LIGHTNING_STRIKE_SUBTEXT";
 
