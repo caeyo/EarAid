@@ -31,7 +31,7 @@
 
 # ---------------------------------- Mod Options ----------------------------------
 
-EAR_AID=							Ear Aid
+EAR_AID=							EarAid
 
 EAR_AID_ENABLED=					Enabled
 
