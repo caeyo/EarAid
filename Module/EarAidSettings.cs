@@ -25,8 +25,6 @@ public class EarAidSettings : EverestModuleSettings
 
     private readonly List<TextMenu.Item> options = new();
 
-    private bool ShouldBeVisible(int value) => Enabled && (!HideUnusedOptions || value < 10);
-
     public void CreateEnabledEntry(TextMenu menu, bool inGame)
     {
         menu.Add(new TextMenu.OnOff(Dialog.Clean(DialogIds.MenuEnabled), Enabled).Change(value =>
@@ -35,12 +33,11 @@ public class EarAidSettings : EverestModuleSettings
 
             foreach (TextMenu.Item item in options)
             {
-                if (item is EaseInIntSlider slider)
+                if (item is EaseInVolumeSlider slider)
                 {
-                    slider.FadeVisible = ShouldBeVisible(slider.Index);
+                    slider.SetFadeVisible(slider.Index);
                 }
-
-                if (item is EaseInOnOff onoff)
+                else if (item is EaseInOnOff onoff)
                 {
                     onoff.FadeVisible = value;
                 }
@@ -70,9 +67,9 @@ public class EarAidSettings : EverestModuleSettings
 
             foreach (TextMenu.Item item in options)
             {
-                if (item is EaseInIntSlider slider)
+                if (item is EaseInVolumeSlider slider)
                 {
-                    slider.FadeVisible = ShouldBeVisible(slider.Index);
+                    slider.SetFadeVisible(slider.Index);
                 }
             }
         });
@@ -83,7 +80,7 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreateDeathEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuDeath), 0, 10, ShouldBeVisible(Death), menu, Death).Change(value =>
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuDeath), menu, Death).Change(value =>
         {
             Death = value;
             Mixer.MixExistingInstances(EventConsts.Death, value);
@@ -96,7 +93,7 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreateGoldenDeathEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuGoldenDeath), 0, 10, ShouldBeVisible(GoldenDeath), menu, GoldenDeath).Change(value =>
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuGoldenDeath), menu, GoldenDeath).Change(value =>
         {
             GoldenDeath = value;
             Mixer.MixExistingInstances(EventConsts.GoldenDeath, value);
@@ -108,7 +105,7 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreateDreamBlockEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuDreamBlock), 0, 10, ShouldBeVisible(DreamBlock), menu, DreamBlock).Change(value =>
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuDreamBlock), menu, DreamBlock).Change(value =>
         {
             DreamBlock = value;
             Mixer.MixExistingInstances(EventConsts.DreamBlockEnter, value);
@@ -122,7 +119,7 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreateFireballIdleEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuFireballIdle), 0, 10, ShouldBeVisible(FireballIdle), menu, FireballIdle).Change(value =>
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuFireballIdle), menu, FireballIdle).Change(value =>
         {
             FireballIdle = value;
             Mixer.MixExistingInstances(EventConsts.FireballIdle, value);
@@ -134,7 +131,7 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreateHeartCollectEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuHeartCollect), 0, 10, ShouldBeVisible(HeartCollect), menu, HeartCollect).Change(value =>
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuHeartCollect), menu, HeartCollect).Change(value =>
         {
             HeartCollect = value;
             Mixer.MixExistingInstances(EventConsts.BlueHeartCollect, value);
@@ -148,7 +145,7 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreateLightningStrikeEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuLightningStrike), 0, 10, ShouldBeVisible(LightningStrike), menu, LightningStrike).Change(value =>
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuLightningStrike), menu, LightningStrike).Change(value =>
         {
             LightningStrike = value;
             Mixer.MixExistingInstances(EventConsts.LightningStrike, value);
@@ -160,7 +157,7 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreateFarewellWindEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuFarewellWind), 0, 10, ShouldBeVisible(FarewellWind), menu, FarewellWind).Change(value =>
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuFarewellWind), menu, FarewellWind).Change(value =>
         {
             FarewellWind = value;
             Mixer.MixExistingInstances(EventConsts.FarewellWind, value);
@@ -172,7 +169,7 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreateRidgeWindEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuRidgeWind), 0, 10, ShouldBeVisible(RidgeWind), menu, RidgeWind).Change(value =>
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuRidgeWind), menu, RidgeWind).Change(value =>
         {
             RidgeWind = value;
             Mixer.MixExistingInstances(EventConsts.RidgeWind, value);
@@ -184,7 +181,7 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreateZipMoverEntry(TextMenu menu, bool inGame)
     {
-        TextMenu.Item item = new EaseInIntSlider(Dialog.Clean(DialogIds.MenuZipMover), 0, 10, ShouldBeVisible(ZipMover), menu, ZipMover).Change(value =>
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuZipMover), menu, ZipMover).Change(value =>
         {
             ZipMover = value;
             Mixer.MixExistingInstances(EventConsts.CityZipMover, value);
@@ -197,21 +194,30 @@ public class EarAidSettings : EverestModuleSettings
 }
 
 // Bastard child born of a nasty threeway between TextMenuExt.EaseInSubHeaderExt, TextMenuExt.IntSlider, and SRTool's EaseInSubMenu
-internal class EaseInIntSlider : TextMenuExt.IntSlider
+internal class EaseInVolumeSlider : TextMenuExt.IntSlider
 {
-    public bool FadeVisible { get; set; } = true;
+    public bool FadeVisible { get; private set; } = true;
 
     private TextMenu containingMenu;
     private float Alpha;
     private float uneasedAlpha;
 
-    public EaseInIntSlider(string label, int min, int max, bool initVisible, TextMenu menu, int value = 0) : base(label, min, max, value)
+    public void SetFadeVisible(int value)   
+    {
+        FadeVisible = EarAidModule.Settings.Enabled && (!EarAidModule.Settings.HideUnusedOptions || value < 10);
+    }
+
+    public EaseInVolumeSlider(string label, TextMenu menu, int value) : base(label, 0, 10, value)
     {
         containingMenu = menu;
 
-        FadeVisible = initVisible;
+        SetFadeVisible(value);
         Alpha = FadeVisible ? 1 : 0;
         uneasedAlpha = Alpha;
+
+        // Will remove option if scrolled to 10 and then cursor moves off while HideUnusedOptions
+        // May not be necessary if people cry about it
+        OnLeave = () => SetFadeVisible(Index);
     }
 
     public override float Height() => MathHelper.Lerp(-containingMenu.ItemSpacing, base.Height(), Alpha);
