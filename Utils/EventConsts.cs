@@ -31,6 +31,8 @@ public static class EventConsts
     public const string MoveBlockReform = "event:/game/04_cliffside/arrowblock_reform_begin";
     public const string MoveBlockDepress = "event:/game/04_cliffside/arrowblock_side_depress";
     public const string MoveBlockRelease = "event:/game/04_cliffside/arrowblock_side_release";
+    public const string MoveBlockMoveCommunal = "event:/CommunalHelperEvents/game/redirectMoveBlock/arrowblock_move";
+    public const string MoveBlockBreakCommunal = "event:/CommunalHelperEvents/game/redirectMoveBlock/arrowblock_break";
 
     public const string OshiroBossCharge = "event:/char/oshiro/boss_charge";
     public const string OshiroBossEnterScreen = "event:/char/oshiro/boss_enter_screen";
@@ -69,6 +71,8 @@ public static class EventConsts
         MoveBlockReform,
         MoveBlockDepress,
         MoveBlockRelease,
+        MoveBlockMoveCommunal,
+        MoveBlockBreakCommunal,
         OshiroBossCharge,
         OshiroBossEnterScreen,
         OshiroBossPrecharge,
@@ -91,7 +95,8 @@ public static class EventConsts
         BlueHeartCollect or RedHeartCollect or GoldHeartCollect => EarAidModule.Settings.HeartCollect,
         ItemCrystalDeath => EarAidModule.Settings.ItemCrystalDeath,
         LightningStrike => EarAidModule.Settings.LightningStrike,
-        MoveBlockActivate or MoveBlockBreak or MoveBlockMove or MoveBlockReappear or MoveBlockReform or MoveBlockDepress or MoveBlockRelease => EarAidModule.Settings.MoveBlock,
+        MoveBlockActivate or MoveBlockBreak or MoveBlockMove or MoveBlockReappear or MoveBlockReform or MoveBlockDepress or MoveBlockRelease
+            or MoveBlockMoveCommunal or MoveBlockBreakCommunal => EarAidModule.Settings.MoveBlock,
         OshiroBossCharge or OshiroBossEnterScreen or OshiroBossPrecharge or OshiroBossReform => EarAidModule.Settings.OshiroBoss,
         TouchSwitchLast or TouchSwitchLastCutoff or TouchSwitchLastOneshot => EarAidModule.Settings.TouchSwitchComplete,
         FarewellWind => EarAidModule.Settings.FarewellWind,

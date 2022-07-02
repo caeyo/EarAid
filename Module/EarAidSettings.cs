@@ -183,6 +183,8 @@ public class EarAidSettings : EverestModuleSettings
             Mixer.MixExistingInstances(EventConsts.MoveBlockReform, value);
             Mixer.MixExistingInstances(EventConsts.MoveBlockDepress, value);
             Mixer.MixExistingInstances(EventConsts.MoveBlockRelease, value);
+            Mixer.MixExistingInstances(EventConsts.MoveBlockMoveCommunal, value);
+            Mixer.MixExistingInstances(EventConsts.MoveBlockBreakCommunal, value);
         });
         menu.Add(item);
         item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuMoveBlockSubtext));
