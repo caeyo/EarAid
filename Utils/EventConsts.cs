@@ -5,6 +5,9 @@ namespace Celeste.Mod.EarAid.Utils;
 
 public static class EventConsts
 {
+    public const string ConveyorActivate = "event:/game/09_core/conveyor_activate";
+    public const string ConveyorIdle = "event:/env/local/09_core/conveyor_idle";
+
     public const string Death = "event:/char/madeline/death";
     public const string PreDeath = "event:/char/madeline/predeath";
 
@@ -52,6 +55,8 @@ public static class EventConsts
 
     public static readonly HashSet<string> Paths = new()
     {
+        ConveyorActivate,
+        ConveyorIdle,
         Death,
         PreDeath,
         GoldenDeath,
@@ -88,6 +93,7 @@ public static class EventConsts
 
     public static int PathToSetting(string path) => path switch
     {
+        ConveyorActivate or ConveyorIdle => EarAidModule.Settings.Conveyor,
         Death or PreDeath => EarAidModule.Settings.Death,
         GoldenDeath => EarAidModule.Settings.GoldenDeath,
         DreamBlockEnter or DreamBlockExit or DreamBlockTravel => EarAidModule.Settings.DreamBlock,

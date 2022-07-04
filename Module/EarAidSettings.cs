@@ -13,6 +13,7 @@ public class EarAidSettings : EverestModuleSettings
     public bool Enabled { get; set; } = true;
     public bool HideUnusedOptions { get; set; } = false;
 
+    public int Conveyor { get; set; } = 10;
     public int Death { get; set; } = 10;
     public int GoldenDeath { get; set; } = 10;
     public int DreamBlock { get; set; } = 10;
@@ -79,6 +80,19 @@ public class EarAidSettings : EverestModuleSettings
         });
         menu.Add(item);
         item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuHideUnusedOptionsSubtext));
+        options.Add(item);
+    }
+
+    public void CreateConveyorEntry(TextMenu menu, bool inGame)
+    {
+        TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(DialogIds.MenuConveyor), menu, Conveyor).Change(value =>
+        {
+            Conveyor = value;
+            Mixer.MixExistingInstances(EventConsts.ConveyorActivate, value);
+            Mixer.MixExistingInstances(EventConsts.ConveyorIdle, value);
+        });
+        menu.Add(item);
+        item = item.AddDescription(menu, Dialog.Clean(DialogIds.MenuConveyorSubtext));
         options.Add(item);
     }
 

@@ -2,6 +2,7 @@
 A Celeste mod allowing the volume of certain (generally obnoxious) sounds to be adjusted individually. sorry kevin
 
 Sounds currently supported:
+- *Conveyor:* The sounds used when a conveyor is active.
 - *Death:* The sounds used when the player dies.
 - *Golden Death:* The sound used when the player dies with a golden berry.
 - *Dream Block:* The sounds used when the player travels through a dream block.
