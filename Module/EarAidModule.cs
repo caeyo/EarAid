@@ -20,7 +20,7 @@ public class EarAidModule : EverestModule
     {
         if (!Loaded && Settings.Enabled)
         {
-            Mixer.Load();
+            Mixer.LoadHooks();
             Loaded = true;
         }
     }
@@ -29,7 +29,7 @@ public class EarAidModule : EverestModule
     {
         if (Loaded)
         {
-            Mixer.Unload();
+            Mixer.UnloadHooks();
             Loaded = false;
         }
     }

@@ -6,12 +6,12 @@ namespace Celeste.Mod.EarAid;
 
 public static class Mixer
 {
-    public static void Load()
+    public static void LoadHooks()
     {
         On.FMOD.Studio.EventDescription.createInstance += MixNewInstances;
     }
 
-    public static void Unload()
+    public static void UnloadHooks()
     {
         On.FMOD.Studio.EventDescription.createInstance -= MixNewInstances;
     }

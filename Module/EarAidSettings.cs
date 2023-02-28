@@ -277,7 +277,7 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
 {
     public bool FadeVisible { get; private set; } = true;
 
-    private TextMenu containingMenu;
+    private readonly TextMenu containingMenu;
     private float Alpha;
     private float uneasedAlpha;
 
@@ -350,7 +350,7 @@ internal class EaseInOnOff : TextMenu.OnOff
 {
     public bool FadeVisible { get; set; } = true;
 
-    private TextMenu containingMenu;
+    private readonly TextMenu containingMenu;
     private float Alpha;
     private float uneasedAlpha;
 
