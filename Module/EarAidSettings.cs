@@ -16,6 +16,7 @@ public class EarAidSettings : EverestModuleSettings
     public int Conveyor { get; set; } = 10;
     public int Death { get; set; } = 10;
     public int GoldenDeath { get; set; } = 10;
+    public int Dialogue { get; set; } = 10;
     public int DreamBlock { get; set; } = 10;
     public int FireballIdle { get; set; } = 10;
     public int HeartCollect { get; set; } = 10;
@@ -110,6 +111,21 @@ public class EarAidSettings : EverestModuleSettings
         {
             GoldenDeath = value;
             Mixer.MixExistingInstances(SFX.char_mad_death_golden, value);
+        });
+    
+    public void CreateDialogueEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuDialogue, DialogIds.MenuDialogueSubtext, Dialogue, (value) =>
+        {
+            Dialogue = value;
+            Mixer.MixExistingInstances(EventConsts.DialogueBadeline, value);
+            Mixer.MixExistingInstances(EventConsts.DialogueEx, value);
+            Mixer.MixExistingInstances(EventConsts.DialogueGranny, value);
+            Mixer.MixExistingInstances(EventConsts.DialogueMadeline, value);
+            Mixer.MixExistingInstances(EventConsts.DialogueMadelineMirror, value);
+            Mixer.MixExistingInstances(EventConsts.DialogueMom, value);
+            Mixer.MixExistingInstances(EventConsts.DialogueOshiro, value);
+            Mixer.MixExistingInstances(EventConsts.DialogueTheo, value);
+            Mixer.MixExistingInstances(EventConsts.DialogueTheoMirror, value);
+            Mixer.MixExistingInstances(EventConsts.DialogueTheoWebcam, value);
         });
 
     public void CreateDreamBlockEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuDreamBlock, DialogIds.MenuDreamBlockSubtext, DreamBlock, (value) =>

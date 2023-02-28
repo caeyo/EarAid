@@ -18,6 +18,9 @@ public static class DialogIds
     public const string MenuGoldenDeath = "EAR_AID_GOLDEN_DEATH";
     public const string MenuGoldenDeathSubtext = "EAR_AID_GOLDEN_DEATH_SUBTEXT";
 
+    public const string MenuDialogue = "EAR_AID_DIALOGUE";
+    public const string MenuDialogueSubtext = "EAR_AID_DIALOGUE_SUBTEXT";
+
     public const string MenuDreamBlock = "EAR_AID_DREAM_BLOCK";
     public const string MenuDreamBlockSubtext = "EAR_AID_DREAM_BLOCK_SUBTEXT";
 

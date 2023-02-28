@@ -47,6 +47,9 @@ EAR_AID_DEATH_SUBTEXT=					The sounds used when the player dies.
 EAR_AID_GOLDEN_DEATH=					Golden Death
 EAR_AID_GOLDEN_DEATH_SUBTEXT=			The sound used when the player dies with a golden berry.
 
+EAR_AID_DIALOGUE=						Dialogue
+EAR_AID_DIALOGUE_SUBTEXT=				The sounds used for character voices in dialogue. Affects all voices.
+
 EAR_AID_DREAM_BLOCK=					Dream Block
 EAR_AID_DREAM_BLOCK_SUBTEXT=			The sounds used when the player travels through a dream block.
 
