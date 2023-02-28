@@ -21,6 +21,7 @@ public class EarAidSettings : EverestModuleSettings
     public int FireballIdle { get; set; } = 10;
     public int HeartCollect { get; set; } = 10;
     public int ItemCrystalDeath { get; set; } = 10;
+    public int LightningAmbience { get; set; } = 10;
     public int LightningStrike { get; set; } = 10;
     public int MoveBlock { get; set; } = 10;
     public int OshiroBoss { get; set; } = 10;
@@ -154,6 +155,12 @@ public class EarAidSettings : EverestModuleSettings
         {
             ItemCrystalDeath = value;
             Mixer.MixExistingInstances(EventConsts.ItemCrystalDeath, value);
+        });
+    
+    public void CreateLightningAmbienceEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuLightningAmbience, DialogIds.MenuLightningAmbienceSubtext, LightningAmbience, (value) =>
+        {
+            LightningAmbience = value;
+            Mixer.MixExistingInstances(SFX.env_amb_10_electricity, value);
         });
     
     public void CreateLightningStrikeEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuLightningStrike, DialogIds.MenuLightningStrikeSubtext, LightningStrike, (value) =>

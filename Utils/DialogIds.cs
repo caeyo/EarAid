@@ -33,6 +33,9 @@ public static class DialogIds
     public const string MenuItemCrystalDeath = "EAR_AID_ITEM_CRYSTAL_DEATH";
     public const string MenuItemCrystalDeathSubtext = "EAR_AID_ITEM_CRYSTAL_DEATH_SUBTEXT";
 
+    public const string MenuLightningAmbience = "EAR_AID_LIGHTNING_AMBIENCE";
+    public const string MenuLightningAmbienceSubtext = "EAR_AID_LIGHTING_AMBIENCE_SUBTEXT";
+
     public const string MenuLightningStrike = "EAR_AID_LIGHTNING_STRIKE";
     public const string MenuLightningStrikeSubtext = "EAR_AID_LIGHTNING_STRIKE_SUBTEXT";
 

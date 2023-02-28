@@ -10,6 +10,7 @@ Sounds currently supported:
 - *Fireball:* The sound used when a fireball is present.
 - *Heart Collect:* The sound used when a crystal heart is collected.
 - *Item Crystal Death:* The sound used when an item crystal from Cherry Helper is destroyed.
+- *Lightning Ambience:* The sound used when lightning is present in a room.
 - *Lightning Strike:* The sound used when lightning strikes occur.
 - *Move Block:* The sounds used by move blocks.
 - *Oshiro Boss:* The sounds used when an Oshiro boss is active.

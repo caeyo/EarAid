@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.EarAid.Module;
+using IL.Celeste;
 using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid.Utils;
@@ -46,6 +47,7 @@ public static class EventConsts
         SFX.game_gen_crystalheart_red_get,
         SFX.game_gen_crystalheart_gold_get,
         ItemCrystalDeath,
+        SFX.env_amb_10_electricity,
         SFX.game_10_lightning_strike,
         SFX.game_04_arrowblock_activate,
         SFX.game_04_arrowblock_break,
@@ -81,6 +83,7 @@ public static class EventConsts
         SFX.game_gen_crystalheart_blue_get or SFX.game_gen_crystalheart_red_get or 
             SFX.game_gen_crystalheart_gold_get => EarAidModule.Settings.HeartCollect,
         ItemCrystalDeath => EarAidModule.Settings.ItemCrystalDeath,
+        SFX.env_amb_10_electricity => EarAidModule.Settings.LightningAmbience,
         SFX.game_10_lightning_strike => EarAidModule.Settings.LightningStrike,
         SFX.game_04_arrowblock_activate or SFX.game_04_arrowblock_break or SFX.game_04_arrowblock_move_loop or SFX.game_04_arrowblock_reappear or 
             SFX.game_04_arrowblock_reform_begin or SFX.game_04_arrowblock_side_depress or SFX.game_04_arrowblock_side_release or
