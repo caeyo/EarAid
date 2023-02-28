@@ -38,6 +38,9 @@ EAR_AID_ENABLED=						Enabled
 EAR_AID_HIDE_UNUSED_OPTIONS=			Hide Unused Options
 EAR_AID_HIDE_UNUSED_OPTIONS_SUBTEXT=	Options set to 10 are considered unused.
 
+EAR_AID_BIRD_SQUAWK=					Bird Squawk
+EAR_AID_BIRD_SQUAWK_SUBTEXT=			The sound used when the bird squawks.
+
 EAR_AID_CONVEYOR=						Conveyor
 EAR_AID_CONVEYOR_SUBTEXT=				The sounds used when a conveyor is active.
 

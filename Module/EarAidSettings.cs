@@ -13,6 +13,7 @@ public class EarAidSettings : EverestModuleSettings
     public bool Enabled { get; set; } = true;
     public bool HideUnusedOptions { get; set; } = false;
 
+    public int BirdSquawk { get; set; } = 10;
     public int Conveyor { get; set; } = 10;
     public int Death { get; set; } = 10;
     public int GoldenDeath { get; set; } = 10;
@@ -93,6 +94,12 @@ public class EarAidSettings : EverestModuleSettings
         item = item.AddDescription(menu, Dialog.Clean(subtextId));
         options.Add(item);
     }
+
+    public void CreateBirdSquawkEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuBirdSquawk, DialogIds.MenuBirdSquawkSubtext, BirdSquawk, (value) =>
+    {
+        BirdSquawk = value;
+        Mixer.MixExistingInstances(SFX.game_gen_bird_squawk, value);
+    });
 
     public void CreateConveyorEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuConveyor, DialogIds.MenuConveyorSubtext, Conveyor, (value) =>
         {

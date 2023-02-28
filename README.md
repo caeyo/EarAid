@@ -2,6 +2,7 @@
 A Celeste mod allowing the volume of certain (generally obnoxious) sounds to be adjusted individually. sorry kevin
 
 Sounds currently supported:
+- *Bird Squawk:* The sound used when the bird squawks.
 - *Conveyor:* The sounds used when a conveyor is active.
 - *Death:* The sounds used when the player dies.
 - *Golden Death:* The sound used when the player dies with a golden berry.

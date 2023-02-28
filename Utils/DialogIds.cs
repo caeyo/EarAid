@@ -9,6 +9,9 @@ public static class DialogIds
     public const string MenuHideUnusedOptions = "EAR_AID_HIDE_UNUSED_OPTIONS";
     public const string MenuHideUnusedOptionsSubtext = "EAR_AID_HIDE_UNUSED_OPTIONS_SUBTEXT";
 
+    public const string MenuBirdSquawk = "EAR_AID_BIRD_SQUAWK";
+    public const string MenuBirdSquawkSubtext = "EAR_AID_BIRD_SQUAWK_SUBTEXT";
+    
     public const string MenuConveyor = "EAR_AID_CONVEYOR";
     public const string MenuConveyorSubtext = "EAR_AID_CONVEYOR_SUBTEXT";
 
