@@ -39,6 +39,7 @@ public static class EventConsts
         SFX.char_oshiro_boss_enterscreen,
         SFX.char_oshiro_boss_precharge,
         SFX.char_oshiro_boss_reform,
+        SFX.game_gen_spring,
         SFX.game_gen_touchswitch_last_cutoff,
         SFX.game_gen_touchswitch_last_oneshot,
         SFX.env_amb_10_voidspiral,
@@ -63,6 +64,7 @@ public static class EventConsts
             MoveBlockMoveCommunal or MoveBlockBreakCommunal => EarAidModule.Settings.MoveBlock,
         SFX.char_oshiro_boss_charge or SFX.char_oshiro_boss_enterscreen or SFX.char_oshiro_boss_precharge or 
             SFX.char_oshiro_boss_reform => EarAidModule.Settings.OshiroBoss,
+        SFX.game_gen_spring => EarAidModule.Settings.Spring,
         SFX.game_gen_touchswitch_last_cutoff or SFX.game_gen_touchswitch_last_oneshot => EarAidModule.Settings.TouchSwitchComplete,
         SFX.env_amb_10_voidspiral => EarAidModule.Settings.FarewellWind,
         SFX.env_amb_04_main => EarAidModule.Settings.RidgeWind,

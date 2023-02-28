@@ -23,6 +23,7 @@ public class EarAidSettings : EverestModuleSettings
     public int LightningStrike { get; set; } = 10;
     public int MoveBlock { get; set; } = 10;
     public int OshiroBoss { get; set; } = 10;
+    public int Spring { get; set; } = 10;
     public int TouchSwitchComplete { get; set; } = 10;
     public int FarewellWind { get; set; } = 10;
     public int RidgeWind { get; set; } = 10;
@@ -168,6 +169,12 @@ public class EarAidSettings : EverestModuleSettings
             Mixer.MixExistingInstances(SFX.char_oshiro_boss_reform, value);
         });
     
+    public void CreateSpringEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuSpring, DialogIds.MenuSpringSubtext, Spring, (value) => 
+        {
+            Spring = value;
+            Mixer.MixExistingInstances(SFX.game_gen_spring, value);
+        });
+
     public void CreateTouchSwitchCompleteEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuTouchSwitchComplete, DialogIds.MenuTouchSwitchCompleteSubtext, TouchSwitchComplete, (value) =>
         {
             TouchSwitchComplete = value;
