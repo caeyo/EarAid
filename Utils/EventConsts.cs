@@ -5,109 +5,68 @@ namespace Celeste.Mod.EarAid.Utils;
 
 public static class EventConsts
 {
-    public const string ConveyorActivate = "event:/game/09_core/conveyor_activate";
-    public const string ConveyorIdle = "event:/env/local/09_core/conveyor_idle";
-
-    public const string Death = "event:/char/madeline/death";
-    public const string PreDeath = "event:/char/madeline/predeath";
-
-    public const string GoldenDeath = "event:/new_content/char/madeline/death_golden";
-
-    public const string DreamBlockEnter = "event:/char/madeline/dreamblock_enter";
-    public const string DreamBlockExit = "event:/char/madeline/dreamblock_exit";
-    public const string DreamBlockTravel = "event:/char/madeline/dreamblock_travel";
-
-    public const string FireballIdle = "event:/env/local/09_core/fireballs_idle";
-
-    public const string BlueHeartCollect = "event:/game/general/crystalheart_blue_get";
-    public const string RedHeartCollect = "event:/game/general/crystalheart_red_get";
-    public const string GoldHeartCollect = "event:/game/general/crystalheart_gold_get";
-
     public const string ItemCrystalDeath = "event:/cherryhelper/itemcrystal_death";
 
-    public const string LightningStrike = "event:/new_content/game/10_farewell/lightning_strike";
-
-    public const string MoveBlockActivate = "event:/game/04_cliffside/arrowblock_activate";
-    public const string MoveBlockBreak = "event:/game/04_cliffside/arrowblock_break";
-    public const string MoveBlockMove = "event:/game/04_cliffside/arrowblock_move";
-    public const string MoveBlockReappear = "event:/game/04_cliffside/arrowblock_reappear";
-    public const string MoveBlockReform = "event:/game/04_cliffside/arrowblock_reform_begin";
-    public const string MoveBlockDepress = "event:/game/04_cliffside/arrowblock_side_depress";
-    public const string MoveBlockRelease = "event:/game/04_cliffside/arrowblock_side_release";
     public const string MoveBlockMoveCommunal = "event:/CommunalHelperEvents/game/redirectMoveBlock/arrowblock_move";
     public const string MoveBlockBreakCommunal = "event:/CommunalHelperEvents/game/redirectMoveBlock/arrowblock_break";
 
-    public const string OshiroBossCharge = "event:/char/oshiro/boss_charge";
-    public const string OshiroBossEnterScreen = "event:/char/oshiro/boss_enter_screen";
-    public const string OshiroBossPrecharge = "event:/char/oshiro/boss_precharge";
-    public const string OshiroBossReform = "event:/char/oshiro/boss_reform";
-
-    public const string TouchSwitchLast = "event:/game/general/touchswitch_last";
-    public const string TouchSwitchLastCutoff = "event:/game/general/touchswitch_last_cutoff";
-    public const string TouchSwitchLastOneshot = "event:/game/general/touchswitch_last_oneshot";
-
-    public const string FarewellWind = "event:/new_content/env/10_voidspiral";
-
-    public const string RidgeWind = "event:/env/amb/04_main";
-
-    public const string CityZipMover = "event:/game/01_forsaken_city/zip_mover";
-    public const string FarewellZipMover = "event:/new_content/game/10_farewell/zip_mover";
-
     public static readonly HashSet<string> Paths = new()
     {
-        ConveyorActivate,
-        ConveyorIdle,
-        Death,
-        PreDeath,
-        GoldenDeath,
-        DreamBlockEnter,
-        DreamBlockExit,
-        DreamBlockTravel,
-        FireballIdle,
-        BlueHeartCollect,
-        RedHeartCollect,
-        GoldHeartCollect,
+        SFX.game_09_conveyor_activate,
+        SFX.env_loc_09_conveyer_idle,
+        SFX.char_mad_death,
+        SFX.char_mad_predeath,
+        SFX.char_mad_death_golden,
+        SFX.char_mad_dreamblock_enter,
+        SFX.char_mad_dreamblock_exit,
+        SFX.char_mad_dreamblock_travel,
+        SFX.env_loc_09_fireball_idle,
+        SFX.game_gen_crystalheart_blue_get,
+        SFX.game_gen_crystalheart_red_get,
+        SFX.game_gen_crystalheart_gold_get,
         ItemCrystalDeath,
-        LightningStrike,
-        MoveBlockActivate,
-        MoveBlockBreak,
-        MoveBlockMove,
-        MoveBlockReappear,
-        MoveBlockReform,
-        MoveBlockDepress,
-        MoveBlockRelease,
+        SFX.game_10_lightning_strike,
+        SFX.game_04_arrowblock_activate,
+        SFX.game_04_arrowblock_break,
+        SFX.game_04_arrowblock_move_loop,
+        SFX.game_04_arrowblock_reappear,
+        SFX.game_04_arrowblock_reform_begin,
+        SFX.game_04_arrowblock_side_depress,
+        SFX.game_04_arrowblock_side_release,
         MoveBlockMoveCommunal,
         MoveBlockBreakCommunal,
-        OshiroBossCharge,
-        OshiroBossEnterScreen,
-        OshiroBossPrecharge,
-        OshiroBossReform,
-        TouchSwitchLast,
-        TouchSwitchLastCutoff,
-        TouchSwitchLastOneshot,
-        FarewellWind,
-        RidgeWind,
-        CityZipMover,
-        FarewellZipMover
+        SFX.char_oshiro_boss_charge,
+        SFX.char_oshiro_boss_enterscreen,
+        SFX.char_oshiro_boss_precharge,
+        SFX.char_oshiro_boss_reform,
+        SFX.game_gen_touchswitch_last_cutoff,
+        SFX.game_gen_touchswitch_last_oneshot,
+        SFX.env_amb_10_voidspiral,
+        SFX.env_amb_04_main,
+        SFX.game_01_zipmover,
+        SFX.game_10_zip_mover
     };
 
     public static int PathToSetting(string path) => path switch
     {
-        ConveyorActivate or ConveyorIdle => EarAidModule.Settings.Conveyor,
-        Death or PreDeath => EarAidModule.Settings.Death,
-        GoldenDeath => EarAidModule.Settings.GoldenDeath,
-        DreamBlockEnter or DreamBlockExit or DreamBlockTravel => EarAidModule.Settings.DreamBlock,
-        FireballIdle => EarAidModule.Settings.FireballIdle,
-        BlueHeartCollect or RedHeartCollect or GoldHeartCollect => EarAidModule.Settings.HeartCollect,
+        SFX.game_09_conveyor_activate or SFX.env_loc_09_conveyer_idle => EarAidModule.Settings.Conveyor,
+        SFX.char_mad_death or SFX.char_mad_predeath => EarAidModule.Settings.Death,
+        SFX.char_mad_death_golden => EarAidModule.Settings.GoldenDeath,
+        SFX.char_mad_dreamblock_enter or SFX.char_mad_dreamblock_exit or SFX.char_mad_dreamblock_travel => EarAidModule.Settings.DreamBlock,
+        SFX.env_loc_09_fireball_idle => EarAidModule.Settings.FireballIdle,
+        SFX.game_gen_crystalheart_blue_get or SFX.game_gen_crystalheart_red_get or 
+            SFX.game_gen_crystalheart_gold_get => EarAidModule.Settings.HeartCollect,
         ItemCrystalDeath => EarAidModule.Settings.ItemCrystalDeath,
-        LightningStrike => EarAidModule.Settings.LightningStrike,
-        MoveBlockActivate or MoveBlockBreak or MoveBlockMove or MoveBlockReappear or MoveBlockReform or MoveBlockDepress or MoveBlockRelease
-            or MoveBlockMoveCommunal or MoveBlockBreakCommunal => EarAidModule.Settings.MoveBlock,
-        OshiroBossCharge or OshiroBossEnterScreen or OshiroBossPrecharge or OshiroBossReform => EarAidModule.Settings.OshiroBoss,
-        TouchSwitchLast or TouchSwitchLastCutoff or TouchSwitchLastOneshot => EarAidModule.Settings.TouchSwitchComplete,
-        FarewellWind => EarAidModule.Settings.FarewellWind,
-        RidgeWind => EarAidModule.Settings.RidgeWind,
-        CityZipMover or FarewellZipMover => EarAidModule.Settings.ZipMover,
+        SFX.game_10_lightning_strike => EarAidModule.Settings.LightningStrike,
+        SFX.game_04_arrowblock_activate or SFX.game_04_arrowblock_break or SFX.game_04_arrowblock_move_loop or SFX.game_04_arrowblock_reappear or 
+            SFX.game_04_arrowblock_reform_begin or SFX.game_04_arrowblock_side_depress or SFX.game_04_arrowblock_side_release or
+            MoveBlockMoveCommunal or MoveBlockBreakCommunal => EarAidModule.Settings.MoveBlock,
+        SFX.char_oshiro_boss_charge or SFX.char_oshiro_boss_enterscreen or SFX.char_oshiro_boss_precharge or 
+            SFX.char_oshiro_boss_reform => EarAidModule.Settings.OshiroBoss,
+        SFX.game_gen_touchswitch_last_cutoff or SFX.game_gen_touchswitch_last_oneshot => EarAidModule.Settings.TouchSwitchComplete,
+        SFX.env_amb_10_voidspiral => EarAidModule.Settings.FarewellWind,
+        SFX.env_amb_04_main => EarAidModule.Settings.RidgeWind,
+        SFX.game_01_zipmover or SFX.game_10_zip_mover => EarAidModule.Settings.ZipMover,
         _ => 10
     };
 }
