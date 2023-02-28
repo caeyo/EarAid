@@ -96,10 +96,10 @@ public class EarAidSettings : EverestModuleSettings
     }
 
     public void CreateBirdSquawkEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuBirdSquawk, DialogIds.MenuBirdSquawkSubtext, BirdSquawk, (value) =>
-    {
-        BirdSquawk = value;
-        Mixer.MixExistingInstances(SFX.game_gen_bird_squawk, value);
-    });
+        {
+            BirdSquawk = value;
+            Mixer.MixExistingInstances(SFX.game_gen_bird_squawk, value);
+        });
 
     public void CreateConveyorEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuConveyor, DialogIds.MenuConveyorSubtext, Conveyor, (value) =>
         {
