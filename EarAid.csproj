@@ -9,6 +9,7 @@
     <OutputPath>C:\Program Files (x86)\Steam\steamapps\common\Celeste\Mods\EarAid</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CelesteGamePath Condition="'$(CELESTEGAMEPATH)' == ''">..\..</CelesteGamePath>
+    <PathMap>$(MSBuildProjectDirectory)=EarAid/</PathMap>
   </PropertyGroup>
 
   <!--Disable "Copy Local" for all references-->
