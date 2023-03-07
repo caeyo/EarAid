@@ -55,6 +55,11 @@ public class EarAidSettings : EverestModuleSettings
 
             foreach (string path in EventConsts.Paths)
             {
+                if ((path is EventConsts.MoveBlockBreakCommunal or EventConsts.MoveBlockMoveCommunal && !Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true)) ||
+                    (path is EventConsts.ItemCrystalDeath && !Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true)))
+                {
+                    break;
+                }
                 Mixer.MixExistingInstances(path, value ? EventConsts.PathToSetting(path) : 10);
             }
 
@@ -159,7 +164,10 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuItemCrystalDeath, DialogIds.MenuItemCrystalDeathSubtext, ItemCrystalDeath, (value) =>
             {
                 ItemCrystalDeath = value;
-                Mixer.MixExistingInstances(EventConsts.ItemCrystalDeath, value);
+                if (Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true))
+                {
+                    Mixer.MixExistingInstances(EventConsts.ItemCrystalDeath, value);
+                }
             });
     
     public void CreateLightningAmbienceEntry(TextMenu menu, bool inGame) 
@@ -180,9 +188,13 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuMoveBlock, DialogIds.MenuMoveBlockSubtext, MoveBlock, (value) =>
             {
                 MoveBlock = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.game_04_arrowblock_activate, SFX.game_04_arrowblock_break, SFX.game_04_arrowblock_move_loop, 
-                    SFX.game_04_arrowblock_reappear, SFX.game_04_arrowblock_reform_begin, SFX.game_04_arrowblock_side_depress, SFX.game_04_arrowblock_side_release, 
-                    EventConsts.MoveBlockBreakCommunal, EventConsts.MoveBlockMoveCommunal }, value);
+                Mixer.MixExistingInstances(new List<string> { SFX.game_04_arrowblock_activate, SFX.game_04_arrowblock_break, SFX.game_04_arrowblock_move_loop,
+                    SFX.game_04_arrowblock_reappear, SFX.game_04_arrowblock_reform_begin, SFX.game_04_arrowblock_side_depress, SFX.game_04_arrowblock_side_release }, 
+                    value);
+                if (Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true))
+                {
+                    Mixer.MixExistingInstances(new List<string> { EventConsts.MoveBlockBreakCommunal, EventConsts.MoveBlockMoveCommunal }, value);
+                }
             });
     
     public void CreateOshiroBossEntry(TextMenu menu, bool inGame) 
