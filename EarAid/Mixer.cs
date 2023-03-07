@@ -1,6 +1,7 @@
 ﻿using Celeste.Mod.EarAid.Utils;
 using FMOD;
 using FMOD.Studio;
+using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid;
 
@@ -40,6 +41,14 @@ public static class Mixer
             {
                 instanceArray[i].setVolume(volume / 10f);
             }
+        }
+    }
+
+    public static void MixExistingInstances(List<string> paths, int volume)
+    {
+        foreach (string path in paths)
+        {
+            MixExistingInstances(path, volume);
         }
     }
 }

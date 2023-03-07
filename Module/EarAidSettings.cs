@@ -4,6 +4,7 @@ using Monocle;
 using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Celeste.Mod.EarAid.Module;
 
@@ -87,7 +88,7 @@ public class EarAidSettings : EverestModuleSettings
         options.Add(item);
     }
 
-    private void CreateGenericEntry(TextMenu menu, string labelId, string subtextId, int initValue, Action<int> onChange)
+    private void CreateGenericVolumeEntry(TextMenu menu, string labelId, string subtextId, int initValue, Action<int> onChange)
     {
         TextMenu.Item item = new EaseInVolumeSlider(Dialog.Clean(labelId), menu, initValue).Change(onChange);
         menu.Add(item);
@@ -95,141 +96,137 @@ public class EarAidSettings : EverestModuleSettings
         options.Add(item);
     }
 
-    public void CreateBirdSquawkEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuBirdSquawk, DialogIds.MenuBirdSquawkSubtext, BirdSquawk, (value) =>
-        {
-            BirdSquawk = value;
-            Mixer.MixExistingInstances(SFX.game_gen_bird_squawk, value);
-        });
+    public void CreateBirdSquawkEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuBirdSquawk, DialogIds.MenuBirdSquawkSubtext, BirdSquawk, (value) =>
+            {
+                BirdSquawk = value;
+                Mixer.MixExistingInstances(SFX.game_gen_bird_squawk, value);
+            });
 
-    public void CreateConveyorEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuConveyor, DialogIds.MenuConveyorSubtext, Conveyor, (value) =>
-        {
-            Conveyor = value;
-            Mixer.MixExistingInstances(SFX.game_09_conveyor_activate, value);
-            Mixer.MixExistingInstances(SFX.env_loc_09_conveyer_idle, value);
-        });
+    public void CreateConveyorEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuConveyor, DialogIds.MenuConveyorSubtext, Conveyor, (value) =>
+            {
+                Conveyor = value;
+                Mixer.MixExistingInstances(new List<string> { SFX.game_09_conveyor_activate, SFX.env_loc_09_conveyer_idle }, value);
+            });
 
-    public void CreateDeathEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuDeath, DialogIds.MenuDeathSubtext, Death, (value) =>
-        {
-            Death = value;
-            Mixer.MixExistingInstances(SFX.char_mad_death, value);
-            Mixer.MixExistingInstances(SFX.char_mad_predeath, value);
-        });
+    public void CreateDeathEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuDeath, DialogIds.MenuDeathSubtext, Death, (value) =>
+            {
+                Death = value;
+                Mixer.MixExistingInstances(new List<string> { SFX.char_mad_death, SFX.char_mad_predeath }, value);
+            });
 
-    public void CreateGoldenDeathEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuGoldenDeath, DialogIds.MenuGoldenDeathSubtext, GoldenDeath, (value) =>
-        {
-            GoldenDeath = value;
-            Mixer.MixExistingInstances(SFX.char_mad_death_golden, value);
-        });
+    public void CreateGoldenDeathEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuGoldenDeath, DialogIds.MenuGoldenDeathSubtext, GoldenDeath, (value) =>
+            {
+                GoldenDeath = value;
+                Mixer.MixExistingInstances(SFX.char_mad_death_golden, value);
+            });
     
-    public void CreateDialogueEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuDialogue, DialogIds.MenuDialogueSubtext, Dialogue, (value) =>
-        {
-            Dialogue = value;
-            Mixer.MixExistingInstances(EventConsts.DialogueBadeline, value);
-            Mixer.MixExistingInstances(EventConsts.DialogueEx, value);
-            Mixer.MixExistingInstances(EventConsts.DialogueGranny, value);
-            Mixer.MixExistingInstances(EventConsts.DialogueMadeline, value);
-            Mixer.MixExistingInstances(EventConsts.DialogueMadelineMirror, value);
-            Mixer.MixExistingInstances(EventConsts.DialogueMom, value);
-            Mixer.MixExistingInstances(EventConsts.DialogueOshiro, value);
-            Mixer.MixExistingInstances(EventConsts.DialogueTheo, value);
-            Mixer.MixExistingInstances(EventConsts.DialogueTheoMirror, value);
-            Mixer.MixExistingInstances(EventConsts.DialogueTheoWebcam, value);
-        });
+    public void CreateDialogueEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuDialogue, DialogIds.MenuDialogueSubtext, Dialogue, (value) =>
+            {
+                Dialogue = value;
+                Mixer.MixExistingInstances(new List<string> { EventConsts.DialogueBadeline, EventConsts.DialogueEx, EventConsts.DialogueGranny,
+                    EventConsts.DialogueMadeline, EventConsts.DialogueMadelineMirror, EventConsts.DialogueMom, EventConsts.DialogueOshiro, EventConsts.DialogueTheo,
+                    EventConsts.DialogueTheoMirror, EventConsts.DialogueTheoWebcam }, value);
+            });
 
-    public void CreateDreamBlockEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuDreamBlock, DialogIds.MenuDreamBlockSubtext, DreamBlock, (value) =>
-        {
-            DreamBlock = value;
-            Mixer.MixExistingInstances(SFX.char_mad_dreamblock_enter, value);
-            Mixer.MixExistingInstances(SFX.char_mad_dreamblock_exit, value);
-            Mixer.MixExistingInstances(SFX.char_mad_dreamblock_travel, value);
-        });
+    public void CreateDreamBlockEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuDreamBlock, DialogIds.MenuDreamBlockSubtext, DreamBlock, (value) =>
+            {
+                DreamBlock = value;
+                Mixer.MixExistingInstances(new List<string> { SFX.char_mad_dreamblock_enter, SFX.char_mad_dreamblock_exit, SFX.char_mad_dreamblock_travel }, value);
+            });
     
-    public void CreateFireballIdleEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuFireballIdle, DialogIds.MenuFireballIdleSubtext, FireballIdle, (value) =>
-        {
-            FireballIdle = value;
-            Mixer.MixExistingInstances(SFX.env_loc_09_fireball_idle, value);
-        });
+    public void CreateFireballIdleEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuFireballIdle, DialogIds.MenuFireballIdleSubtext, FireballIdle, (value) =>
+            {
+                FireballIdle = value;
+                Mixer.MixExistingInstances(SFX.env_loc_09_fireball_idle, value);
+            });
     
-    public void CreateHeartCollectEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuHeartCollect, DialogIds.MenuHeartCollectSubtext, HeartCollect, (value) =>
-        {
-            HeartCollect = value;
-            Mixer.MixExistingInstances(SFX.game_gen_crystalheart_blue_get, value);
-            Mixer.MixExistingInstances(SFX.game_gen_crystalheart_red_get, value);
-            Mixer.MixExistingInstances(SFX.game_gen_crystalheart_gold_get, value);
-        });
+    public void CreateHeartCollectEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuHeartCollect, DialogIds.MenuHeartCollectSubtext, HeartCollect, (value) =>
+            {
+                HeartCollect = value;
+                Mixer.MixExistingInstances(new List<string> { SFX.game_gen_crystalheart_blue_get, SFX.game_gen_crystalheart_red_get,
+                    SFX.game_gen_crystalheart_gold_get }, value);
+            });
 
-    public void CreateItemCrystalDeathEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuItemCrystalDeath, DialogIds.MenuItemCrystalDeathSubtext, ItemCrystalDeath, (value) =>
-        {
-            ItemCrystalDeath = value;
-            Mixer.MixExistingInstances(EventConsts.ItemCrystalDeath, value);
-        });
+    public void CreateItemCrystalDeathEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuItemCrystalDeath, DialogIds.MenuItemCrystalDeathSubtext, ItemCrystalDeath, (value) =>
+            {
+                ItemCrystalDeath = value;
+                Mixer.MixExistingInstances(EventConsts.ItemCrystalDeath, value);
+            });
     
-    public void CreateLightningAmbienceEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuLightningAmbience, DialogIds.MenuLightningAmbienceSubtext, LightningAmbience, (value) =>
-        {
-            LightningAmbience = value;
-            Mixer.MixExistingInstances(SFX.env_amb_10_electricity, value);
-        });
+    public void CreateLightningAmbienceEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuLightningAmbience, DialogIds.MenuLightningAmbienceSubtext, LightningAmbience, (value) =>
+            {
+                LightningAmbience = value;
+                Mixer.MixExistingInstances(SFX.env_amb_10_electricity, value);
+            });
     
-    public void CreateLightningStrikeEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuLightningStrike, DialogIds.MenuLightningStrikeSubtext, LightningStrike, (value) =>
-        {
-            LightningStrike = value;
-            Mixer.MixExistingInstances(SFX.game_10_lightning_strike, value);
-        });
+    public void CreateLightningStrikeEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuLightningStrike, DialogIds.MenuLightningStrikeSubtext, LightningStrike, (value) =>
+            {
+                LightningStrike = value;
+                Mixer.MixExistingInstances(SFX.game_10_lightning_strike, value);
+            });
     
-    public void CreateMoveBlockEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuMoveBlock, DialogIds.MenuMoveBlockSubtext, MoveBlock, (value) =>
-        {
-            MoveBlock = value;
-            Mixer.MixExistingInstances(SFX.game_04_arrowblock_activate, value);
-            Mixer.MixExistingInstances(SFX.game_04_arrowblock_break, value);
-            Mixer.MixExistingInstances(SFX.game_04_arrowblock_move_loop, value);
-            Mixer.MixExistingInstances(SFX.game_04_arrowblock_reappear, value);
-            Mixer.MixExistingInstances(SFX.game_04_arrowblock_reform_begin, value);
-            Mixer.MixExistingInstances(SFX.game_04_arrowblock_side_depress, value);
-            Mixer.MixExistingInstances(SFX.game_04_arrowblock_side_release, value);
-            Mixer.MixExistingInstances(EventConsts.MoveBlockMoveCommunal, value);
-            Mixer.MixExistingInstances(EventConsts.MoveBlockBreakCommunal, value);
-        });
+    public void CreateMoveBlockEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuMoveBlock, DialogIds.MenuMoveBlockSubtext, MoveBlock, (value) =>
+            {
+                MoveBlock = value;
+                Mixer.MixExistingInstances(new List<string> { SFX.game_04_arrowblock_activate, SFX.game_04_arrowblock_break, SFX.game_04_arrowblock_move_loop, 
+                    SFX.game_04_arrowblock_reappear, SFX.game_04_arrowblock_reform_begin, SFX.game_04_arrowblock_side_depress, SFX.game_04_arrowblock_side_release, 
+                    EventConsts.MoveBlockBreakCommunal, EventConsts.MoveBlockMoveCommunal }, value);
+            });
     
-    public void CreateOshiroBossEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuOshiroBoss, DialogIds.MenuOshiroBossSubtext, OshiroBoss, (value) =>
-        {
-            OshiroBoss = value;
-            Mixer.MixExistingInstances(SFX.char_oshiro_boss_charge, value);
-            Mixer.MixExistingInstances(SFX.char_oshiro_boss_enterscreen, value);
-            Mixer.MixExistingInstances(SFX.char_oshiro_boss_precharge, value);
-            Mixer.MixExistingInstances(SFX.char_oshiro_boss_reform, value);
-        });
+    public void CreateOshiroBossEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuOshiroBoss, DialogIds.MenuOshiroBossSubtext, OshiroBoss, (value) =>
+            {
+                OshiroBoss = value;
+                Mixer.MixExistingInstances(new List<string> { SFX.char_oshiro_boss_charge, SFX.char_oshiro_boss_enterscreen, SFX.char_oshiro_boss_precharge,
+                    SFX.char_oshiro_boss_reform }, value);
+            });
     
-    public void CreateSpringEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuSpring, DialogIds.MenuSpringSubtext, Spring, (value) => 
-        {
-            Spring = value;
-            Mixer.MixExistingInstances(SFX.game_gen_spring, value);
-        });
+    public void CreateSpringEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuSpring, DialogIds.MenuSpringSubtext, Spring, (value) => 
+            {
+                Spring = value;
+                Mixer.MixExistingInstances(SFX.game_gen_spring, value);
+            });
 
-    public void CreateTouchSwitchCompleteEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuTouchSwitchComplete, DialogIds.MenuTouchSwitchCompleteSubtext, TouchSwitchComplete, (value) =>
-        {
-            TouchSwitchComplete = value;
-            Mixer.MixExistingInstances(SFX.game_gen_touchswitch_last_cutoff, value);
-            Mixer.MixExistingInstances(SFX.game_gen_touchswitch_last_oneshot, value);
-        });
+    public void CreateTouchSwitchCompleteEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuTouchSwitchComplete, DialogIds.MenuTouchSwitchCompleteSubtext, TouchSwitchComplete, (value) =>
+            {
+                TouchSwitchComplete = value;
+                Mixer.MixExistingInstances(new List<string> { SFX.game_gen_touchswitch_last_cutoff, SFX.game_gen_touchswitch_last_oneshot }, value);
+            });
     
-    public void CreateFarewellWindEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuFarewellWind, DialogIds.MenuFarewellWindSubtext, FarewellWind, (value) =>
-        {
-            FarewellWind = value;
-            Mixer.MixExistingInstances(SFX.env_amb_10_voidspiral, value);
-        });
+    public void CreateFarewellWindEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuFarewellWind, DialogIds.MenuFarewellWindSubtext, FarewellWind, (value) =>
+            {
+                FarewellWind = value;
+                Mixer.MixExistingInstances(SFX.env_amb_10_voidspiral, value);
+            });
     
-    public void CreateRidgeWindEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuRidgeWind, DialogIds.MenuRidgeWindSubtext, RidgeWind, (value) =>
-        {
-            RidgeWind = value;
-            Mixer.MixExistingInstances(SFX.env_amb_04_main, value);
-        });
+    public void CreateRidgeWindEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuRidgeWind, DialogIds.MenuRidgeWindSubtext, RidgeWind, (value) =>
+            {
+                RidgeWind = value;
+                Mixer.MixExistingInstances(SFX.env_amb_04_main, value);
+            });
     
-    public void CreateZipMoverEntry(TextMenu menu, bool inGame) => CreateGenericEntry(menu, DialogIds.MenuZipMover, DialogIds.MenuZipMoverSubtext, ZipMover, (value) =>
-        {
-            ZipMover = value;
-            Mixer.MixExistingInstances(SFX.game_01_zipmover, value);
-            Mixer.MixExistingInstances(SFX.game_10_zip_mover, value);
-        });
+    public void CreateZipMoverEntry(TextMenu menu, bool inGame) 
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuZipMover, DialogIds.MenuZipMoverSubtext, ZipMover, (value) =>
+            {
+                ZipMover = value;
+                Mixer.MixExistingInstances(new List<string> { SFX.game_01_zipmover, SFX.game_10_zip_mover }, value);
+            });
 }
 
 // Bastard child born of a nasty threeway between TextMenuExt.EaseInSubHeaderExt, TextMenuExt.IntSlider, and SRTool's EaseInSubMenu
