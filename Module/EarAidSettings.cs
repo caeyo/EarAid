@@ -58,7 +58,7 @@ public class EarAidSettings : EverestModuleSettings
                 if ((path is EventConsts.MoveBlockBreakCommunal or EventConsts.MoveBlockMoveCommunal && !Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true)) ||
                     (path is EventConsts.ItemCrystalDeath && !Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true)))
                 {
-                    break;
+                    continue;
                 }
                 Mixer.MixExistingInstances(path, value ? EventConsts.PathToSetting(path) : 10);
             }
