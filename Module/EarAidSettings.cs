@@ -15,6 +15,7 @@ public class EarAidSettings : EverestModuleSettings
     public bool HideUnusedOptions { get; set; } = false;
 
     public int BirdSquawk { get; set; } = 10;
+    public int BrokenWindow { get; set; } = 10;
     public int Conveyor { get; set; } = 10;
     public int Death { get; set; } = 10;
     public int GoldenDeath { get; set; } = 10;
@@ -106,6 +107,13 @@ public class EarAidSettings : EverestModuleSettings
             {
                 BirdSquawk = value;
                 Mixer.MixExistingInstances(SFX.game_gen_bird_squawk, value);
+            });
+
+    public void CreateBrokenWindowEntry(TextMenu menu, bool inGame)
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuBrokenWindow, DialogIds.MenuBrokenWindowSubtext, BrokenWindow, (value) =>
+            {
+                BrokenWindow = value;
+                Mixer.MixExistingInstances(new List<string> { SFX.env_loc_03_brokenwindow_large_loop, SFX.env_loc_03_brokenwindow_small_loop }, value);
             });
 
     public void CreateConveyorEntry(TextMenu menu, bool inGame) 

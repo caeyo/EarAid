@@ -1,4 +1,6 @@
 ﻿using Celeste.Mod.EarAid.Module;
+using IL.Celeste;
+using On.Celeste;
 using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid.Utils;
@@ -24,6 +26,8 @@ public static class EventConsts
     public static readonly HashSet<string> Paths = new()
     {
         SFX.game_gen_bird_squawk,
+        SFX.env_loc_03_brokenwindow_large_loop,
+        SFX.env_loc_03_brokenwindow_small_loop,
         SFX.game_09_conveyor_activate,
         SFX.env_loc_09_conveyer_idle,
         SFX.char_mad_death,
@@ -74,6 +78,7 @@ public static class EventConsts
     public static int PathToSetting(string path) => path switch
     {
         SFX.game_gen_bird_squawk => EarAidModule.Settings.BirdSquawk,
+        SFX.env_loc_03_brokenwindow_large_loop or SFX.env_loc_03_brokenwindow_small_loop => EarAidModule.Settings.BrokenWindow,
         SFX.game_09_conveyor_activate or SFX.env_loc_09_conveyer_idle => EarAidModule.Settings.Conveyor,
         SFX.char_mad_death or SFX.char_mad_predeath => EarAidModule.Settings.Death,
         SFX.char_mad_death_golden => EarAidModule.Settings.GoldenDeath,

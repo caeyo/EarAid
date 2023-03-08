@@ -11,6 +11,9 @@ public static class DialogIds
 
     public const string MenuBirdSquawk = "EAR_AID_BIRD_SQUAWK";
     public const string MenuBirdSquawkSubtext = "EAR_AID_BIRD_SQUAWK_SUBTEXT";
+
+    public const string MenuBrokenWindow = "EAR_AID_BROKEN_WINDOW";
+    public const string MenuBrokenWindowSubtext = "EAR_AID_BROKEN_WINDOW_SUBTEXT";
     
     public const string MenuConveyor = "EAR_AID_CONVEYOR";
     public const string MenuConveyorSubtext = "EAR_AID_CONVEYOR_SUBTEXT";
