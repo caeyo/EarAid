@@ -56,8 +56,8 @@ public class EarAidSettings : EverestModuleSettings
 
             foreach (string path in EventConsts.Paths)
             {
-                if ((path is EventConsts.Communal_MoveBlockBreak or EventConsts.Communal_MoveBlockMove && !Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true)) ||
-                    (path is EventConsts.Cherry_ItemCrystalDeath && !Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true)))
+                if ((path.StartsWith("event:/CommunalHelperEvents") && !Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true)) ||
+                    (path.StartsWith("event:/cherryhelper") && !Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true)))
                 {
                     continue;
                 }
