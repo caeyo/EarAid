@@ -16,10 +16,26 @@ public static class EventConsts
     public const string DialogueTheoMirror = "event:/char/dialogue/theo_mirror";
     public const string DialogueTheoWebcam = "event:/char/dialogue/theo_webcam";
     
-    public const string ItemCrystalDeath = "event:/cherryhelper/itemcrystal_death";
+    public const string Cherry_ItemCrystalDeath = "event:/cherryhelper/itemcrystal_death";
 
-    public const string MoveBlockMoveCommunal = "event:/CommunalHelperEvents/game/redirectMoveBlock/arrowblock_move";
-    public const string MoveBlockBreakCommunal = "event:/CommunalHelperEvents/game/redirectMoveBlock/arrowblock_break";
+    public const string Communal_MoveBlockMove = "event:/CommunalHelperEvents/game/redirectMoveBlock/arrowblock_move";
+    public const string Communal_MoveBlockBreak = "event:/CommunalHelperEvents/game/redirectMoveBlock/arrowblock_break";
+
+    public const string Communal_ZipMoverMoonStart = "event:/CommunalHelperEvents/game/zipMover/moon/start";
+    public const string Communal_ZipMoverMoonImpact = "event:/CommunalHelperEvents/game/zipMover/moon/impact";
+    public const string Communal_ZipMoverMoonReturn = "event:/CommunalHelperEvents/game/zipMover/moon/return";
+    public const string Communal_ZipMoverMoonFinish = "event:/CommunalHelperEvents/game/zipMover/moon/finish";
+    public const string Communal_ZipMoverMoonTick = "event:/CommunalHelperEvents/game/zipMover/moon/tick";
+    public const string Communal_ZipMoverNormalStart = "event:/CommunalHelperEvents/game/zipMover/normal/start";
+    public const string Communal_ZipMoverNormalImpact = "event:/CommunalHelperEvents/game/zipMover/normal/impact";
+    public const string Communal_ZipMoverNormalReturn = "event:/CommunalHelperEvents/game/zipMover/normal/return";
+    public const string Communal_ZipMoverNormalFinish = "event:/CommunalHelperEvents/game/zipMover/normal/finish";
+    public const string Communal_ZipMoverNormalTick = "event:/CommunalHelperEvents/game/zipMover/normal/tick";
+    public const string Communal_ZipMoverDreamReturn = "event:/CommunalHelperEvents/game/dreamZipMover/return";
+    public const string Communal_ZipMoverDreamFinish = "event:/CommunalHelperEvents/game/dreamZipMover/finish";
+    public const string Communal_ZipMoverDreamStart = "event:/CommunalHelperEvents/game/dreamZipMover/start";
+    public const string Communal_ZipMoverDreamTick = "event:/CommunalHelperEvents/game/dreamZipMover/tick";
+    public const string Communal_ZipMoverDreamImpact = "event:/CommunalHelperEvents/game/dreamZipMover/impact";
 
     public static readonly HashSet<string> Paths = new()
     {
@@ -48,7 +64,7 @@ public static class EventConsts
         SFX.game_gen_crystalheart_blue_get,
         SFX.game_gen_crystalheart_red_get,
         SFX.game_gen_crystalheart_gold_get,
-        ItemCrystalDeath,
+        Cherry_ItemCrystalDeath,
         SFX.env_amb_10_electricity,
         SFX.game_10_lightning_strike,
         SFX.game_04_arrowblock_activate,
@@ -58,8 +74,8 @@ public static class EventConsts
         SFX.game_04_arrowblock_reform_begin,
         SFX.game_04_arrowblock_side_depress,
         SFX.game_04_arrowblock_side_release,
-        MoveBlockMoveCommunal,
-        MoveBlockBreakCommunal,
+        Communal_MoveBlockMove,
+        Communal_MoveBlockBreak,
         SFX.char_oshiro_boss_charge,
         SFX.char_oshiro_boss_enterscreen,
         SFX.char_oshiro_boss_precharge,
@@ -70,7 +86,22 @@ public static class EventConsts
         SFX.env_amb_10_voidspiral,
         SFX.env_amb_04_main,
         SFX.game_01_zipmover,
-        SFX.game_10_zip_mover
+        SFX.game_10_zip_mover,
+        Communal_ZipMoverDreamFinish,
+        Communal_ZipMoverDreamImpact,
+        Communal_ZipMoverDreamReturn,
+        Communal_ZipMoverDreamStart,
+        Communal_ZipMoverDreamTick,
+        Communal_ZipMoverMoonFinish,
+        Communal_ZipMoverMoonImpact,
+        Communal_ZipMoverMoonReturn,
+        Communal_ZipMoverMoonStart,
+        Communal_ZipMoverMoonTick,
+        Communal_ZipMoverNormalFinish,
+        Communal_ZipMoverNormalImpact,
+        Communal_ZipMoverNormalReturn,
+        Communal_ZipMoverNormalStart,
+        Communal_ZipMoverNormalTick,
     };
 
     public static int PathToSetting(string path) => path switch
@@ -86,19 +117,23 @@ public static class EventConsts
         SFX.env_loc_09_fireball_idle => EarAidModule.Settings.FireballIdle,
         SFX.game_gen_crystalheart_blue_get or SFX.game_gen_crystalheart_red_get or 
             SFX.game_gen_crystalheart_gold_get => EarAidModule.Settings.HeartCollect,
-        ItemCrystalDeath => EarAidModule.Settings.ItemCrystalDeath,
+        Cherry_ItemCrystalDeath => EarAidModule.Settings.ItemCrystalDeath,
         SFX.env_amb_10_electricity => EarAidModule.Settings.LightningAmbience,
         SFX.game_10_lightning_strike => EarAidModule.Settings.LightningStrike,
         SFX.game_04_arrowblock_activate or SFX.game_04_arrowblock_break or SFX.game_04_arrowblock_move_loop or SFX.game_04_arrowblock_reappear or 
             SFX.game_04_arrowblock_reform_begin or SFX.game_04_arrowblock_side_depress or SFX.game_04_arrowblock_side_release or
-            MoveBlockMoveCommunal or MoveBlockBreakCommunal => EarAidModule.Settings.MoveBlock,
+            Communal_MoveBlockMove or Communal_MoveBlockBreak => EarAidModule.Settings.MoveBlock,
         SFX.char_oshiro_boss_charge or SFX.char_oshiro_boss_enterscreen or SFX.char_oshiro_boss_precharge or 
             SFX.char_oshiro_boss_reform => EarAidModule.Settings.OshiroBoss,
         SFX.game_gen_spring => EarAidModule.Settings.Spring,
         SFX.game_gen_touchswitch_last_cutoff or SFX.game_gen_touchswitch_last_oneshot => EarAidModule.Settings.TouchSwitchComplete,
         SFX.env_amb_10_voidspiral => EarAidModule.Settings.FarewellWind,
         SFX.env_amb_04_main => EarAidModule.Settings.RidgeWind,
-        SFX.game_01_zipmover or SFX.game_10_zip_mover => EarAidModule.Settings.ZipMover,
+        SFX.game_01_zipmover or SFX.game_10_zip_mover or Communal_ZipMoverDreamFinish or Communal_ZipMoverDreamImpact or 
+            Communal_ZipMoverDreamReturn or Communal_ZipMoverDreamStart or Communal_ZipMoverDreamTick or Communal_ZipMoverMoonFinish or 
+            Communal_ZipMoverMoonImpact or Communal_ZipMoverMoonReturn or Communal_ZipMoverMoonStart or Communal_ZipMoverMoonTick or 
+            Communal_ZipMoverNormalFinish or Communal_ZipMoverNormalImpact or Communal_ZipMoverNormalReturn or Communal_ZipMoverNormalStart or 
+            Communal_ZipMoverNormalTick => EarAidModule.Settings.ZipMover,
         _ => 10
     };
 }

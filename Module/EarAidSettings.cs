@@ -55,8 +55,8 @@ public class EarAidSettings : EverestModuleSettings
 
             foreach (string path in EventConsts.Paths)
             {
-                if ((path is EventConsts.MoveBlockBreakCommunal or EventConsts.MoveBlockMoveCommunal && !Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true)) ||
-                    (path is EventConsts.ItemCrystalDeath && !Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true)))
+                if ((path is EventConsts.Communal_MoveBlockBreak or EventConsts.Communal_MoveBlockMove && !Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true)) ||
+                    (path is EventConsts.Cherry_ItemCrystalDeath && !Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true)))
                 {
                     continue;
                 }
@@ -173,7 +173,7 @@ public class EarAidSettings : EverestModuleSettings
                 ItemCrystalDeath = value;
                 if (Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true))
                 {
-                    Mixer.MixExistingInstances(EventConsts.ItemCrystalDeath, value);
+                    Mixer.MixExistingInstances(EventConsts.Cherry_ItemCrystalDeath, value);
                 }
             });
     
@@ -200,7 +200,7 @@ public class EarAidSettings : EverestModuleSettings
                     value);
                 if (Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true))
                 {
-                    Mixer.MixExistingInstances(new List<string> { EventConsts.MoveBlockBreakCommunal, EventConsts.MoveBlockMoveCommunal }, value);
+                    Mixer.MixExistingInstances(new List<string> { EventConsts.Communal_MoveBlockBreak, EventConsts.Communal_MoveBlockMove }, value);
                 }
             });
     
@@ -245,6 +245,15 @@ public class EarAidSettings : EverestModuleSettings
             {
                 ZipMover = value;
                 Mixer.MixExistingInstances(new List<string> { SFX.game_01_zipmover, SFX.game_10_zip_mover }, value);
+                if (Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true))
+                {
+                    Mixer.MixExistingInstances(new List<string> { EventConsts.Communal_ZipMoverDreamFinish, EventConsts.Communal_ZipMoverDreamImpact, 
+                        EventConsts.Communal_ZipMoverDreamReturn, EventConsts.Communal_ZipMoverDreamStart, EventConsts.Communal_ZipMoverDreamTick, 
+                        EventConsts.Communal_ZipMoverMoonFinish, EventConsts.Communal_ZipMoverMoonImpact, EventConsts.Communal_ZipMoverMoonReturn, 
+                        EventConsts.Communal_ZipMoverMoonStart, EventConsts.Communal_ZipMoverMoonTick, EventConsts.Communal_ZipMoverNormalFinish, 
+                        EventConsts.Communal_ZipMoverNormalImpact, EventConsts.Communal_ZipMoverNormalReturn, EventConsts.Communal_ZipMoverNormalStart, 
+                        EventConsts.Communal_ZipMoverNormalTick }, value);
+                }
             });
 }
 
