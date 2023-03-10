@@ -17,6 +17,7 @@ public class EarAidSettings : EverestModuleSettings
     public int BrokenWindow { get; set; } = 10;
     public int Conveyor { get; set; } = 10;
     public int Death { get; set; } = 10;
+    public int Respawn { get; set; } = 10;
     public int GoldenDeath { get; set; } = 10;
     public int Dialogue { get; set; } = 10;
     public int DreamBlock { get; set; } = 10;
@@ -127,6 +128,13 @@ public class EarAidSettings : EverestModuleSettings
             {
                 Death = value;
                 Mixer.MixExistingInstances(new List<string> { SFX.char_mad_death, SFX.char_mad_predeath }, value);
+            });
+
+    public void CreateRespawnEntry(TextMenu menu, bool inGame)
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuRespawn, DialogIds.MenuRespawnSubtext, Respawn, (value) =>
+            {
+                Respawn = value;
+                Mixer.MixExistingInstances(SFX.char_mad_revive, value);
             });
 
     public void CreateGoldenDeathEntry(TextMenu menu, bool inGame) 

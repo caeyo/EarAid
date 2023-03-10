@@ -21,6 +21,9 @@ public static class DialogIds
     public const string MenuDeath = "EAR_AID_DEATH";
     public const string MenuDeathSubtext = "EAR_AID_DEATH_SUBTEXT";
 
+    public const string MenuRespawn = "EAR_AID_RESPAWN";
+    public const string MenuRespawnSubtext = "EAR_AID_RESPAWN_SUBTEXT";
+
     public const string MenuGoldenDeath = "EAR_AID_GOLDEN_DEATH";
     public const string MenuGoldenDeathSubtext = "EAR_AID_GOLDEN_DEATH_SUBTEXT";
 

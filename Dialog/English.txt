@@ -50,6 +50,9 @@ EAR_AID_CONVEYOR_SUBTEXT=				The sounds used when a conveyor is active.
 EAR_AID_DEATH=							Death
 EAR_AID_DEATH_SUBTEXT=					The sounds used when the player dies.
 
+EAR_AID_RESPAWN=						Respawn
+EAR_AID_RESPAWN_SUBTEXT=				The sound used when the player respawns.
+
 EAR_AID_GOLDEN_DEATH=					Golden Death
 EAR_AID_GOLDEN_DEATH_SUBTEXT=			The sound used when the player dies with a golden berry.
 

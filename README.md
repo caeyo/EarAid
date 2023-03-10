@@ -6,6 +6,7 @@ Sounds currently supported:
 - *Broken Window:* The sounds used when wind is blowing through a broken window (e.g. in Resort).
 - *Conveyor:* The sounds used when a conveyor is active.
 - *Death:* The sounds used when the player dies.
+- *Respawn:* The sound used when the player respawns.
 - *Golden Death:* The sound used when the player dies with a golden berry.
 - *Dialogue:* The sounds used for character voices in dialogue. Affects all voices.
 - *Dream Block:* The sounds used when the player travels through a dream block.

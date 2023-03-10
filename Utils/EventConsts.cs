@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.EarAid.Module;
+using IL.Celeste;
 using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid.Utils;
@@ -46,6 +47,7 @@ public static class EventConsts
         SFX.env_loc_09_conveyer_idle,
         SFX.char_mad_death,
         SFX.char_mad_predeath,
+        SFX.char_mad_revive,
         SFX.char_mad_death_golden,
         DialogueBadeline, 
         DialogueEx, 
@@ -110,6 +112,7 @@ public static class EventConsts
         SFX.env_loc_03_brokenwindow_large_loop or SFX.env_loc_03_brokenwindow_small_loop => EarAidModule.Settings.BrokenWindow,
         SFX.game_09_conveyor_activate or SFX.env_loc_09_conveyer_idle => EarAidModule.Settings.Conveyor,
         SFX.char_mad_death or SFX.char_mad_predeath => EarAidModule.Settings.Death,
+        SFX.char_mad_revive => EarAidModule.Settings.Respawn,
         SFX.char_mad_death_golden => EarAidModule.Settings.GoldenDeath,
         DialogueBadeline or DialogueEx or DialogueGranny or DialogueMadeline or DialogueMadelineMirror or DialogueMom or DialogueOshiro or
             DialogueTheo or DialogueTheoMirror or DialogueTheoWebcam => EarAidModule.Settings.Dialogue,
