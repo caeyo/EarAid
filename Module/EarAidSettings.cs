@@ -28,6 +28,7 @@ public class EarAidSettings : EverestModuleSettings
     public int LightningStrike { get; set; } = 10;
     public int MoveBlock { get; set; } = 10;
     public int OshiroBoss { get; set; } = 10;
+    public int Pico8Flag { get; set; } = 10;
     public int Spring { get; set; } = 10;
     public int TouchSwitchComplete { get; set; } = 10;
     public int FarewellWind { get; set; } = 10;
@@ -219,6 +220,13 @@ public class EarAidSettings : EverestModuleSettings
                 Mixer.MixExistingInstances(new List<string> { SFX.char_oshiro_boss_charge, SFX.char_oshiro_boss_enterscreen, SFX.char_oshiro_boss_precharge,
                     SFX.char_oshiro_boss_reform }, value);
             });
+
+    public void CreatePico8FlagEntry(TextMenu menu, bool inGame)
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuPico8Flag, DialogIds.MenuPico8FlagSubtext, Pico8Flag, (value) =>
+        {
+            Pico8Flag = value;
+            Mixer.MixExistingInstances(SFX.game_10_pico8_flag, value);
+        });
     
     public void CreateSpringEntry(TextMenu menu, bool inGame) 
         => CreateGenericVolumeEntry(menu, DialogIds.MenuSpring, DialogIds.MenuSpringSubtext, Spring, (value) => 

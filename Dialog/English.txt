@@ -83,6 +83,9 @@ EAR_AID_MOVE_BLOCK_SUBTEXT=				The sounds used by move blocks.
 EAR_AID_OSHIRO_BOSS=					Oshiro Boss
 EAR_AID_OSHIRO_BOSS_SUBTEXT=			The sounds used when an Oshiro boss is active.
 
+EAR_AID_PICO_8_FLAG=					Pico-8 Flag
+EAR_AID_PICO_8_FLAG_SUBTEXT=			The sound used when a Pico-8 flag is hit.
+
 EAR_AID_SPRING=							Spring
 EAR_AID_SPRING_SUBTEXT=					The sound used when a spring is sprung.
 
