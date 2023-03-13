@@ -44,11 +44,11 @@ public static class Mixer
         }
     }
 
-    public static void MixExistingInstances(List<string> paths, int volume)
+    public static void MixExistingInstances(string[] paths, int volume)
     {
-        foreach (string path in paths)
+        for (int i = 0; i < paths.Length; i++)
         {
-            MixExistingInstances(path, volume);
+            MixExistingInstances(paths[i], volume);
         }
     }
 }

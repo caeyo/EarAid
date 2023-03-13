@@ -114,21 +114,21 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuBrokenWindow, DialogIds.MenuBrokenWindowSubtext, BrokenWindow, (value) =>
             {
                 BrokenWindow = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.env_loc_03_brokenwindow_large_loop, SFX.env_loc_03_brokenwindow_small_loop }, value);
+                Mixer.MixExistingInstances(new string[] { SFX.env_loc_03_brokenwindow_large_loop, SFX.env_loc_03_brokenwindow_small_loop }, value);
             });
 
     public void CreateConveyorEntry(TextMenu menu, bool inGame) 
         => CreateGenericVolumeEntry(menu, DialogIds.MenuConveyor, DialogIds.MenuConveyorSubtext, Conveyor, (value) =>
             {
                 Conveyor = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.game_09_conveyor_activate, SFX.env_loc_09_conveyer_idle }, value);
+                Mixer.MixExistingInstances(new string[] { SFX.game_09_conveyor_activate, SFX.env_loc_09_conveyer_idle }, value);
             });
 
     public void CreateDeathEntry(TextMenu menu, bool inGame) 
         => CreateGenericVolumeEntry(menu, DialogIds.MenuDeath, DialogIds.MenuDeathSubtext, Death, (value) =>
             {
                 Death = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.char_mad_death, SFX.char_mad_predeath }, value);
+                Mixer.MixExistingInstances(new string[] { SFX.char_mad_death, SFX.char_mad_predeath }, value);
             });
 
     public void CreateRespawnEntry(TextMenu menu, bool inGame)
@@ -149,7 +149,7 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuDialogue, DialogIds.MenuDialogueSubtext, Dialogue, (value) =>
             {
                 Dialogue = value;
-                Mixer.MixExistingInstances(new List<string> { EventConsts.DialogueBadeline, EventConsts.DialogueEx, EventConsts.DialogueGranny,
+                Mixer.MixExistingInstances(new string[] { EventConsts.DialogueBadeline, EventConsts.DialogueEx, EventConsts.DialogueGranny,
                     EventConsts.DialogueMadeline, EventConsts.DialogueMadelineMirror, EventConsts.DialogueMom, EventConsts.DialogueOshiro, EventConsts.DialogueTheo,
                     EventConsts.DialogueTheoMirror, EventConsts.DialogueTheoWebcam }, value);
             });
@@ -158,7 +158,7 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuDreamBlock, DialogIds.MenuDreamBlockSubtext, DreamBlock, (value) =>
             {
                 DreamBlock = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.char_mad_dreamblock_enter, SFX.char_mad_dreamblock_exit, SFX.char_mad_dreamblock_travel }, value);
+                Mixer.MixExistingInstances(new string[] { SFX.char_mad_dreamblock_enter, SFX.char_mad_dreamblock_exit, SFX.char_mad_dreamblock_travel }, value);
             });
     
     public void CreateFireballIdleEntry(TextMenu menu, bool inGame) 
@@ -172,7 +172,7 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuHeartCollect, DialogIds.MenuHeartCollectSubtext, HeartCollect, (value) =>
             {
                 HeartCollect = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.game_gen_crystalheart_blue_get, SFX.game_gen_crystalheart_red_get,
+                Mixer.MixExistingInstances(new string[] { SFX.game_gen_crystalheart_blue_get, SFX.game_gen_crystalheart_red_get,
                     SFX.game_gen_crystalheart_gold_get }, value);
             });
 
@@ -204,12 +204,12 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuMoveBlock, DialogIds.MenuMoveBlockSubtext, MoveBlock, (value) =>
             {
                 MoveBlock = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.game_04_arrowblock_activate, SFX.game_04_arrowblock_break, SFX.game_04_arrowblock_move_loop,
+                Mixer.MixExistingInstances(new string[] { SFX.game_04_arrowblock_activate, SFX.game_04_arrowblock_break, SFX.game_04_arrowblock_move_loop,
                     SFX.game_04_arrowblock_reappear, SFX.game_04_arrowblock_reform_begin, SFX.game_04_arrowblock_side_depress, SFX.game_04_arrowblock_side_release }, 
                     value);
                 if (Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true))
                 {
-                    Mixer.MixExistingInstances(new List<string> { EventConsts.Communal_MoveBlockBreak, EventConsts.Communal_MoveBlockMove }, value);
+                    Mixer.MixExistingInstances(new string[] { EventConsts.Communal_MoveBlockBreak, EventConsts.Communal_MoveBlockMove }, value);
                 }
             });
     
@@ -217,7 +217,7 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuOshiroBoss, DialogIds.MenuOshiroBossSubtext, OshiroBoss, (value) =>
             {
                 OshiroBoss = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.char_oshiro_boss_charge, SFX.char_oshiro_boss_enterscreen, SFX.char_oshiro_boss_precharge,
+                Mixer.MixExistingInstances(new string[] { SFX.char_oshiro_boss_charge, SFX.char_oshiro_boss_enterscreen, SFX.char_oshiro_boss_precharge,
                     SFX.char_oshiro_boss_reform }, value);
             });
 
@@ -239,7 +239,7 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuTouchSwitchComplete, DialogIds.MenuTouchSwitchCompleteSubtext, TouchSwitchComplete, (value) =>
             {
                 TouchSwitchComplete = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.game_gen_touchswitch_last_cutoff, SFX.game_gen_touchswitch_last_oneshot }, value);
+                Mixer.MixExistingInstances(new string[] { SFX.game_gen_touchswitch_last_cutoff, SFX.game_gen_touchswitch_last_oneshot }, value);
             });
     
     public void CreateFarewellWindEntry(TextMenu menu, bool inGame) 
@@ -260,10 +260,10 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuZipMover, DialogIds.MenuZipMoverSubtext, ZipMover, (value) =>
             {
                 ZipMover = value;
-                Mixer.MixExistingInstances(new List<string> { SFX.game_01_zipmover, SFX.game_10_zip_mover }, value);
+                Mixer.MixExistingInstances(new string[] { SFX.game_01_zipmover, SFX.game_10_zip_mover }, value);
                 if (Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true))
                 {
-                    Mixer.MixExistingInstances(new List<string> { EventConsts.Communal_ZipMoverDreamFinish, EventConsts.Communal_ZipMoverDreamImpact, 
+                    Mixer.MixExistingInstances(new string[] { EventConsts.Communal_ZipMoverDreamFinish, EventConsts.Communal_ZipMoverDreamImpact,
                         EventConsts.Communal_ZipMoverDreamReturn, EventConsts.Communal_ZipMoverDreamStart, EventConsts.Communal_ZipMoverDreamTick, 
                         EventConsts.Communal_ZipMoverMoonFinish, EventConsts.Communal_ZipMoverMoonImpact, EventConsts.Communal_ZipMoverMoonReturn, 
                         EventConsts.Communal_ZipMoverMoonStart, EventConsts.Communal_ZipMoverMoonTick, EventConsts.Communal_ZipMoverNormalFinish, 
