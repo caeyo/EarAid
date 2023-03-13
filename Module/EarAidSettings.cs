@@ -21,6 +21,7 @@ public class EarAidSettings : EverestModuleSettings
     public int GoldenDeath { get; set; } = 10;
     public int Dialogue { get; set; } = 10;
     public int DreamBlock { get; set; } = 10;
+    public int DrumSwapBlock { get; set; } = 10;
     public int FireballIdle { get; set; } = 10;
     public int HeartCollect { get; set; } = 10;
     public int ItemCrystalDeath { get; set; } = 10;
@@ -58,7 +59,8 @@ public class EarAidSettings : EverestModuleSettings
             foreach (string path in EventConsts.Paths)
             {
                 if ((path.StartsWith("event:/CommunalHelperEvents") && !Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true)) ||
-                    (path.StartsWith("event:/cherryhelper") && !Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true)))
+                    (path.StartsWith("event:/cherryhelper") && !Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true)) ||
+                    (path.StartsWith("event:/strawberry_jam_2021") && !Everest.Content.TryGet("StrawberryJam2021:/Audio/StrawberryJam2021Bank", out ModAsset _, true))) 
                 {
                     continue;
                 }
@@ -159,6 +161,16 @@ public class EarAidSettings : EverestModuleSettings
             {
                 DreamBlock = value;
                 Mixer.MixExistingInstances(new string[] { SFX.char_mad_dreamblock_enter, SFX.char_mad_dreamblock_exit, SFX.char_mad_dreamblock_travel }, value);
+            });
+
+    public void CreateDrumSwapBlockEntry(TextMenu menu, bool inGame)
+        => CreateGenericVolumeEntry(menu, DialogIds.MenuDrumSwapBlock, DialogIds.MenuDrumSwapBlockSubtext, DrumSwapBlock, (value) =>
+            {
+                DrumSwapBlock = value;
+                if (Everest.Content.TryGet("StrawberryJam2021:/Audio/StrawberryJam2021Bank", out ModAsset _, true))
+                {
+                    Mixer.MixExistingInstances(new string[] { EventConsts.SJ_DrumSwapBlockMove, EventConsts.SJ_DrumSwapBlockMoveEnd }, value);
+                }
             });
     
     public void CreateFireballIdleEntry(TextMenu menu, bool inGame) 

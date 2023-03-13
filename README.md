@@ -10,6 +10,7 @@ Sounds currently supported:
 - *Golden Death:* The sound used when the player dies with a golden berry.
 - *Dialogue:* The sounds used for character voices in dialogue. Affects all voices.
 - *Dream Block:* The sounds used when the player travels through a dream block.
+- *Drum Swap Block:* The sounds used for drum swap blocks from Strawberry Jam.
 - *Fireball:* The sound used when a fireball is present.
 - *Heart Collect:* The sound used when a crystal heart is collected.
 - *Item Crystal Death:* The sound used when an item crystal from Cherry Helper is destroyed.

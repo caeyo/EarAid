@@ -62,6 +62,9 @@ EAR_AID_DIALOGUE_SUBTEXT=				The sounds used for character voices in dialogue. A
 EAR_AID_DREAM_BLOCK=					Dream Block
 EAR_AID_DREAM_BLOCK_SUBTEXT=			The sounds used when the player travels through a dream block.
 
+EAR_AID_DRUM_SWAP_BLOCK=				Drum Swap Block
+EAR_AID_DRUM_SWAP_BLOCK_SUBTEXT=		The sounds used for drum swap blocks from Strawberry Jam.
+
 EAR_AID_FIREBALL_IDLE=					Fireball
 EAR_AID_FIREBALL_IDLE_SUBTEXT=			The sound used when a fireball is present.
 

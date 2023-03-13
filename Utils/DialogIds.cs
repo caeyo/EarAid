@@ -33,6 +33,9 @@ public static class DialogIds
     public const string MenuDreamBlock = "EAR_AID_DREAM_BLOCK";
     public const string MenuDreamBlockSubtext = "EAR_AID_DREAM_BLOCK_SUBTEXT";
 
+    public const string MenuDrumSwapBlock = "EAR_AID_DRUM_SWAP_BLOCK";
+    public const string MenuDrumSwapBlockSubtext = "EAR_AID_DRUM_SWAP_BLOCK_SUBTEXT";
+
     public const string MenuFireballIdle = "EAR_AID_FIREBALL_IDLE";
     public const string MenuFireballIdleSubtext = "EAR_AID_FIREBALL_IDLE_SUBTEXT";
 

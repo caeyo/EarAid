@@ -38,6 +38,9 @@ public static class EventConsts
     public const string Communal_ZipMoverDreamTick = "event:/CommunalHelperEvents/game/dreamZipMover/tick";
     public const string Communal_ZipMoverDreamImpact = "event:/CommunalHelperEvents/game/dreamZipMover/impact";
 
+    public const string SJ_DrumSwapBlockMove = "event:/strawberry_jam_2021/game/drum_swapblock/drum_swapblock_move";
+    public const string SJ_DrumSwapBlockMoveEnd = "event:/strawberry_jam_2021/game/drum_swapblock/drum_swapblock_move_end";
+
     public static readonly HashSet<string> Paths = new()
     {
         SFX.game_gen_bird_squawk,
@@ -62,6 +65,8 @@ public static class EventConsts
         SFX.char_mad_dreamblock_enter,
         SFX.char_mad_dreamblock_exit,
         SFX.char_mad_dreamblock_travel,
+        SJ_DrumSwapBlockMove,
+        SJ_DrumSwapBlockMoveEnd,
         SFX.env_loc_09_fireball_idle,
         SFX.game_gen_crystalheart_blue_get,
         SFX.game_gen_crystalheart_red_get,
@@ -118,6 +123,7 @@ public static class EventConsts
         DialogueBadeline or DialogueEx or DialogueGranny or DialogueMadeline or DialogueMadelineMirror or DialogueMom or DialogueOshiro or
             DialogueTheo or DialogueTheoMirror or DialogueTheoWebcam => EarAidModule.Settings.Dialogue,
         SFX.char_mad_dreamblock_enter or SFX.char_mad_dreamblock_exit or SFX.char_mad_dreamblock_travel => EarAidModule.Settings.DreamBlock,
+        SJ_DrumSwapBlockMove or SJ_DrumSwapBlockMoveEnd => EarAidModule.Settings.DrumSwapBlock,
         SFX.env_loc_09_fireball_idle => EarAidModule.Settings.FireballIdle,
         SFX.game_gen_crystalheart_blue_get or SFX.game_gen_crystalheart_red_get or 
             SFX.game_gen_crystalheart_gold_get => EarAidModule.Settings.HeartCollect,
