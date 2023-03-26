@@ -1,5 +1,4 @@
 ﻿using Celeste.Mod.EarAid.Module;
-using IL.Celeste;
 using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid.Utils;

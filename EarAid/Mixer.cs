@@ -1,7 +1,6 @@
 ﻿using Celeste.Mod.EarAid.Utils;
 using FMOD;
 using FMOD.Studio;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid;
 
