@@ -58,9 +58,9 @@ public class EarAidSettings : EverestModuleSettings
 
             foreach (string path in EventConsts.Paths)
             {
-                if ((path.StartsWith("event:/CommunalHelperEvents") && !Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true)) ||
-                    (path.StartsWith("event:/cherryhelper") && !Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true)) ||
-                    (path.StartsWith("event:/strawberry_jam_2021") && !Everest.Content.TryGet("StrawberryJam2021:/Audio/StrawberryJam2021Bank", out ModAsset _, true))) 
+                if ((path.StartsWith("event:/CommunalHelperEvents") && !Everest.Content.TryGet("Audio/CommunalHelperBank", out ModAsset _)) ||
+                    (path.StartsWith("event:/cherryhelper") && !Everest.Content.TryGet("Audio/CherryHelper", out ModAsset _)) ||
+                    (path.StartsWith("event:/strawberry_jam_2021") && !Everest.Content.TryGet("Audio/StrawberryJam2021Bank", out ModAsset _))) 
                 {
                     continue;
                 }
@@ -167,7 +167,7 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuDrumSwapBlock, DialogIds.MenuDrumSwapBlockSubtext, DrumSwapBlock, (value) =>
             {
                 DrumSwapBlock = value;
-                if (Everest.Content.TryGet("StrawberryJam2021:/Audio/StrawberryJam2021Bank", out ModAsset _, true))
+                if (Everest.Content.TryGet("Audio/StrawberryJam2021Bank", out ModAsset _))
                 {
                     Mixer.MixExistingInstances(new string[] { EventConsts.SJ_DrumSwapBlockMove, EventConsts.SJ_DrumSwapBlockMoveEnd }, value);
                 }
@@ -192,7 +192,7 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuItemCrystalDeath, DialogIds.MenuItemCrystalDeathSubtext, ItemCrystalDeath, (value) =>
             {
                 ItemCrystalDeath = value;
-                if (Everest.Content.TryGet("CherryHelper:/Audio/CherryHelper", out ModAsset _, true))
+                if (Everest.Content.TryGet("Audio/CherryHelper", out ModAsset _))
                 {
                     Mixer.MixExistingInstances(EventConsts.Cherry_ItemCrystalDeath, value);
                 }
@@ -219,7 +219,7 @@ public class EarAidSettings : EverestModuleSettings
                 Mixer.MixExistingInstances(new string[] { SFX.game_04_arrowblock_activate, SFX.game_04_arrowblock_break, SFX.game_04_arrowblock_move_loop,
                     SFX.game_04_arrowblock_reappear, SFX.game_04_arrowblock_reform_begin, SFX.game_04_arrowblock_side_depress, SFX.game_04_arrowblock_side_release }, 
                     value);
-                if (Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true))
+                if (Everest.Content.TryGet("Audio/CommunalHelperBank", out ModAsset _))
                 {
                     Mixer.MixExistingInstances(new string[] { EventConsts.Communal_MoveBlockBreak, EventConsts.Communal_MoveBlockMove }, value);
                 }
@@ -273,7 +273,7 @@ public class EarAidSettings : EverestModuleSettings
             {
                 ZipMover = value;
                 Mixer.MixExistingInstances(new string[] { SFX.game_01_zipmover, SFX.game_10_zip_mover }, value);
-                if (Everest.Content.TryGet("CommunalHelper:/Audio/CommunalHelperBank", out ModAsset _, true))
+                if (Everest.Content.TryGet("Audio/CommunalHelperBank", out ModAsset _))
                 {
                     Mixer.MixExistingInstances(new string[] { EventConsts.Communal_ZipMoverDreamFinish, EventConsts.Communal_ZipMoverDreamImpact,
                         EventConsts.Communal_ZipMoverDreamReturn, EventConsts.Communal_ZipMoverDreamStart, EventConsts.Communal_ZipMoverDreamTick, 
