@@ -36,8 +36,7 @@ public static class Mixer
 
         if (eventDesc?.getInstanceList(out EventInstance[] instanceArray) is RESULT.OK)
         {
-            eventDesc.getInstanceCount(out int instanceCount);
-            for (int i = 0; i < instanceCount; i++)
+            for (int i = 0; i < instanceArray.Length; i++)
             {
                 instanceArray[i].setVolume(volume / 10f);
             }
