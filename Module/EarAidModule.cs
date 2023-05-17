@@ -29,6 +29,9 @@ public class EarAidModule : EverestModule
         IEnumerable<MethodInfo> getMethods(string methodName) => Assembly.GetCallingAssembly().GetTypesSafe()
             .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
             .Where(methodInfo => methodInfo.Name == methodName));
+
+        EarAidSettings.CollectVolumeSettings();
+        Events.PopulateEventPaths();
     }
 
     public override void Load()
@@ -41,13 +44,6 @@ public class EarAidModule : EverestModule
             }
             Loaded = true;
         }
-    }
-
-    public override void Initialize()
-    {
-        VolumeSettings = typeof(EarAidSettings).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(prop => prop.PropertyType == typeof(int));
-
-        Events.PopulateEventPaths();
     }
 
     public override void Unload()

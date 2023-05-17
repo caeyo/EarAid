@@ -68,7 +68,7 @@ public static class EarAidMenu
         options.Add(hideUnusedItem);
 
         // Create all volume sliders
-        foreach (PropertyInfo volSetting in EarAidModule.Instance.VolumeSettings)
+        foreach (PropertyInfo volSetting in EarAidSettings.VolumeSettings)
         {
             string labelId = "EAR_AID_" + volSetting.Name.ToUpper();
             string subtextId = labelId + "_SUBTEXT";

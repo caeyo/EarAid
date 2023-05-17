@@ -48,7 +48,7 @@ public static class Events
 
     public static void PopulateEventPaths()
     {
-        foreach (PropertyInfo volSetting in EarAidModule.Instance.VolumeSettings)
+        foreach (PropertyInfo volSetting in EarAidSettings.VolumeSettings)
         {
             MethodInfo volSettingGetGetMethod = volSetting.GetGetMethod();
 

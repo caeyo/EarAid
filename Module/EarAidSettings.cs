@@ -90,6 +90,14 @@ public class EarAidSettings : EverestModuleSettings
         Events.Communal_ZipMoverNormalImpact, Events.Communal_ZipMoverNormalReturn, Events.Communal_ZipMoverNormalStart, 
         Events.Communal_ZipMoverNormalTick }, modded: true)]
     public int ZipMover { get; set; } = 10;
+
+    [YamlIgnore]
+    public static IEnumerable<PropertyInfo> VolumeSettings { get; private set; }
+
+    public static void CollectVolumeSettings()
+    {
+        VolumeSettings = typeof(EarAidSettings).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(prop => prop.PropertyType == typeof(int));
+    }
 }
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
