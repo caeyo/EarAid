@@ -1,26 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Celeste.Mod.EarAid.Module;
 
 public class EarAidModule : EverestModule
 {
-    public static bool Loaded;
-
     public static EarAidModule Instance;
 
     public override Type SettingsType => typeof(EarAidSettings);
     public static EarAidSettings Settings => Instance._Settings as EarAidSettings;
 
+    public static bool Loaded;
+
+    private readonly IEnumerable<MethodInfo> hookLoaders;
+    private readonly IEnumerable<MethodInfo> hookUnloaders;
+
     public EarAidModule()
     {
         Instance = this;
+        hookLoaders = getMethods("LoadHooks");
+        hookUnloaders = getMethods("UnloadHooks");
+
+        IEnumerable<MethodInfo> getMethods(string methodName) => Assembly.GetCallingAssembly().GetTypesSafe()
+            .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+            .Where(methodInfo => methodInfo.Name == methodName));
     }
 
     public override void Load()
     {
         if (!Loaded && Settings.Enabled)
         {
-            Mixer.LoadHooks();
+            foreach (MethodInfo hookLoader in hookLoaders)
+            {
+                hookLoader.Invoke(null, null);
+            }
             Loaded = true;
         }
     }
@@ -29,7 +44,10 @@ public class EarAidModule : EverestModule
     {
         if (Loaded)
         {
-            Mixer.UnloadHooks();
+            foreach (MethodInfo hookUnloader in hookUnloaders)
+            {
+                hookUnloader.Invoke(null, null);
+            }
             Loaded = false;
         }
     }
