@@ -56,6 +56,9 @@ public class EarAidSettings : EverestModuleSettings
         SFX.game_06_crushblock_rest, SFX.game_06_crushblock_rest_waypoint, SFX.game_06_crushblock_return_loop })]
     public int KevinBlock { get; set; } = 10;
 
+    [VolumeSettingEvents(SFX.env_loc_09_lavagate_idle)]
+    public int LavaBarrier { get; set; } = 10;
+
     [VolumeSettingEvents(SFX.env_amb_10_electricity)]
     public int LightningAmbience { get; set; } = 10;
 

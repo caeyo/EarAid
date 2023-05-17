@@ -15,6 +15,7 @@ Sounds currently supported:
 - *Heart Collect:* The sound used when a crystal heart is collected.
 - *Item Crystal Death:* The sound used when an item crystal from Cherry Helper is destroyed.
 - *Kevin Block:* The sounds used for Kevin blocks.
+- *Lava Barrier:* The sound used when a lava barrier is present.
 - *Lightning Ambience:* The sound used when lightning is present in a room.
 - *Lightning Strike:* The sound used when lightning strikes occur.
 - *Move Block:* The sounds used by move blocks.

@@ -77,6 +77,9 @@ EAR_AID_ITEMCRYSTALDEATH_SUBTEXT=		The sound used when an item crystal from Cher
 EAR_AID_KEVINBLOCK=						Kevin Block
 EAR_AID_KEVINBLOCK_SUBTEXT=				The sounds used for Kevin blocks.
 
+EAR_AID_LAVABARRIER=					Lava Barrier
+EAR_AID_LAVABARRIER_SUBTEXT=			The sound used when a lava barrier is present.
+
 EAR_AID_LIGHTNINGAMBIENCE=				Lightning Ambience
 EAR_AID_LIGHTNINGAMBIENCE_SUBTEXT=		The sound used when lightning is present in a room.
 
