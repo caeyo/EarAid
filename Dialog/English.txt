@@ -38,11 +38,11 @@ EAR_AID_ENABLED=						Enabled
 EAR_AID_HIDE_UNUSED_OPTIONS=			Hide Unused Options
 EAR_AID_HIDE_UNUSED_OPTIONS_SUBTEXT=	Options set to 10 are considered unused.
 
-EAR_AID_BIRD_SQUAWK=					Bird Squawk
-EAR_AID_BIRD_SQUAWK_SUBTEXT=			The sound used when the bird squawks.
+EAR_AID_BIRDSQUAWK=						Bird Squawk
+EAR_AID_BIRDSQUAWK_SUBTEXT=				The sound used when the bird squawks.
 
-EAR_AID_BROKEN_WINDOW=					Broken Window
-EAR_AID_BROKEN_WINDOW_SUBTEXT=			The sounds used when wind is blowing through a broken window (e.g. in Resort).
+EAR_AID_BROKENWINDOW=					Broken Window
+EAR_AID_BROKENWINDOW_SUBTEXT=			The sounds used when wind is blowing through a broken window (e.g. in Resort).
 
 EAR_AID_CONVEYOR=						Conveyor
 EAR_AID_CONVEYOR_SUBTEXT=				The sounds used when a conveyor is active.
@@ -53,53 +53,53 @@ EAR_AID_DEATH_SUBTEXT=					The sounds used when the player dies.
 EAR_AID_RESPAWN=						Respawn
 EAR_AID_RESPAWN_SUBTEXT=				The sound used when the player respawns.
 
-EAR_AID_GOLDEN_DEATH=					Golden Death
-EAR_AID_GOLDEN_DEATH_SUBTEXT=			The sound used when the player dies with a golden berry.
+EAR_AID_GOLDENDEATH=					Golden Death
+EAR_AID_GOLDENDEATH_SUBTEXT=			The sound used when the player dies with a golden berry.
 
 EAR_AID_DIALOGUE=						Dialogue
 EAR_AID_DIALOGUE_SUBTEXT=				The sounds used for character voices in dialogue. Affects all voices.
 
-EAR_AID_DREAM_BLOCK=					Dream Block
-EAR_AID_DREAM_BLOCK_SUBTEXT=			The sounds used when the player travels through a dream block.
+EAR_AID_DREAMBLOCK=						Dream Block
+EAR_AID_DREAMBLOCK_SUBTEXT=				The sounds used when the player travels through a dream block.
 
-EAR_AID_DRUM_SWAP_BLOCK=				Drum Swap Block
-EAR_AID_DRUM_SWAP_BLOCK_SUBTEXT=		The sounds used for drum swap blocks from Strawberry Jam.
+EAR_AID_DRUMSWAPBLOCK=					Drum Swap Block
+EAR_AID_DRUMSWAPBLOCK_SUBTEXT=			The sounds used for drum swap blocks from Strawberry Jam.
 
-EAR_AID_FIREBALL_IDLE=					Fireball
-EAR_AID_FIREBALL_IDLE_SUBTEXT=			The sound used when a fireball is present.
+EAR_AID_FIREBALLIDLE=						Fireball
+EAR_AID_FIREBALLIDLE_SUBTEXT=				The sound used when a fireball is present.
 
-EAR_AID_HEART_COLLECT=					Heart Collect
-EAR_AID_HEART_COLLECT_SUBTEXT=			The sound used when a crystal heart is collected.
+EAR_AID_HEARTCOLLECT=					Heart Collect
+EAR_AID_HEARTCOLLECT_SUBTEXT=			The sound used when a crystal heart is collected.
 
-EAR_AID_ITEM_CRYSTAL_DEATH=				Item Crystal Death
-EAR_AID_ITEM_CRYSTAL_DEATH_SUBTEXT=		The sound used when an item crystal from Cherry Helper is destroyed.
+EAR_AID_ITEMCRYSTALDEATH=				Item Crystal Death
+EAR_AID_ITEMCRYSTALDEATH_SUBTEXT=		The sound used when an item crystal from Cherry Helper is destroyed.
 
-EAR_AID_LIGHTNING_AMBIENCE=				Lightning Ambience
-EAR_AID_LIGHTNING_AMBIENCE_SUBTEXT=		The sound used when lightning is present in a room.
+EAR_AID_LIGHTNINGAMBIENCE=				Lightning Ambience
+EAR_AID_LIGHTNINGAMBIENCE_SUBTEXT=		The sound used when lightning is present in a room.
 
-EAR_AID_LIGHTNING_STRIKE=				Lightning Strike
-EAR_AID_LIGHTNING_STRIKE_SUBTEXT=		The sound used when lightning strikes occur.
+EAR_AID_LIGHTNINGSTRIKE=				Lightning Strike
+EAR_AID_LIGHTNINGSTRIKE_SUBTEXT=		The sound used when lightning strikes occur.
 
-EAR_AID_MOVE_BLOCK=						Move Block
-EAR_AID_MOVE_BLOCK_SUBTEXT=				The sounds used by move blocks.
+EAR_AID_MOVEBLOCK=						Move Block
+EAR_AID_MOVEBLOCK_SUBTEXT=				The sounds used by move blocks.
 
-EAR_AID_OSHIRO_BOSS=					Oshiro Boss
-EAR_AID_OSHIRO_BOSS_SUBTEXT=			The sounds used when an Oshiro boss is active.
+EAR_AID_OSHIROBOSS=						Oshiro Boss
+EAR_AID_OSHIROBOSS_SUBTEXT=				The sounds used when an Oshiro boss is active.
 
-EAR_AID_PICO_8_FLAG=					Pico-8 Flag
-EAR_AID_PICO_8_FLAG_SUBTEXT=			The sound used when a Pico-8 flag is hit.
+EAR_AID_PICO8FLAG=						Pico-8 Flag
+EAR_AID_PICO8FLAG_SUBTEXT=				The sound used when a Pico-8 flag is hit.
 
 EAR_AID_SPRING=							Spring
 EAR_AID_SPRING_SUBTEXT=					The sound used when a spring is sprung.
 
-EAR_AID_TOUCH_SWITCH_COMPLETE=			Touch Switch Complete
-EAR_AID_TOUCH_SWITCH_COMPLETE_SUBTEXT=	The sound used when the final touch switch is activated. Ding dong!
+EAR_AID_TOUCHSWITCHCOMPLETE=			Touch Switch Complete
+EAR_AID_TOUCHSWITCHCOMPLETE_SUBTEXT=	The sound used when the final touch switch is activated. Ding dong!
 
-EAR_AID_FAREWELL_WIND=					Farewell Wind
-EAR_AID_FAREWELL_WIND_SUBTEXT=			The wind ambience used in Farewell.
+EAR_AID_FAREWELLWIND=					Farewell Wind
+EAR_AID_FAREWELLWIND_SUBTEXT=			The wind ambience used in Farewell.
 
-EAR_AID_RIDGE_WIND=						Ridge Wind
-EAR_AID_RIDGE_WIND_SUBTEXT=				The wind ambience used in Golden Ridge.
+EAR_AID_RIDGEWIND=						Ridge Wind
+EAR_AID_RIDGEWIND_SUBTEXT=				The wind ambience used in Golden Ridge.
 
-EAR_AID_ZIP_MOVER=						Zip Mover
-EAR_AID_ZIP_MOVER_SUBTEXT=				The sound used when a zip mover is activated.
+EAR_AID_ZIPMOVER=						Zip Mover
+EAR_AID_ZIPMOVER_SUBTEXT=				The sound used when a zip mover is activated.
