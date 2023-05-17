@@ -19,6 +19,7 @@ Sounds currently supported:
 - *Move Block:* The sounds used by move blocks.
 - *Oshiro Boss:* The sounds used when an Oshiro boss is active.
 - *Pico-8 Flag:* The sound used when a Pico-8 flag is hit.
+- *Seeker:* The sounds used for seekers.
 - *Spring:* The sound used when a spring is sprung.
 - *Touch Switch Complete:* The sound used when the last touch switch is activated. Ding dong!
 - *Farewell Wind:* The wind ambience used in Farewell.

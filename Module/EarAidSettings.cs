@@ -71,6 +71,11 @@ public class EarAidSettings : EverestModuleSettings
     [VolumeSettingEvents(SFX.game_10_pico8_flag)]
     public int Pico8Flag { get; set; } = 10;
 
+    [VolumeSettingEvents(new string[] { SFX.game_05_seeker_aggro, SFX.game_05_seeker_booped, SFX.game_05_seeker_dash, 
+        SFX.game_05_seeker_dash_turn, SFX.game_05_seeker_death, SFX.game_05_seeker_impact_lightwall, SFX.game_05_seeker_impact_normal, 
+        SFX.game_05_seeker_revive, SFX.game_05_seeker_statuebreak})]
+    public int Seeker { get; set; } = 10;
+
     [VolumeSettingEvents(SFX.game_gen_spring)]
     public int Spring { get; set; } = 10;
 

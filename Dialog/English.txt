@@ -89,6 +89,9 @@ EAR_AID_OSHIROBOSS_SUBTEXT=				The sounds used when an Oshiro boss is active.
 EAR_AID_PICO8FLAG=						Pico-8 Flag
 EAR_AID_PICO8FLAG_SUBTEXT=				The sound used when a Pico-8 flag is hit.
 
+EAR_AID_SEEKER=							Seeker
+EAR_AID_SEEKER_SUBTEXT=					The sounds used for seekers.
+
 EAR_AID_SPRING=							Spring
 EAR_AID_SPRING_SUBTEXT=					The sound used when a spring is sprung.
 
