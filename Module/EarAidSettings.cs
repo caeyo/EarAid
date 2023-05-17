@@ -52,6 +52,10 @@ public class EarAidSettings : EverestModuleSettings
     [VolumeSettingEvents(Events.Cherry_ItemCrystalDeath, modded: true)]
     public int ItemCrystalDeath { get; set; } = 10;
 
+    [VolumeSettingEvents(new string[] { SFX.game_06_crushblock_activate, SFX.game_06_crushblock_impact, SFX.game_06_crushblock_move_loop,
+        SFX.game_06_crushblock_rest, SFX.game_06_crushblock_rest_waypoint, SFX.game_06_crushblock_return_loop })]
+    public int KevinBlock { get; set; } = 10;
+
     [VolumeSettingEvents(SFX.env_amb_10_electricity)]
     public int LightningAmbience { get; set; } = 10;
 

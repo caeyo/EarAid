@@ -74,6 +74,9 @@ EAR_AID_HEARTCOLLECT_SUBTEXT=			The sound used when a crystal heart is collected
 EAR_AID_ITEMCRYSTALDEATH=				Item Crystal Death
 EAR_AID_ITEMCRYSTALDEATH_SUBTEXT=		The sound used when an item crystal from Cherry Helper is destroyed.
 
+EAR_AID_KEVINBLOCK=						Kevin Block
+EAR_AID_KEVINBLOCK_SUBTEXT=				The sounds used for Kevin blocks.
+
 EAR_AID_LIGHTNINGAMBIENCE=				Lightning Ambience
 EAR_AID_LIGHTNINGAMBIENCE_SUBTEXT=		The sound used when lightning is present in a room.
 
