@@ -65,8 +65,8 @@ EAR_AID_DREAMBLOCK_SUBTEXT=				The sounds used when the player travels through a
 EAR_AID_DRUMSWAPBLOCK=					Drum Swap Block
 EAR_AID_DRUMSWAPBLOCK_SUBTEXT=			The sounds used for drum swap blocks from Strawberry Jam.
 
-EAR_AID_FIREBALLIDLE=						Fireball
-EAR_AID_FIREBALLIDLE_SUBTEXT=				The sound used when a fireball is present.
+EAR_AID_FIREBALLIDLE=					Fireball
+EAR_AID_FIREBALLIDLE_SUBTEXT=			The sound used when a fireball is present.
 
 EAR_AID_HEARTCOLLECT=					Heart Collect
 EAR_AID_HEARTCOLLECT_SUBTEXT=			The sound used when a crystal heart is collected.

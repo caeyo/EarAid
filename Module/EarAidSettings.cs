@@ -7,6 +7,7 @@ using YamlDotNet.Serialization;
 
 namespace Celeste.Mod.EarAid.Module;
 
+[SettingName("EAR_AID")]
 public class EarAidSettings : EverestModuleSettings
 {
     public bool Enabled { get; set; } = true;

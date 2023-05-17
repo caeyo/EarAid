@@ -64,6 +64,7 @@ public static class EarAidMenu
                 }
             }
         });
+        menu.Add(hideUnusedItem);
         hideUnusedItem = hideUnusedItem.AddDescription(menu, Dialog.Clean("EAR_AID_HIDE_UNUSED_OPTIONS_SUBTEXT"));
         options.Add(hideUnusedItem);
 
@@ -81,14 +82,9 @@ public static class EarAidMenu
                     Mixer.MixExistingInstances(attrib.EventPaths, value);
                 }
             });
+            menu.Add(item);
             item = item.AddDescription(menu, Dialog.Clean(subtextId));
             options.Add(item);
-        }
-
-        // Add 'Hide Unused Options' and all volume sliders
-        foreach (TextMenu.Item item in options)
-        {
-            menu.Add(item);
         }
     }
 }
