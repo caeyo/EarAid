@@ -31,13 +31,16 @@ public static class Mixer
 
     public static void MixExistingInstances(string path, int volume)
     {
-        EventDescription eventDesc = Audio.GetEventDescription(path);
-
-        if (eventDesc?.getInstanceList(out EventInstance[] instanceArray) is RESULT.OK)
+        if (Audio.cachedPaths.ContainsValue(path))
         {
-            for (int i = 0; i < instanceArray.Length; i++)
+            EventDescription eventDesc = Audio.GetEventDescription(path);
+
+            if (eventDesc?.getInstanceList(out EventInstance[] instanceArray) is RESULT.OK)
             {
-                instanceArray[i].setVolume(volume / 10f);
+                for (int i = 0; i < instanceArray.Length; i++)
+                {
+                    instanceArray[i].setVolume(volume / 10f);
+                }
             }
         }
     }

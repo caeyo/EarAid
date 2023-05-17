@@ -58,12 +58,6 @@ public class EarAidSettings : EverestModuleSettings
 
             foreach (string path in EventConsts.Paths)
             {
-                if ((path.StartsWith("event:/CommunalHelperEvents") && !Everest.Content.TryGet("Audio/CommunalHelperBank", out ModAsset _)) ||
-                    (path.StartsWith("event:/cherryhelper") && !Everest.Content.TryGet("Audio/CherryHelper", out ModAsset _)) ||
-                    (path.StartsWith("event:/strawberry_jam_2021") && !Everest.Content.TryGet("Audio/StrawberryJam2021Bank", out ModAsset _))) 
-                {
-                    continue;
-                }
                 Mixer.MixExistingInstances(path, value ? EventConsts.PathToSetting(path) : 10);
             }
 
@@ -167,10 +161,7 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuDrumSwapBlock, DialogIds.MenuDrumSwapBlockSubtext, DrumSwapBlock, (value) =>
             {
                 DrumSwapBlock = value;
-                if (Everest.Content.TryGet("Audio/StrawberryJam2021Bank", out ModAsset _))
-                {
-                    Mixer.MixExistingInstances(new string[] { EventConsts.SJ_DrumSwapBlockMove, EventConsts.SJ_DrumSwapBlockMoveEnd }, value);
-                }
+                Mixer.MixExistingInstances(new string[] { EventConsts.SJ_DrumSwapBlockMove, EventConsts.SJ_DrumSwapBlockMoveEnd }, value);
             });
     
     public void CreateFireballIdleEntry(TextMenu menu, bool inGame) 
@@ -192,10 +183,7 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuItemCrystalDeath, DialogIds.MenuItemCrystalDeathSubtext, ItemCrystalDeath, (value) =>
             {
                 ItemCrystalDeath = value;
-                if (Everest.Content.TryGet("Audio/CherryHelper", out ModAsset _))
-                {
-                    Mixer.MixExistingInstances(EventConsts.Cherry_ItemCrystalDeath, value);
-                }
+                Mixer.MixExistingInstances(EventConsts.Cherry_ItemCrystalDeath, value);
             });
     
     public void CreateLightningAmbienceEntry(TextMenu menu, bool inGame) 
@@ -217,12 +205,8 @@ public class EarAidSettings : EverestModuleSettings
             {
                 MoveBlock = value;
                 Mixer.MixExistingInstances(new string[] { SFX.game_04_arrowblock_activate, SFX.game_04_arrowblock_break, SFX.game_04_arrowblock_move_loop,
-                    SFX.game_04_arrowblock_reappear, SFX.game_04_arrowblock_reform_begin, SFX.game_04_arrowblock_side_depress, SFX.game_04_arrowblock_side_release }, 
-                    value);
-                if (Everest.Content.TryGet("Audio/CommunalHelperBank", out ModAsset _))
-                {
-                    Mixer.MixExistingInstances(new string[] { EventConsts.Communal_MoveBlockBreak, EventConsts.Communal_MoveBlockMove }, value);
-                }
+                    SFX.game_04_arrowblock_reappear, SFX.game_04_arrowblock_reform_begin, SFX.game_04_arrowblock_side_depress, SFX.game_04_arrowblock_side_release,
+                    EventConsts.Communal_MoveBlockBreak, EventConsts.Communal_MoveBlockMove}, value);
             });
     
     public void CreateOshiroBossEntry(TextMenu menu, bool inGame) 
@@ -235,10 +219,10 @@ public class EarAidSettings : EverestModuleSettings
 
     public void CreatePico8FlagEntry(TextMenu menu, bool inGame)
         => CreateGenericVolumeEntry(menu, DialogIds.MenuPico8Flag, DialogIds.MenuPico8FlagSubtext, Pico8Flag, (value) =>
-        {
-            Pico8Flag = value;
-            Mixer.MixExistingInstances(SFX.game_10_pico8_flag, value);
-        });
+            {
+                Pico8Flag = value;
+                Mixer.MixExistingInstances(SFX.game_10_pico8_flag, value);
+            });
     
     public void CreateSpringEntry(TextMenu menu, bool inGame) 
         => CreateGenericVolumeEntry(menu, DialogIds.MenuSpring, DialogIds.MenuSpringSubtext, Spring, (value) => 
@@ -272,16 +256,12 @@ public class EarAidSettings : EverestModuleSettings
         => CreateGenericVolumeEntry(menu, DialogIds.MenuZipMover, DialogIds.MenuZipMoverSubtext, ZipMover, (value) =>
             {
                 ZipMover = value;
-                Mixer.MixExistingInstances(new string[] { SFX.game_01_zipmover, SFX.game_10_zip_mover }, value);
-                if (Everest.Content.TryGet("Audio/CommunalHelperBank", out ModAsset _))
-                {
-                    Mixer.MixExistingInstances(new string[] { EventConsts.Communal_ZipMoverDreamFinish, EventConsts.Communal_ZipMoverDreamImpact,
-                        EventConsts.Communal_ZipMoverDreamReturn, EventConsts.Communal_ZipMoverDreamStart, EventConsts.Communal_ZipMoverDreamTick, 
-                        EventConsts.Communal_ZipMoverMoonFinish, EventConsts.Communal_ZipMoverMoonImpact, EventConsts.Communal_ZipMoverMoonReturn, 
-                        EventConsts.Communal_ZipMoverMoonStart, EventConsts.Communal_ZipMoverMoonTick, EventConsts.Communal_ZipMoverNormalFinish, 
-                        EventConsts.Communal_ZipMoverNormalImpact, EventConsts.Communal_ZipMoverNormalReturn, EventConsts.Communal_ZipMoverNormalStart, 
-                        EventConsts.Communal_ZipMoverNormalTick }, value);
-                }
+                Mixer.MixExistingInstances(new string[] { SFX.game_01_zipmover, SFX.game_10_zip_mover, EventConsts.Communal_ZipMoverDreamFinish, 
+                    EventConsts.Communal_ZipMoverDreamImpact, EventConsts.Communal_ZipMoverDreamReturn, EventConsts.Communal_ZipMoverDreamStart, 
+                    EventConsts.Communal_ZipMoverDreamTick, EventConsts.Communal_ZipMoverMoonFinish, EventConsts.Communal_ZipMoverMoonImpact, 
+                    EventConsts.Communal_ZipMoverMoonReturn, EventConsts.Communal_ZipMoverMoonStart, EventConsts.Communal_ZipMoverMoonTick, 
+                    EventConsts.Communal_ZipMoverNormalFinish, EventConsts.Communal_ZipMoverNormalImpact, EventConsts.Communal_ZipMoverNormalReturn, 
+                    EventConsts.Communal_ZipMoverNormalStart, EventConsts.Communal_ZipMoverNormalTick }, value);
             });
 }
 
@@ -337,6 +317,7 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
         int max = DynamicData.For(this).Get<int>("max");
 
         // All this just to add the * Alpha lol
+        // It is possible to do this via IL hook, but because the on-off switch also unloads hooks it doesn't give the options long enough to disappear gracefully
         float alpha = Container.Alpha * Alpha;
 
         Color strokeColor = Color.Black * (alpha * alpha * alpha);
