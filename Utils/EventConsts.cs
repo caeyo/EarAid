@@ -108,7 +108,31 @@ public static class EventConsts
         Communal_ZipMoverNormalImpact,
         Communal_ZipMoverNormalReturn,
         Communal_ZipMoverNormalStart,
+        Communal_ZipMoverNormalTick
+    };
+
+    public static readonly HashSet<string> ModdedPaths = new()
+    {
+        Cherry_ItemCrystalDeath,
+        Communal_MoveBlockBreak,
+        Communal_MoveBlockMove,
+        Communal_ZipMoverDreamFinish,
+        Communal_ZipMoverDreamImpact,
+        Communal_ZipMoverDreamReturn,
+        Communal_ZipMoverDreamStart,
+        Communal_ZipMoverDreamTick,
+        Communal_ZipMoverMoonFinish,
+        Communal_ZipMoverMoonImpact,
+        Communal_ZipMoverMoonReturn,
+        Communal_ZipMoverMoonStart,
+        Communal_ZipMoverMoonTick,
+        Communal_ZipMoverNormalFinish,
+        Communal_ZipMoverNormalImpact,
+        Communal_ZipMoverNormalReturn,
+        Communal_ZipMoverNormalStart,
         Communal_ZipMoverNormalTick,
+        SJ_DrumSwapBlockMove,
+        SJ_DrumSwapBlockMoveEnd
     };
 
     public static int PathToSetting(string path) => path switch

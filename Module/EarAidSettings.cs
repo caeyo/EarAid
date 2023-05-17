@@ -206,7 +206,7 @@ public class EarAidSettings : EverestModuleSettings
                 MoveBlock = value;
                 Mixer.MixExistingInstances(new string[] { SFX.game_04_arrowblock_activate, SFX.game_04_arrowblock_break, SFX.game_04_arrowblock_move_loop,
                     SFX.game_04_arrowblock_reappear, SFX.game_04_arrowblock_reform_begin, SFX.game_04_arrowblock_side_depress, SFX.game_04_arrowblock_side_release,
-                    EventConsts.Communal_MoveBlockBreak, EventConsts.Communal_MoveBlockMove}, value);
+                    EventConsts.Communal_MoveBlockBreak, EventConsts.Communal_MoveBlockMove }, value);
             });
     
     public void CreateOshiroBossEntry(TextMenu menu, bool inGame) 
