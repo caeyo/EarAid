@@ -92,6 +92,11 @@ public static class EarAidMenu
 // Bastard child born of a nasty threeway between TextMenuExt.EaseInSubHeaderExt, TextMenuExt.IntSlider, and SRTool's EaseInSubMenu
 internal class EaseInVolumeSlider : TextMenuExt.IntSlider
 {
+    private static readonly FieldInfo intSliderSine = typeof(TextMenuExt.IntSlider).GetField("sine", BindingFlags.NonPublic | BindingFlags.Instance);
+    private static readonly FieldInfo intSliderLastDir = typeof(TextMenuExt.IntSlider).GetField("lastDir", BindingFlags.NonPublic | BindingFlags.Instance);
+    private static readonly FieldInfo intSliderMin = typeof(TextMenuExt.IntSlider).GetField("min", BindingFlags.NonPublic | BindingFlags.Instance);
+    private static readonly FieldInfo intSliderMax = typeof(TextMenuExt.IntSlider).GetField("max", BindingFlags.NonPublic | BindingFlags.Instance);
+
     public bool FadeVisible { get; private set; } = true;
 
     private readonly TextMenu containingMenu;
@@ -135,10 +140,10 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
     public override void Render(Vector2 position, bool highlighted)
     {
         // We need to get the private fields from TextMenuExt.IntSlider
-        float sine = DynamicData.For(this).Get<float>("sine");
-        int lastDir = DynamicData.For(this).Get<int>("lastDir");
-        int min = DynamicData.For(this).Get<int>("min");
-        int max = DynamicData.For(this).Get<int>("max");
+        float sine = (float)intSliderSine.GetValue(this);
+        int lastDir = (int)intSliderLastDir.GetValue(this);
+        int min = (int)intSliderMin.GetValue(this);
+        int max = (int)intSliderMax.GetValue(this);
 
         // All this just to add the * Alpha lol
         // It is possible to do this via IL hook, but because the on-off switch also unloads hooks it doesn't give the options long enough to disappear gracefully
@@ -166,6 +171,9 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
 
 internal class EaseInOnOff : TextMenu.OnOff
 {
+    private static readonly FieldInfo onOffSine = typeof(TextMenu.OnOff).GetField("sine", BindingFlags.NonPublic | BindingFlags.Instance);
+    private static readonly FieldInfo onOffLastDir = typeof(TextMenu.OnOff).GetField("lastDir", BindingFlags.NonPublic | BindingFlags.Instance);
+
     public bool FadeVisible { get; set; } = true;
 
     private readonly TextMenu containingMenu;
@@ -199,8 +207,8 @@ internal class EaseInOnOff : TextMenu.OnOff
 
     public override void Render(Vector2 position, bool highlighted)
     {
-        float sine = DynamicData.For(this).Get<float>("sine");
-        int lastDir = DynamicData.For(this).Get<int>("lastDir");
+        float sine = (float)onOffSine.GetValue(this);
+        int lastDir = (int)onOffLastDir.GetValue(this);
 
         float alpha = Container.Alpha * Alpha;
 
