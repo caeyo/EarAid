@@ -2,6 +2,7 @@
 using Celeste.Mod.EarAid.Module;
 using FMOD;
 using FMOD.Studio;
+using System.Reflection;
 
 namespace Celeste.Mod.EarAid;
 
@@ -22,9 +23,9 @@ public static class Mixer
         RESULT result = orig(self, out instance);
         string path = Audio.GetEventName(self);
 
-        if (!string.IsNullOrEmpty(path) && Events.PathToSettingGetter.ContainsKey(path))
+        if (Events.PathToSettingGetter.TryGetValue(path, out MethodInfo settingGetter))
         {
-            instance?.setVolume((int)Events.PathToSettingGetter[path].Invoke(EarAidModule.Settings, null) / 10f);
+            instance?.setVolume((int)settingGetter.Invoke(EarAidModule.Settings, null) / 10f);
         }
 
         return result;

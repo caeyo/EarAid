@@ -1,6 +1,7 @@
 ﻿using Celeste.Mod.EarAid.EarAid;
 using Microsoft.Xna.Framework;
 using Monocle;
+using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -171,9 +172,6 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
 
 internal class EaseInOnOff : TextMenu.OnOff
 {
-    private static readonly FieldInfo onOffSine = typeof(TextMenu.OnOff).GetField("sine", BindingFlags.NonPublic | BindingFlags.Instance);
-    private static readonly FieldInfo onOffLastDir = typeof(TextMenu.OnOff).GetField("lastDir", BindingFlags.NonPublic | BindingFlags.Instance);
-
     public bool FadeVisible { get; set; } = true;
 
     private readonly TextMenu containingMenu;
@@ -207,8 +205,8 @@ internal class EaseInOnOff : TextMenu.OnOff
 
     public override void Render(Vector2 position, bool highlighted)
     {
-        float sine = (float)onOffSine.GetValue(this);
-        int lastDir = (int)onOffLastDir.GetValue(this);
+        float sine = DynamicData.For(this).Get<float>("sine");
+        int lastDir = DynamicData.For(this).Get<int>("lastDir");
 
         float alpha = Container.Alpha * Alpha;
 
