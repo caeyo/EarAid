@@ -15,7 +15,6 @@ public class EarAidModule : EverestModule
     public static EarAidSettings Settings => Instance._Settings as EarAidSettings;
 
     public static bool Loaded { get; private set; }
-    public IEnumerable<PropertyInfo> VolumeSettings { get; private set; }
 
     private readonly IEnumerable<MethodInfo> hookLoaders;
     private readonly IEnumerable<MethodInfo> hookUnloaders;
@@ -26,7 +25,7 @@ public class EarAidModule : EverestModule
 
         hookLoaders = getMethods("LoadHooks");
         hookUnloaders = getMethods("UnloadHooks");
-        IEnumerable<MethodInfo> getMethods(string methodName) => Assembly.GetCallingAssembly().GetTypesSafe()
+        IEnumerable<MethodInfo> getMethods(string methodName) => typeof(EarAidModule).Assembly.GetTypesSafe()
             .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
             .Where(methodInfo => methodInfo.Name == methodName));
 
