@@ -22,6 +22,10 @@ public class EarAidSettings : EverestModuleSettings
     [VolumeSettingEvents(new string[] { SFX.game_09_conveyor_activate, SFX.env_loc_09_conveyer_idle })]
     public int Conveyor { get; set; } = 10;
 
+    [VolumeSettingEvents(new string[] { SFX.game_09_bounceblock_break, SFX.game_09_bounceblock_reappear, SFX.game_09_bounceblock_touch, 
+        SFX.game_09_iceblock_reappear, SFX.game_09_iceblock_touch })]
+    public int CoreBlock { get; set; } = 10;
+
     [VolumeSettingEvents(new string[] { SFX.char_mad_death, SFX.char_mad_predeath })]
     public int Death { get; set; } = 10;
 

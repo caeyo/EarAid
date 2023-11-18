@@ -47,6 +47,9 @@ EAR_AID_BROKENWINDOW_SUBTEXT=			The sounds used when wind is blowing through a b
 EAR_AID_CONVEYOR=						Conveyor
 EAR_AID_CONVEYOR_SUBTEXT=				The sounds used when a conveyor is active.
 
+EAR_AID_COREBLOCK=						Core Block
+EAR_AID_COREBLOCK_SUBTEXT=				The sounds used for core blocks.
+
 EAR_AID_DEATH=							Death
 EAR_AID_DEATH_SUBTEXT=					The sounds used when the player dies.
 

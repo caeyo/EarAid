@@ -5,6 +5,7 @@ Sounds currently supported:
 - *Bird Squawk:* The sound used when the bird squawks.
 - *Broken Window:* The sounds used when wind is blowing through a broken window (e.g. in Resort).
 - *Conveyor:* The sounds used when a conveyor is active.
+- *Core Block:* The sounds used for core blocks.
 - *Death:* The sounds used when the player dies.
 - *Respawn:* The sound used when the player respawns.
 - *Golden Death:* The sound used when the player dies with a golden berry.
