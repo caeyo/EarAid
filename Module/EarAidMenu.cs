@@ -1,7 +1,6 @@
 ﻿using Celeste.Mod.EarAid.EarAid;
 using Microsoft.Xna.Framework;
 using Monocle;
-using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,7 +102,7 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
     private float Alpha;
     private float uneasedAlpha;
 
-    public EaseInVolumeSlider(string label, TextMenu menu, int value) : base(label, 0, 10, value)
+    public EaseInVolumeSlider(string label, TextMenu menu, int value) : base(label, 0, 20, value)
     {
         containingMenu = menu;
 
@@ -118,7 +117,7 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
 
     public void SetFadeVisible(int value)
     {
-        FadeVisible = EarAidModule.Settings.Enabled && (!EarAidModule.Settings.HideUnusedOptions || value < 10);
+        FadeVisible = EarAidModule.Settings.Enabled && (!EarAidModule.Settings.HideUnusedOptions || value != 10);
     }
 
     public override float Height() => MathHelper.Lerp(-containingMenu.ItemSpacing, base.Height(), Alpha);
@@ -156,7 +155,8 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
         if ((max - min) > 0)
         {
             float rWidth = RightWidth();
-            ActiveFont.DrawOutline(Index.ToString(), position + new Vector2(Container.Width - rWidth * 0.5f + lastDir * ValueWiggler.Value * 8f, 0f), new Vector2(0.5f, 0.5f), Vector2.One * 0.8f, color, 2f, strokeColor);
+
+            ActiveFont.DrawOutline(Index.ToString() + (Index > 0 ? "0%" : "%"), position + new Vector2(Container.Width - rWidth * 0.5f + lastDir * ValueWiggler.Value * 8f, 0f), new Vector2(0.5f, 0.5f), Vector2.One * 0.8f, color, 2f, strokeColor);
 
             Vector2 vector = Vector2.UnitX * (float)(highlighted ? (Math.Sin(sine * 4f) * 4f) : 0f);
 
