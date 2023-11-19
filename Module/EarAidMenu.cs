@@ -137,6 +137,11 @@ internal class EaseInVolumeSlider : TextMenuExt.IntSlider
         Visible = Alpha != 0;
     }
 
+    public override float RightWidth()
+    {
+        return ActiveFont.Measure(((int)intSliderMax.GetValue(this)).ToString() + "0%").X + 120f;
+    }
+
     public override void Render(Vector2 position, bool highlighted)
     {
         // We need to get the private fields from TextMenuExt.IntSlider
