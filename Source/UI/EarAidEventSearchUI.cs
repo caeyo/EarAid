@@ -51,7 +51,7 @@ public class EarAidEventSearchUI : Entity
     public EarAidEventSearchUI(TextMenu parentMenu)
     {
         this.parentMenu = parentMenu;
-        Tag = Tags.HUD;
+        Tag = Tags.HUD | Tags.PauseUpdate;
     }
 
     public override void Added(Scene scene)
