@@ -46,7 +46,7 @@ EAR_AID_SEARCH_HINTS=					(R) Search
 										(Up/Down) Navigate
 										(P) Play/Stop
 										(A) Add/Remove
-										(Enter/C) Confirm
+										(Enter) Confirm
 										(Esc) Back
 EAR_AID_SEARCH_TYPING_HINTS=			(Enter/Esc) Done
 

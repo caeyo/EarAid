@@ -148,7 +148,7 @@ public class EarAidEventSearchUI : Entity
         {
             AddCurrentToSelection();
         }
-        else if (KeyPressed(Keys.C) || KeyPressed(Keys.Enter))
+        else if (KeyPressed(Keys.Enter))
         {
             if (selectedPaths.Count > 0)
             {
