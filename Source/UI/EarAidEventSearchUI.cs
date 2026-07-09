@@ -36,6 +36,7 @@ public class EarAidEventSearchUI : Entity
     private int listIndex;
     private int listScroll;
     private EventInstance previewInstance;
+    private string previewPath;
 
     private Dictionary<EventInstance, float> silencedBackgroundAudio = new();
     private readonly Queue<char> inputQueue = new();
@@ -434,18 +435,19 @@ public class EarAidEventSearchUI : Entity
 
     private void PlayPreview()
     {
-        if (IsPreviewPlaying())
-        {
-            StopPreview();
-            return;
-        }
-
         if (filteredPaths.Count == 0)
         {
             return;
         }
 
         string path = filteredPaths[listIndex];
+
+        if (IsPreviewPlaying() && previewPath == path)
+        {
+            StopPreview();
+            return;
+        }
+
         if (!Events.IsEventAvailable(path))
         {
             return;
@@ -453,6 +455,7 @@ public class EarAidEventSearchUI : Entity
 
         StopPreview();
         previewInstance = Audio.Play(path);
+        previewPath = path;
     }
 
     private bool IsPreviewPlaying()
@@ -526,7 +529,9 @@ public class EarAidEventSearchUI : Entity
 
     private void StopPreview()
     {
-        Audio.Stop(previewInstance);
+        Audio.Stop(previewInstance, false);
+        previewInstance = null;
+        previewPath = null;
     }
 
     private void SilenceAllEvents()
