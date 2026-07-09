@@ -104,7 +104,7 @@ public class EarAidEventSearchUI : Entity
 
     public override void Render()
     {
-        Draw.Rect(0f, 0f, 1920f, 1080f, Color.Black * 0.85f);
+        Draw.Rect(0f, 0f, 1920f, 1080f, Color.Black);
 
         if (state == UiState.Search)
         {
