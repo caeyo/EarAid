@@ -199,7 +199,7 @@ public class EarAidEventSearchUI : Entity
         ActiveFont.DrawOutline(Dialog.Clean("EAR_AID_SEARCH_TITLE"), topLeft, Vector2.Zero, Vector2.One, Color.White, 2f, Color.Black);
 
         Color queryColor = searchTyping ? Color.Yellow : Color.White;
-        ActiveFont.DrawOutline(searchQuery + (searchTyping ? "_" : ""), topLeft + new Vector2(0f, 60f), Vector2.Zero, Vector2.One * 1.1f, queryColor, 2f, Color.Black);
+        ActiveFont.DrawOutline(searchQuery + (searchTyping ? "_" : ""), topLeft + new Vector2(0f, 60f), Vector2.Zero, Vector2.One * 0.9f, queryColor, 2f, Color.Black);
 
         string hintsKey = searchTyping ? "EAR_AID_SEARCH_TYPING_HINTS" : "EAR_AID_SEARCH_HINTS";
         ActiveFont.Draw(Dialog.Clean(hintsKey), topLeft + new Vector2(0f, 130f), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
@@ -229,7 +229,7 @@ public class EarAidEventSearchUI : Entity
             bool staged = selectedPaths.Contains(path);
             bool assigned = assignedPaths.Contains(path);
 
-            Color color = highlighted ? Color.Yellow
+            Color color = highlighted && !searchTyping ? Color.Yellow
                 : assigned ? Color.DarkSlateGray
                 : staged ? Calc.HexToColor("84FF54")
                 : Color.White;
