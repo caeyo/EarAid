@@ -12,6 +12,7 @@ public class EarAidSettings : EverestModuleSettings
     public List<SoundGroup> SoundGroups { get; set; } = new();
 
     // Legacy 1.5 properties — kept so existing YAML deserializes during migration.
+    [SettingIgnore] public string DEPRECATED_SETTINGS_BELOW { get; set; } = "";
     [SettingIgnore] public int BirdSquawk { get; set; } = 10;
     [SettingIgnore] public int BrokenWindow { get; set; } = 10;
     [SettingIgnore] public int Conveyor { get; set; } = 10;
