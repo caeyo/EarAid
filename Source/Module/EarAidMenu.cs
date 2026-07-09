@@ -42,17 +42,6 @@ public static class EarAidMenu
                 Events.RebuildRegistry(EarAidModule.Settings.SoundGroups);
                 Mixer.MixExistingInstances(capturedGroup.EventPaths, value);
             }));
-
-            TextMenu.Button deleteButton = new("    " + Dialog.Clean("EAR_AID_DELETE_GROUP"));
-            deleteButton.Pressed(() =>
-            {
-                Mixer.MixExistingInstances(capturedGroup.EventPaths, 10);
-                EarAidModule.Settings.SoundGroups.Remove(capturedGroup);
-                Events.RebuildRegistry(EarAidModule.Settings.SoundGroups);
-                Audio.Play(SFX.ui_main_button_lowkey);
-            });
-            menu.Add(deleteButton);
-            deleteButton.AddDescription(menu, Dialog.Clean("EAR_AID_DELETE_GROUP_SUBTEXT"));
         }
 
         TextMenu.Button searchButton = new(Dialog.Clean("EAR_AID_OPEN_SEARCH"));

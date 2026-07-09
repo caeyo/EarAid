@@ -5,7 +5,7 @@ A Celeste mod that lets you define custom groups of sounds and adjust their volu
 EarAid 2.0 uses **Sound Groups** — named collections of one or more FMOD events that share a single volume slider (0%–200%, default 100%).
 
 ### Your Sounds
-Shows each of your saved Sound Groups with a volume slider and a delete option.
+Shows each of your saved Sound Groups with a volume slider.
 
 ### Search
 Opens a search overlay where you can browse all loaded FMOD events (vanilla and modded), preview them, select events, and save them as a new Sound Group.
