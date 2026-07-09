@@ -1,8 +1,7 @@
-﻿using Celeste.Mod.EarAid.EarAid;
-using Celeste.Mod.EarAid.Module;
+﻿using System.Collections.Generic;
+using Celeste.Mod.EarAid.EarAid;
 using FMOD;
 using FMOD.Studio;
-using System.Reflection;
 
 namespace Celeste.Mod.EarAid;
 
@@ -23,9 +22,9 @@ public static class Mixer
         RESULT result = orig(self, out instance);
         string path = Audio.GetEventName(self);
 
-        if (Events.PathToSettingGetter.TryGetValue(path, out MethodInfo settingGetter))
+        if (Events.PathToVolume.TryGetValue(path, out int volume))
         {
-            instance?.setVolume((int)settingGetter.Invoke(EarAidModule.Settings, null) / 10f);
+            instance?.setVolume(volume / 10f);
         }
 
         return result;
@@ -33,7 +32,7 @@ public static class Mixer
 
     public static void MixExistingInstances(string path, int volume)
     {
-        if (Events.ModdedPaths.Contains(path) && !Audio.cachedModEvents.ContainsKey(path))
+        if (!Events.IsEventAvailable(path))
         {
             return;
         }
@@ -49,11 +48,11 @@ public static class Mixer
         }
     }
 
-    public static void MixExistingInstances(string[] paths, int volume)
+    public static void MixExistingInstances(IEnumerable<string> paths, int volume)
     {
-        for (int i = 0; i < paths.Length; i++)
+        foreach (string path in paths)
         {
-            MixExistingInstances(paths[i], volume);
+            MixExistingInstances(path, volume);
         }
     }
 }

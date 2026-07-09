@@ -1,33 +1,24 @@
 # EarAid
-A Celeste mod allowing the volume of certain (generally obnoxious) sounds to be adjusted individually. sorry kevin
+A Celeste mod that lets you define custom groups of sounds and adjust their volume individually. sorry kevin
 
-Sounds currently supported:
-- *Bird Squawk:* The sound used when the bird squawks.
-- *Broken Window:* The sounds used when wind is blowing through a broken window (e.g. in Resort).
-- *Conveyor:* The sounds used when a conveyor is active.
-- *Core Block:* The sounds used for core blocks.
-- *Death:* The sounds used when the player dies.
-- *Respawn:* The sound used when the player respawns.
-- *Golden Death:* The sound used when the player dies with a golden berry.
-- *Dialogue:* The sounds used for character voices in dialogue. Affects all voices.
-- *Dream Block:* The sounds used when the player travels through a dream block.
-- *Drum Swap Block:* The sounds used for drum swap blocks from Strawberry Jam.
-- *Fireball:* The sound used when a fireball is present.
-- *Heart Collect:* The sound used when a crystal heart is collected.
-- *Item Crystal Death:* The sound used when an item crystal from Cherry Helper is destroyed.
-- *Kevin Block:* The sounds used for Kevin blocks.
-- *Lava Barrier:* The sound used when a lava barrier is present.
-- *Lightning Ambience:* The sound used when lightning is present in a room.
-- *Lightning Strike:* The sound used when lightning strikes occur.
-- *Move Block:* The sounds used by move blocks.
-- *Oshiro Boss:* The sounds used when an Oshiro boss is active.
-- *Pico-8 Flag:* The sound used when a Pico-8 flag is hit.
-- *Seeker:* The sounds used for seekers.
-- *Spring:* The sound used when a spring is sprung.
-- *Touch Switch Complete:* The sound used when the last touch switch is activated. Ding dong!
-- *Farewell Wind:* The wind ambience used in Farewell.
-- *Ridge Wind:* The wind ambience used in Golden Ridge.
-- *Zip Mover:* The sound used when a zip mover is activated.
+## How it works
+EarAid 2.0 uses **Sound Groups** — named collections of one or more FMOD events that share a single volume slider (0%–200%, default 100%).
 
-If you find any issues or have a sound you'd like to be supported, give me a shout in [Celestecord's](https://discord.gg/celeste) #modding_feedback, via dm at caeyo#0477, or in the Issues tab.
-Support for other sounds (from vanilla or mods) can be added with little trouble, but in the interest of not overloading the menu I won't be adding every sound under the sun.
+### Your Sounds
+Shows each of your saved Sound Groups with a volume slider and a delete option.
+
+### Search
+Opens a search overlay where you can browse all loaded FMOD events (vanilla and modded), preview them, select events, and save them as a new Sound Group.
+
+**Keyboard controls in Search:**
+- **P** — Play preview of the highlighted event
+- **A** — Add/remove the highlighted event from your selection
+- **Enter** or **C** — Confirm selection and name your new group
+- **Esc** — Back / close
+
+After creating a new group, close and reopen Mod Options to see it in Your Sounds.
+
+## Upgrading from 1.5
+On first launch after updating, any 1.5 volume settings that were not at 100% are automatically converted into Sound Groups with the same names and volumes.
+
+If you find any issues, give me a shout in [Celestecord's](https://discord.gg/celeste) #modding_feedback, via dm at caeyo#0477, or in the Issues tab.

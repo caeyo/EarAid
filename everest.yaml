@@ -1,6 +1,6 @@
-﻿- Name: EarAid
-  Version: 1.5.0
-  DLL: EarAid.dll
+- Name: EarAid
+  Version: 2.0.0
+  DLL: bin/EarAid.dll
   Dependencies:
-    - Name: Everest
-      Version: 1.4436.0
+    - Name: EverestCore
+      Version: 1.5935.0

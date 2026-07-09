@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.EarAid.EarAid;
+using Celeste.Mod.EarAid.Module.Migration;
 using FMOD.Studio;
 using System;
 using System.Collections.Generic;
@@ -28,13 +29,13 @@ public class EarAidModule : EverestModule
         IEnumerable<MethodInfo> getMethods(string methodName) => typeof(EarAidModule).Assembly.GetTypesSafe()
             .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
             .Where(methodInfo => methodInfo.Name == methodName));
-
-        EarAidSettings.CollectVolumeSettings();
-        Events.PopulateEventPaths();
     }
 
     public override void Load()
     {
+        V15Migration.MigrateIfNeeded(Settings);
+        Events.RebuildRegistry(Settings.SoundGroups);
+
         if (!Loaded && Settings.Enabled)
         {
             foreach (MethodInfo hookLoader in hookLoaders)
@@ -60,6 +61,6 @@ public class EarAidModule : EverestModule
     public override void CreateModMenuSection(TextMenu menu, bool inGame, EventInstance snapshot)
     {
         CreateModMenuSectionHeader(menu, inGame, snapshot);
-        EarAidMenu.CreateMenu(menu);
+        EarAidMenu.CreateMenu(menu, inGame);
     }
 }
