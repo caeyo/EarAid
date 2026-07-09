@@ -386,7 +386,8 @@ public class EarAidEventSearchUI : Entity
                 .ToList();
         }
 
-        listIndex = Calc.Clamp(listIndex, 0, Math.Max(0, filteredPaths.Count - 1));
+        listIndex = 0;
+        listScroll = 0;
         UpdateListScroll();
     }
 
