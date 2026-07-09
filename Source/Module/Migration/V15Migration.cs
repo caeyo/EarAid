@@ -90,11 +90,11 @@ internal static class V15Migration
         }),
     };
 
-    public static void MigrateIfNeeded(EarAidSettings settings)
+    public static bool MigrateIfNeeded(EarAidSettings settings)
     {
         if (settings.SchemaVersion >= EarAidSettings.CurrentSchemaVersion)
         {
-            return;
+            return false;
         }
 
         HashSet<string> claimedPaths = new();
@@ -133,5 +133,6 @@ internal static class V15Migration
         }
 
         settings.SchemaVersion = EarAidSettings.CurrentSchemaVersion;
+        return true;
     }
 }

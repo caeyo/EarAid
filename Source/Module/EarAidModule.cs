@@ -33,7 +33,12 @@ public class EarAidModule : EverestModule
 
     public override void Load()
     {
-        V15Migration.MigrateIfNeeded(Settings);
+        bool migratedSettings = V15Migration.MigrateIfNeeded(Settings);
+        if (migratedSettings)
+        {
+            SaveSettings();
+        }
+
         Events.RebuildRegistry(Settings.SoundGroups);
 
         if (!Loaded && Settings.Enabled)
