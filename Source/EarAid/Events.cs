@@ -46,7 +46,7 @@ public static class Events
         return assigned;
     }
 
-    public static List<string> GetAllKnownEventPaths()
+    public static HashSet<string> GetAllKnownEventPaths()
     {
         HashSet<string> paths = new();
 
@@ -63,8 +63,6 @@ public static class Events
             paths.Add(path);
         }
 
-        List<string> sorted = paths.ToList();
-        sorted.Sort();
-        return sorted;
+        return paths;
     }
 }

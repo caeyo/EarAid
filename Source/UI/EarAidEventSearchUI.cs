@@ -19,8 +19,6 @@ public class EarAidEventSearchUI : Entity
         Naming
     }
 
-    private static readonly string[] MutedBuses = { "bus:/game", "bus:/music", "bus:/env", "bus:/ui" };
-
     private const int VisibleListRows = 20;
     private const float RowHeight = 36f;
 
@@ -39,7 +37,7 @@ public class EarAidEventSearchUI : Entity
     private int listScroll;
     private EventInstance previewInstance;
 
-    private readonly Dictionary<string, float> savedBusVolumes = new();
+    private Dictionary<EventInstance, float> silencedBackgroundAudio = new();
     private readonly Queue<char> inputQueue = new();
 
     private bool searchTyping;
@@ -61,7 +59,7 @@ public class EarAidEventSearchUI : Entity
         base.Added(scene);
         RefreshAssignedPaths();
         Refilter();
-        MuteGameplayAudio();
+        SilenceAllEvents();
 
         parentMenu.Focused = false;
         previousEngineCommandsEnabled = Engine.Commands.Enabled;
@@ -74,7 +72,7 @@ public class EarAidEventSearchUI : Entity
         StopNamingTyping();
         Engine.Commands.Enabled = previousEngineCommandsEnabled;
         StopPreview();
-        RestoreGameplayAudio();
+        RestoreAllEvents();
         base.Removed(scene);
     }
 
@@ -374,7 +372,8 @@ public class EarAidEventSearchUI : Entity
     private void Refilter()
     {
         string query = searchQuery.Trim();
-        List<string> allPaths = Events.GetAllKnownEventPaths();
+        List<string> allPaths = Events.GetAllKnownEventPaths().ToList();
+        allPaths.Sort();
 
         if (query.Length == 0)
         {
@@ -452,19 +451,12 @@ public class EarAidEventSearchUI : Entity
         }
 
         StopPreview();
-        UnmuteGameBusForPreview();
         previewInstance = Audio.Play(path);
     }
 
     private bool IsPreviewPlaying()
     {
-        if (previewInstance == null)
-        {
-            return false;
-        }
-
-        previewInstance.getPlaybackState(out PLAYBACK_STATE state);
-        return state is PLAYBACK_STATE.PLAYING or PLAYBACK_STATE.STARTING;
+        return Audio.IsPlaying(previewInstance);
     }
 
     private void AddCurrentToSelection()
@@ -533,35 +525,45 @@ public class EarAidEventSearchUI : Entity
 
     private void StopPreview()
     {
-        if (previewInstance != null)
-        {
-            previewInstance.stop(STOP_MODE.IMMEDIATE);
-            previewInstance.release();
-            previewInstance = null;
-        }
-
-        MuteGameBus();
+        Audio.Stop(previewInstance);
     }
 
-    private void UnmuteGameBusForPreview()
+    private void SilenceAllEvents()
     {
-        if (savedBusVolumes.TryGetValue("bus:/game", out float volume))
+        silencedBackgroundAudio.Clear();
+        foreach (string path in Events.GetAllKnownEventPaths())
         {
-            SetBusVolume("bus:/game", volume);
+            EventDescription evt = Audio.GetEventDescription(path);
+            if (evt.getInstanceList(out EventInstance[] instances) != FMOD.RESULT.OK) 
+                continue;
+            foreach (EventInstance instance in instances)
+            {
+                if (instance.isValid() && instance.getVolume(out float vol, out float finalvolume) == FMOD.RESULT.OK)
+                {
+                    if (vol > 0f)
+                    {
+                        silencedBackgroundAudio[instance] = vol;
+                        instance.setVolume(0f);
+                    }
+                }
+            }
         }
     }
-
-    private void MuteGameBus()
+    
+    private void RestoreAllEvents()
     {
-        SetBusVolume("bus:/game", 0f);
-    }
-
-    private static void SetBusVolume(string busPath, float volume)
-    {
-        if (Audio.System.getBus(busPath, out Bus bus) == RESULT.OK)
+        foreach (var kvp in silencedBackgroundAudio)
         {
-            bus.setVolume(volume);
+            EventInstance instance = kvp.Key;
+            float originalVolume = kvp.Value;
+
+            if (instance.isValid())
+            {
+                instance.setVolume(originalVolume);
+            }
         }
+    
+        silencedBackgroundAudio.Clear();
     }
 
     private void HookTextInput()
@@ -580,37 +582,5 @@ public class EarAidEventSearchUI : Entity
             TextInput.OnInput -= OnTextInput;
             textInputHooked = false;
         }
-    }
-
-    private void MuteGameplayAudio()
-    {
-        savedBusVolumes.Clear();
-
-        foreach (string busPath in MutedBuses)
-        {
-            if (Audio.System.getBus(busPath, out Bus bus) != RESULT.OK)
-            {
-                continue;
-            }
-
-            if (bus.getVolume(out float volume, out _) == RESULT.OK)
-            {
-                savedBusVolumes[busPath] = volume;
-                bus.setVolume(0f);
-            }
-        }
-    }
-
-    private void RestoreGameplayAudio()
-    {
-        foreach (KeyValuePair<string, float> kvp in savedBusVolumes)
-        {
-            if (Audio.System.getBus(kvp.Key, out Bus bus) == RESULT.OK)
-            {
-                bus.setVolume(kvp.Value);
-            }
-        }
-
-        savedBusVolumes.Clear();
     }
 }
