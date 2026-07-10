@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Celeste.Mod.EarAid.Control;
+using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid.Module;
 

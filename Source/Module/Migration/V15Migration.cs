@@ -1,3 +1,4 @@
+using Celeste.Mod.EarAid.Control;
 using System;
 using System.Collections.Generic;
 

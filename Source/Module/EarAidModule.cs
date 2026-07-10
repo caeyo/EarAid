@@ -1,4 +1,5 @@
-﻿using Celeste.Mod.EarAid.Module.Migration;
+﻿using Celeste.Mod.EarAid.Control;
+using Celeste.Mod.EarAid.Module.Migration;
 using FMOD.Studio;
 using System;
 

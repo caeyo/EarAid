@@ -1,4 +1,5 @@
-﻿using Celeste.Mod.EarAid.UI;
+﻿using Celeste.Mod.EarAid.Control;
+using Celeste.Mod.EarAid.UI;
 using Monocle;
 
 namespace Celeste.Mod.EarAid.Module;
@@ -90,7 +91,7 @@ public static class EarAidMenu
         addItem(enabledItem);
 
         TextMenu.Button manageButton = new(Dialog.Clean("EAR_AID_OPEN_MANAGE"));
-        manageButton.Pressed(() => OpenOverlay(menu, new EarAidGroupManageUI(menu)));
+        manageButton.Pressed(() => OpenOverlay(menu, new GroupManageUI(menu)));
         manageItem = manageButton;
         addItem(manageButton);
         addDescription(manageButton, Dialog.Clean("EAR_AID_OPEN_MANAGE_SUBTEXT"));
@@ -115,11 +116,11 @@ public static class EarAidMenu
     {
         menu.Focused = false;
 
-        if (overlay is EarAidEventSearchUI searchUi)
+        if (overlay is EventSearchUI searchUi)
         {
             searchUi.OnClose = () => CloseOverlay(menu);
         }
-        else if (overlay is EarAidGroupManageUI manageUi)
+        else if (overlay is GroupManageUI manageUi)
         {
             manageUi.OnClose = () => CloseOverlay(menu);
         }
