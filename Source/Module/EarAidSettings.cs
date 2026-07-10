@@ -9,8 +9,8 @@ public class EarAidSettings : EverestModuleSettings
     public const int CurrentSchemaVersion = 2;
 
     public bool Enabled { get; set; } = true;
-    public int SchemaVersion { get; set; } = 0;
-    public List<SoundGroup> SoundGroups { get; set; } = new();
+    public int SchemaVersion { get; set; }
+    public List<SoundGroup> SoundGroups { get; set; } = [];
 
     // Legacy 1.5 properties — kept so existing YAML deserializes during migration.
     [SettingIgnore] public string DEPRECATED_SETTINGS_BELOW { get; set; } = "";

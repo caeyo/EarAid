@@ -8,7 +8,7 @@ namespace Celeste.Mod.EarAid.UI;
 internal static class AudioMute
 {
     private static int muteDepth;
-    private static readonly Dictionary<EventInstance, float> silencedBackgroundAudio = new(64);
+    private static readonly Dictionary<EventInstance, float> SilencedBackgroundAudio = new(64);
 
     private static EventInstance previewInstance;
     private static string previewPath;
@@ -74,7 +74,7 @@ internal static class AudioMute
 
     private static void SilenceAllEvents()
     {
-        silencedBackgroundAudio.Clear();
+        SilencedBackgroundAudio.Clear();
 
         foreach (string path in Events.SortedKnownPaths)
         {
@@ -88,28 +88,28 @@ internal static class AudioMute
 
             foreach (EventInstance instance in instances)
             {
-                if (instance.isValid()
-                    && instance.getVolume(out float volume, out _) == RESULT.OK
-                    && volume > 0f)
+                if (!instance.isValid()
+                    || instance.getVolume(out float volume, out _) != RESULT.OK
+                    || !(volume > 0f))
                 {
-                    silencedBackgroundAudio[instance] = volume;
-                    instance.setVolume(0f);
+                    continue;
                 }
+                SilencedBackgroundAudio[instance] = volume;
+                instance.setVolume(0f);
             }
         }
     }
 
     private static void RestoreAllEvents()
     {
-        foreach (KeyValuePair<EventInstance, float> kvp in silencedBackgroundAudio)
+        foreach ((EventInstance instance, float value) in SilencedBackgroundAudio)
         {
-            EventInstance instance = kvp.Key;
             if (instance.isValid())
             {
-                instance.setVolume(kvp.Value);
+                instance.setVolume(value);
             }
         }
 
-        silencedBackgroundAudio.Clear();
+        SilencedBackgroundAudio.Clear();
     }
 }

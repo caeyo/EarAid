@@ -8,7 +8,8 @@ using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid.UI;
 
-public class GroupManageUI : OverlayUI
+public class GroupManageUI(
+    TextMenu parentMenu) : OverlayUI(parentMenu)
 {
     private enum UiState
     {
@@ -28,10 +29,10 @@ public class GroupManageUI : OverlayUI
     private int listScroll;
     private int eventListIndex;
     private int eventListScroll;
-    private readonly List<string[]> soundDisplayLines = new();
-    private float[] soundItemHeights = Array.Empty<float>();
-    private readonly List<string[]> eventDisplayLines = new();
-    private float[] eventItemHeights = Array.Empty<float>();
+    private readonly List<string[]> soundDisplayLines = [];
+    private float[] soundItemHeights = [];
+    private readonly List<string[]> eventDisplayLines = [];
+    private float[] eventItemHeights = [];
 
     private SoundGroup selectedGroup;
     private SoundGroup pendingDeleteGroup;
@@ -48,11 +49,9 @@ public class GroupManageUI : OverlayUI
     private string cachedRenameTitle;
     private string cachedRenameHints;
 
-    public GroupManageUI(TextMenu parentMenu) : base(parentMenu) { }
-
     protected override bool IsAcceptingTextInput => renameTyping;
 
-    private int ListItemCount => EarAidModule.Settings.SoundGroups.Count;
+    private static int ListItemCount => EarAidModule.Settings.SoundGroups.Count;
 
     private SoundGroup GetSelectedGroup() => EarAidModule.Settings.SoundGroups[listIndex];
 
@@ -71,18 +70,18 @@ public class GroupManageUI : OverlayUI
 
         if (inputSuspended)
         {
-            listInput.Reset();
+            ListInput.Reset();
             return;
         }
 
-        parentMenu.Focused = false;
+        ParentMenu.Focused = false;
         ConsumeVirtualMenuInput();
         ProcessInputQueue();
         AudioMute.UpdatePreview();
 
         if (state != previousState)
         {
-            listInput.Reset();
+            ListInput.Reset();
             previousState = state;
         }
 
@@ -132,7 +131,7 @@ public class GroupManageUI : OverlayUI
             return;
         }
 
-        listInput.UpdateVertical(MoveListSelection);
+        ListInput.UpdateVertical(MoveListSelection);
 
         if (KeyPressed(Keys.Enter) && ListItemCount > 0)
         {
@@ -140,7 +139,7 @@ public class GroupManageUI : OverlayUI
         }
         else if (KeyPressed(Keys.A))
         {
-            OpenSearch(new EventSearchUI(parentMenu), () =>
+            OpenSearch(new EventSearchUI(ParentMenu), () =>
             {
                 RebuildSoundDisplayLines();
                 ClampListIndex();
@@ -170,7 +169,7 @@ public class GroupManageUI : OverlayUI
             return;
         }
 
-        listInput.UpdateVertical(MoveEventListSelection);
+        ListInput.UpdateVertical(MoveEventListSelection);
 
         if (KeyPressed(Keys.P) && selectedGroup.EventPaths.Count > 0)
         {
@@ -178,7 +177,7 @@ public class GroupManageUI : OverlayUI
         }
         else if (KeyPressed(Keys.A))
         {
-            OpenSearch(new EventSearchUI(parentMenu, selectedGroup), RebuildEventDisplayLines);
+            OpenSearch(new EventSearchUI(ParentMenu, selectedGroup), RebuildEventDisplayLines);
         }
         else if (KeyPressed(Keys.R))
         {
@@ -216,11 +215,12 @@ public class GroupManageUI : OverlayUI
 
     private void UpdateRename()
     {
-        if (renameTyping && KeyPressed(Keys.Escape))
+        if (!renameTyping || !KeyPressed(Keys.Escape))
         {
-            StopRenameTyping();
-            state = UiState.Detail;
+            return;
         }
+        StopRenameTyping();
+        state = UiState.Detail;
     }
 
     private void RenderList()
@@ -310,7 +310,7 @@ public class GroupManageUI : OverlayUI
         searchUi.OnClose = () =>
         {
             inputSuspended = false;
-            parentMenu.Focused = false;
+            ParentMenu.Focused = false;
             EarAidMenu.RefreshMenu();
             afterClose?.Invoke();
         };
@@ -436,20 +436,20 @@ public class GroupManageUI : OverlayUI
 
     protected override void HandleTextInput(char c)
     {
-        if (c is '\r' or '\n')
+        switch (c)
         {
-            SaveRename();
-            return;
-        }
-
-        if (c == (char)8)
-        {
-            if (renameText.Length > 0)
+            case '\r' or '\n':
+                SaveRename();
+                return;
+            case (char)8:
             {
-                renameText = renameText[..^1];
-            }
+                if (renameText.Length > 0)
+                {
+                    renameText = renameText[..^1];
+                }
 
-            return;
+                return;
+            }
         }
 
         if (!char.IsControl(c) && renameText.Length < MaxNameLength && ActiveFont.FontSize.Characters.ContainsKey(c))

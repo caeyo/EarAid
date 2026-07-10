@@ -5,10 +5,13 @@ using Microsoft.Xna.Framework.Input;
 using Monocle;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Celeste.Mod.EarAid.UI;
 
-public class EventSearchUI : OverlayUI
+public class EventSearchUI(
+    TextMenu parentMenu,
+    SoundGroup addingToGroup = null) : OverlayUI(parentMenu)
 {
     private enum UiState
     {
@@ -22,19 +25,18 @@ public class EventSearchUI : OverlayUI
     private static readonly Color StagedColor = Calc.HexToColor("84FF54");
     private static readonly Color BlockedSelectionColor = Calc.HexToColor("9E9E2C");
 
-    private readonly SoundGroup addingToGroup;
-    private readonly HashSet<string> existingGroupPaths = new();
+    private readonly HashSet<string> existingGroupPaths = [];
 
     private UiState state = UiState.Search;
     private UiState previousState = (UiState)(-1);
 
     private string searchQuery = "";
     private string displayName = "";
-    private readonly List<string> filteredPaths = new();
-    private readonly List<string[]> filteredDisplayLines = new();
-    private float[] filteredItemHeights = Array.Empty<float>();
-    private readonly HashSet<string> selectedPaths = new();
-    private HashSet<string> assignedPaths = new();
+    private readonly List<string> filteredPaths = [];
+    private readonly List<string[]> filteredDisplayLines = [];
+    private float[] filteredItemHeights = [];
+    private readonly HashSet<string> selectedPaths = [];
+    private HashSet<string> assignedPaths = [];
 
     private int listIndex;
     private int listScroll;
@@ -49,11 +51,6 @@ public class EventSearchUI : OverlayUI
     private string cachedNamingTitle;
     private string cachedNamingHints;
     private string cachedSearchQueryDisplay = "";
-
-    public EventSearchUI(TextMenu parentMenu, SoundGroup addingToGroup = null) : base(parentMenu)
-    {
-        this.addingToGroup = addingToGroup;
-    }
 
     protected override bool IsAcceptingTextInput => searchTyping || namingTyping;
 
@@ -84,14 +81,14 @@ public class EventSearchUI : OverlayUI
     {
         base.Update();
 
-        parentMenu.Focused = false;
+        ParentMenu.Focused = false;
         ConsumeVirtualMenuInput();
         ProcessInputQueue();
         AudioMute.UpdatePreview();
 
         if (state != previousState)
         {
-            listInput.Reset();
+            ListInput.Reset();
             previousState = state;
         }
 
@@ -123,7 +120,7 @@ public class EventSearchUI : OverlayUI
     {
         if (searchTyping)
         {
-            listInput.Reset();
+            ListInput.Reset();
 
             if (KeyPressed(Keys.Enter) || KeyPressed(Keys.Escape))
             {
@@ -133,7 +130,7 @@ public class EventSearchUI : OverlayUI
             return;
         }
 
-        listInput.UpdateVertical(MoveListSelection);
+        ListInput.UpdateVertical(MoveListSelection);
 
         if (KeyPressed(Keys.R))
         {
@@ -159,11 +156,12 @@ public class EventSearchUI : OverlayUI
 
     private void UpdateNaming()
     {
-        if (namingTyping && KeyPressed(Keys.Escape))
+        if (!namingTyping || !KeyPressed(Keys.Escape))
         {
-            StopNamingTyping();
-            state = UiState.Search;
+            return;
         }
+        StopNamingTyping();
+        state = UiState.Search;
     }
 
     private void ConfirmSearch()
@@ -207,14 +205,12 @@ public class EventSearchUI : OverlayUI
                 bool blocked = assignedPaths.Contains(path) || existingGroupPaths.Contains(path);
                 bool highlighted = index == listIndex && !searchTyping;
 
-                if (highlighted && blocked)
+                switch (highlighted)
                 {
-                    return BlockedSelectionColor;
-                }
-
-                if (highlighted)
-                {
-                    return Color.Yellow;
+                    case true when blocked:
+                        return BlockedSelectionColor;
+                    case true:
+                        return Color.Yellow;
                 }
 
                 if (blocked)
@@ -249,46 +245,48 @@ public class EventSearchUI : OverlayUI
 
     private void HandleSearchTextInput(char c)
     {
-        if (c is '\r' or '\n')
+        switch (c)
         {
-            StopSearchTyping();
-            return;
-        }
-
-        if (c == (char)8)
-        {
-            if (searchQuery.Length > 0)
+            case '\r' or '\n':
+                StopSearchTyping();
+                return;
+            case (char)8:
             {
+                if (searchQuery.Length <= 0)
+                {
+                    return;
+                }
                 searchQuery = searchQuery[..^1];
                 Refilter();
-            }
 
+                return;
+            }
+        }
+
+        if (char.IsControl(c) || searchQuery.Length >= MaxQueryLength)
+        {
             return;
         }
-
-        if (!char.IsControl(c) && searchQuery.Length < MaxQueryLength)
-        {
-            searchQuery += c;
-            Refilter();
-        }
+        searchQuery += c;
+        Refilter();
     }
 
     private void HandleNamingTextInput(char c)
     {
-        if (c is '\r' or '\n')
+        switch (c)
         {
-            SaveGroup();
-            return;
-        }
-
-        if (c == (char)8)
-        {
-            if (displayName.Length > 0)
+            case '\r' or '\n':
+                SaveGroup();
+                return;
+            case (char)8:
             {
-                displayName = displayName[..^1];
-            }
+                if (displayName.Length > 0)
+                {
+                    displayName = displayName[..^1];
+                }
 
-            return;
+                return;
+            }
         }
 
         if (!char.IsControl(c) && displayName.Length < MaxNameLength && ActiveFont.FontSize.Characters.ContainsKey(c))
@@ -364,10 +362,8 @@ public class EventSearchUI : OverlayUI
         filteredDisplayLines.Clear();
         filteredDisplayLines.Capacity = Math.Max(filteredDisplayLines.Capacity, filteredPaths.Count);
 
-        foreach (string path in filteredPaths)
+        foreach (string label in from path in filteredPaths let prefix = selectedPaths.Contains(path) ? "+ " : "  " select prefix + FormatEventPathForDisplay(path))
         {
-            string prefix = selectedPaths.Contains(path) ? "+ " : "  ";
-            string label = prefix + FormatEventPathForDisplay(path);
             filteredDisplayLines.Add(Text.WrapToLines(label, ListMaxWidth, ListRowScale, SearchContinuationIndent));
         }
 
@@ -439,13 +435,7 @@ public class EventSearchUI : OverlayUI
         groupSaved = true;
 
         List<string> mergedPaths = new(addingToGroup.EventPaths);
-        foreach (string path in selectedPaths)
-        {
-            if (!existingGroupPaths.Contains(path))
-            {
-                mergedPaths.Add(path);
-            }
-        }
+        mergedPaths.AddRange(selectedPaths.Where(path => !existingGroupPaths.Contains(path)));
 
         SoundGroupOperations.UpdateGroup(addingToGroup, addingToGroup.DisplayName, mergedPaths);
         Close();
@@ -470,7 +460,7 @@ public class EventSearchUI : OverlayUI
         {
             DisplayName = name,
             Volume = VolumeConstants.DefaultVolume,
-            EventPaths = new List<string>(selectedPaths)
+            EventPaths = [..selectedPaths]
         });
 
         Events.RebuildRegistry(EarAidModule.Settings.SoundGroups);

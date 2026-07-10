@@ -12,7 +12,7 @@ public class EarAidModule : EverestModule
     public override Type SettingsType => typeof(EarAidSettings);
     public static EarAidSettings Settings => Instance._Settings as EarAidSettings;
 
-    public static bool Loaded { get; private set; }
+    private static bool Loaded { get; set; }
 
     private static bool gameLoadEventsScheduled;
 
@@ -31,20 +31,22 @@ public class EarAidModule : EverestModule
 
         ScheduleGameLoadEvents();
 
-        if (!Loaded && Settings.Enabled)
+        if (Loaded || !Settings.Enabled)
         {
-            Mixer.LoadHooks();
-            Loaded = true;
+            return;
         }
+        Mixer.LoadHooks();
+        Loaded = true;
     }
 
     public override void Unload()
     {
-        if (Loaded)
+        if (!Loaded)
         {
-            Mixer.UnloadHooks();
-            Loaded = false;
+            return;
         }
+        Mixer.UnloadHooks();
+        Loaded = false;
     }
 
     public override void CreateModMenuSection(TextMenu menu, bool inGame, EventInstance snapshot)

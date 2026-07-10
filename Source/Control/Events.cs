@@ -1,5 +1,6 @@
 using FMOD.Studio;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Celeste.Mod.EarAid.Control;
 
@@ -14,15 +15,10 @@ public static class Events
 
     public static IReadOnlyList<string> SortedKnownPaths => cachedSortedPaths ??= BuildSortedPaths();
 
-    public static void InvalidateCatalog() => cachedSortedPaths = null;
-
     public static void RebuildRegistry(IEnumerable<SoundGroup> groups)
     {
-        int pathCount = 0;
-        foreach (SoundGroup group in groups)
-        {
-            pathCount += group.EventPaths.Count;
-        }
+        IEnumerable<SoundGroup> soundGroups = groups as SoundGroup[] ?? groups.ToArray();
+        int pathCount = soundGroups.Sum(group => group.EventPaths.Count);
 
         PathToVolume.Clear();
         DescriptionToVolume.Clear();
@@ -33,7 +29,7 @@ public static class Events
             DescriptionToVolume.EnsureCapacity(pathCount);
         }
 
-        foreach (SoundGroup group in groups)
+        foreach (SoundGroup group in soundGroups)
         {
             float volume = VolumeConstants.ToFloat(group.Volume);
 
@@ -77,7 +73,7 @@ public static class Events
 
     public static HashSet<string> GetAssignedEventPaths(IEnumerable<SoundGroup> groups, SoundGroup excludeGroup = null)
     {
-        HashSet<string> assigned = new();
+        HashSet<string> assigned = [];
         foreach (SoundGroup group in groups)
         {
             if (group == excludeGroup)
@@ -95,14 +91,11 @@ public static class Events
 
     private static List<string> BuildSortedPaths()
     {
-        HashSet<string> paths = new();
+        HashSet<string> paths = [];
 
-        foreach (string path in Audio.cachedPaths.Values)
+        foreach (string path in Audio.cachedPaths.Values.Where(path => path.StartsWith("event:/")))
         {
-            if (path.StartsWith("event:/"))
-            {
-                paths.Add(path);
-            }
+            paths.Add(path);
         }
 
         foreach (string path in Audio.cachedModEvents.Keys)

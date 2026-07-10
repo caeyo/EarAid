@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Monocle;
 using System;
 using System.Collections.Generic;
 
@@ -8,13 +7,13 @@ namespace Celeste.Mod.EarAid.UI;
 internal static class Text
 {
     private const float OutlineWidth = 2f;
-    private static readonly char[] PathBreakChars = { '/', '_', '.' };
+    private static readonly char[] PathBreakChars = ['/', '_', '.'];
 
     public static string[] WrapToLines(string text, float maxWidth, float scale = 1f, string continuationIndent = "")
     {
         if (string.IsNullOrEmpty(text))
         {
-            return Array.Empty<string>();
+            return [];
         }
 
         if (string.IsNullOrEmpty(continuationIndent))
@@ -26,7 +25,7 @@ internal static class Text
         float indentWidth = ActiveFont.Measure(continuationIndent).X;
         if (ActiveFont.Measure(text).X <= fullLimit)
         {
-            return new[] { text };
+            return [text];
         }
 
         List<string> lines = new();
@@ -66,7 +65,7 @@ internal static class Text
         float limit = maxWidth / scale;
         if (ActiveFont.Measure(text).X <= limit)
         {
-            return new[] { text };
+            return [text];
         }
 
         List<string> lines = new();
@@ -118,12 +117,7 @@ internal static class Text
 
         int segmentEnd = start + best;
         int preferredBreak = FindPreferredBreak(text, start, segmentEnd);
-        if (preferredBreak > start)
-        {
-            return preferredBreak;
-        }
-
-        return segmentEnd;
+        return preferredBreak > start ? preferredBreak : segmentEnd;
     }
 
     private static int FindPreferredBreak(string text, int start, int segmentEnd)

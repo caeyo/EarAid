@@ -29,8 +29,8 @@ public abstract class OverlayUI : Entity
 
     public Action OnClose;
 
-    protected readonly TextMenu parentMenu;
-    private protected readonly ListInput listInput = new();
+    protected readonly TextMenu ParentMenu;
+    private protected readonly ListInput ListInput = new();
 
     private readonly Queue<char> inputQueue = new();
     private bool textInputHooked;
@@ -38,7 +38,7 @@ public abstract class OverlayUI : Entity
 
     protected OverlayUI(TextMenu parentMenu)
     {
-        this.parentMenu = parentMenu;
+        this.ParentMenu = parentMenu;
         Tag = Tags.HUD | Tags.PauseUpdate;
     }
 
@@ -51,7 +51,7 @@ public abstract class OverlayUI : Entity
         OnOpen();
         AudioMute.PushMute();
 
-        parentMenu.Focused = false;
+        ParentMenu.Focused = false;
         previousEngineCommandsEnabled = Engine.Commands.Enabled;
         Engine.Commands.Enabled = false;
     }
@@ -84,11 +84,12 @@ public abstract class OverlayUI : Entity
 
     protected void HookTextInput()
     {
-        if (!textInputHooked)
+        if (textInputHooked)
         {
-            TextInput.OnInput += OnTextInput;
-            textInputHooked = true;
+            return;
         }
+        TextInput.OnInput += OnTextInput;
+        textInputHooked = true;
     }
 
     protected void UnhookTextInputIfIdle()
@@ -127,11 +128,12 @@ public abstract class OverlayUI : Entity
 
     private void UnhookTextInput()
     {
-        if (textInputHooked)
+        if (!textInputHooked)
         {
-            TextInput.OnInput -= OnTextInput;
-            textInputHooked = false;
+            return;
         }
+        TextInput.OnInput -= OnTextInput;
+        textInputHooked = false;
     }
 
     private void OnTextInput(char c)

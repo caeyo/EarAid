@@ -6,5 +6,5 @@ public class SoundGroup
 {
     public string DisplayName { get; set; }
     public int Volume { get; set; } = VolumeConstants.DefaultVolume;
-    public List<string> EventPaths { get; set; } = new();
+    public List<string> EventPaths { get; set; } = [];
 }

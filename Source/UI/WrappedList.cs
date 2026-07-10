@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Monocle;
 using System;
 using System.Collections.Generic;
 
@@ -12,8 +11,7 @@ internal static class WrappedList
 
     public static float LineStep(float scale) => ActiveFont.LineHeight * scale + 2f;
 
-    public static float GetItemHeight(string[] lines, float lineStep)
-        => lines.Length * lineStep + ItemPadding;
+    private static float GetItemHeight(string[] lines, float lineStep) => lines.Length * lineStep + ItemPadding;
 
     public static float[] ComputeHeights(IReadOnlyList<string[]> items, float lineStep)
     {

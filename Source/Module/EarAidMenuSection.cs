@@ -1,5 +1,4 @@
 using Monocle;
-using System;
 
 namespace Celeste.Mod.EarAid.Module;
 
@@ -9,8 +8,8 @@ internal static class EarAidMenuSection
     {
         menu.Items.Insert(index, item);
         item.Container = menu;
-        menu.Add(item.ValueWiggler = Wiggler.Create(0.25f, 3f, null, false, false));
-        menu.Add(item.SelectWiggler = Wiggler.Create(0.25f, 3f, null, false, false));
+        menu.Add(item.ValueWiggler = Wiggler.Create(0.25f, 3f));
+        menu.Add(item.SelectWiggler = Wiggler.Create(0.25f, 3f));
         item.ValueWiggler.UseRawDeltaTime = true;
         item.SelectWiggler.UseRawDeltaTime = true;
         item.Added();

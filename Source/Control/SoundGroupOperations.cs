@@ -23,10 +23,11 @@ public static class SoundGroupOperations
     public static void UpdateGroup(SoundGroup group, string displayName, IEnumerable<string> eventPaths)
     {
         List<string> oldPaths = group.EventPaths;
-        HashSet<string> newPathSet = new(eventPaths);
+        IEnumerable<string> paths = eventPaths as string[] ?? eventPaths.ToArray();
+        HashSet<string> newPathSet = new(paths);
 
         group.DisplayName = displayName.Trim();
-        group.EventPaths = new List<string>(eventPaths);
+        group.EventPaths = new List<string>(paths);
 
         Events.RebuildRegistry(EarAidModule.Settings.SoundGroups);
 

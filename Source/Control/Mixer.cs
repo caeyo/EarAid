@@ -21,8 +21,7 @@ public static class Mixer
     {
         RESULT result = orig(self, out instance);
 
-        if (Events.HasRegisteredPaths
-            && Events.DescriptionToVolume.TryGetValue(self, out float volume))
+        if (Events.HasRegisteredPaths && Events.DescriptionToVolume.TryGetValue(self, out float volume))
         {
             instance?.setVolume(volume);
         }
@@ -62,12 +61,13 @@ public static class Mixer
 
         EventDescription eventDesc = Audio.GetEventDescription(path);
 
-        if (eventDesc?.getInstanceList(out EventInstance[] instanceArray) is RESULT.OK)
+        if (eventDesc?.getInstanceList(out EventInstance[] instanceArray) is not RESULT.OK)
         {
-            for (int i = 0; i < instanceArray.Length; i++)
-            {
-                action(instanceArray[i]);
-            }
+            return;
+        }
+        foreach (EventInstance eventInst in instanceArray)
+        {
+            action(eventInst);
         }
     }
 }

@@ -9,16 +9,14 @@ public static class EarAidMenu
     private static int sectionStartIndex = -1;
     private static int sectionLength;
     private static TextMenu trackedMenu;
-    private static bool trackedInGame;
     private static TextMenu.Item enabledItem;
     private static TextMenu.Item manageItem;
 
     public static void CreateMenu(TextMenu menu, bool inGame)
     {
         trackedMenu = menu;
-        trackedInGame = inGame;
         sectionStartIndex = menu.Items.Count;
-        sectionLength = AppendSection(menu, inGame);
+        sectionLength = AppendSection(menu);
     }
 
     public static void RefreshMenu()
@@ -39,24 +37,21 @@ public static class EarAidMenu
             EarAidMenuSection.RemoveItem(trackedMenu, sectionStartIndex);
         }
 
-        sectionLength = InsertSection(trackedMenu, sectionStartIndex, trackedInGame);
+        sectionLength = InsertSection(trackedMenu, sectionStartIndex);
         EarAidMenuSection.ApplySelection(trackedMenu, manageItem);
     }
 
-    private static int AppendSection(TextMenu menu, bool inGame)
+    private static int AppendSection(TextMenu menu)
     {
         int startCount = menu.Items.Count;
-        BuildSection(menu, inGame, (item) => menu.Add(item), (button, description) =>
-        {
-            button.AddDescription(menu, description);
-        });
+        BuildSection(menu, (item) => menu.Add(item), (button, description) => { button.AddDescription(menu, description); });
         return menu.Items.Count - startCount;
     }
 
-    private static int InsertSection(TextMenu menu, int startIndex, bool inGame)
+    private static int InsertSection(TextMenu menu, int startIndex)
     {
         int index = startIndex;
-        BuildSection(menu, inGame,
+        BuildSection(menu,
             (item) => index = EarAidMenuSection.InsertItem(menu, index, item),
             (button, description) => index = EarAidMenuSection.InsertDescription(menu, index, button, description));
         return index - startIndex;
@@ -64,7 +59,6 @@ public static class EarAidMenu
 
     private static void BuildSection(
         TextMenu menu,
-        bool inGame,
         System.Action<TextMenu.Item> addItem,
         System.Action<TextMenu.Item, string> addDescription)
     {
