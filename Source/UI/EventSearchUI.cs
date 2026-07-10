@@ -1,3 +1,4 @@
+using Celeste.Mod.EarAid.Control;
 using Celeste.Mod.EarAid.Module;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid.UI;
 
-public class EarAidEventSearchUI : EarAidOverlayUI
+public class EventSearchUI : OverlayUI
 {
     private enum UiState
     {
@@ -49,7 +50,7 @@ public class EarAidEventSearchUI : EarAidOverlayUI
     private string cachedNamingHints;
     private string cachedSearchQueryDisplay = "";
 
-    public EarAidEventSearchUI(TextMenu parentMenu, SoundGroup addingToGroup = null) : base(parentMenu)
+    public EventSearchUI(TextMenu parentMenu, SoundGroup addingToGroup = null) : base(parentMenu)
     {
         this.addingToGroup = addingToGroup;
     }
@@ -86,7 +87,7 @@ public class EarAidEventSearchUI : EarAidOverlayUI
         parentMenu.Focused = false;
         ConsumeVirtualMenuInput();
         ProcessInputQueue();
-        EarAidAudioMute.UpdatePreview();
+        AudioMute.UpdatePreview();
 
         if (state != previousState)
         {
@@ -192,7 +193,7 @@ public class EarAidEventSearchUI : EarAidOverlayUI
         ActiveFont.Draw(hints, topLeft + new Vector2(0f, HintsOffsetY), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
 
         Vector2 listTop = topLeft + new Vector2(ListColumnOffsetX, HintsOffsetY);
-        EarAidWrappedList.Draw(
+        WrappedList.Draw(
             listTop,
             filteredDisplayLines,
             filteredItemHeights,
@@ -367,11 +368,11 @@ public class EarAidEventSearchUI : EarAidOverlayUI
         {
             string prefix = selectedPaths.Contains(path) ? "+ " : "  ";
             string label = prefix + FormatEventPathForDisplay(path);
-            filteredDisplayLines.Add(EarAidText.WrapToLines(label, ListMaxWidth, ListRowScale, SearchContinuationIndent));
+            filteredDisplayLines.Add(Text.WrapToLines(label, ListMaxWidth, ListRowScale, SearchContinuationIndent));
         }
 
-        filteredItemHeights = EarAidWrappedList.ComputeHeights(filteredDisplayLines, WrappedLineStep);
-        EarAidWrappedList.EnsureIndexVisible(ref listScroll, listIndex, filteredItemHeights, ListViewportHeight, WrappedLineStep);
+        filteredItemHeights = WrappedList.ComputeHeights(filteredDisplayLines, WrappedLineStep);
+        WrappedList.EnsureIndexVisible(ref listScroll, listIndex, filteredItemHeights, ListViewportHeight, WrappedLineStep);
     }
 
     private void UpdateSearchQueryDisplay()
@@ -396,14 +397,14 @@ public class EarAidEventSearchUI : EarAidOverlayUI
         }
 
         listIndex = (listIndex + delta + filteredPaths.Count) % filteredPaths.Count;
-        EarAidWrappedList.EnsureIndexVisible(ref listScroll, listIndex, filteredItemHeights, ListViewportHeight, WrappedLineStep);
+        WrappedList.EnsureIndexVisible(ref listScroll, listIndex, filteredItemHeights, ListViewportHeight, WrappedLineStep);
     }
 
     private void PlayPreview()
     {
         if (filteredPaths.Count > 0)
         {
-            EarAidAudioMute.TogglePreview(filteredPaths[listIndex]);
+            AudioMute.TogglePreview(filteredPaths[listIndex]);
         }
     }
 
