@@ -19,6 +19,7 @@ public class EarAidEventSearchUI : EarAidOverlayUI
     private const int MaxQueryLength = 64;
 
     private static readonly Color StagedColor = Calc.HexToColor("84FF54");
+    private static readonly Color BlockedSelectionColor = Calc.HexToColor("9E9E2C");
 
     private readonly SoundGroup addingToGroup;
     private readonly HashSet<string> existingGroupPaths = new();
@@ -203,11 +204,24 @@ public class EarAidEventSearchUI : EarAidOverlayUI
             {
                 string path = filteredPaths[index];
                 bool blocked = assignedPaths.Contains(path) || existingGroupPaths.Contains(path);
+                bool highlighted = index == listIndex && !searchTyping;
 
-                return index == listIndex && !searchTyping ? Color.Yellow
-                    : blocked ? Color.DarkSlateGray
-                    : selectedPaths.Contains(path) ? StagedColor
-                    : Color.White;
+                if (highlighted && blocked)
+                {
+                    return BlockedSelectionColor;
+                }
+
+                if (highlighted)
+                {
+                    return Color.Yellow;
+                }
+
+                if (blocked)
+                {
+                    return Color.DarkSlateGray;
+                }
+
+                return selectedPaths.Contains(path) ? StagedColor : Color.White;
             });
     }
 
