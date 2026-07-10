@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Celeste.Mod.EarAid.EarAid;
+﻿using System;
+using System.Collections.Generic;
 using FMOD;
 using FMOD.Studio;
 
@@ -20,17 +20,40 @@ public static class Mixer
     private static RESULT MixNewInstances(On.FMOD.Studio.EventDescription.orig_createInstance orig, EventDescription self, out EventInstance instance)
     {
         RESULT result = orig(self, out instance);
-        string path = Audio.GetEventName(self);
 
-        if (Events.PathToVolume.TryGetValue(path, out int volume))
+        if (Events.HasRegisteredPaths
+            && Events.DescriptionToVolume.TryGetValue(self, out float volume))
         {
-            instance?.setVolume(volume / 10f);
+            instance?.setVolume(volume);
         }
 
         return result;
     }
 
     public static void MixExistingInstances(string path, int volume)
+    {
+        float scaledVolume = VolumeConstants.ToFloat(volume);
+        ForEachInstance(path, instance => instance.setVolume(scaledVolume));
+    }
+
+    public static void MixExistingInstances(IEnumerable<string> paths, int volume)
+    {
+        float scaledVolume = VolumeConstants.ToFloat(volume);
+        foreach (string path in paths)
+        {
+            ForEachInstance(path, instance => instance.setVolume(scaledVolume));
+        }
+    }
+
+    public static void MixAllRegisteredInstances()
+    {
+        foreach (KeyValuePair<string, float> entry in Events.PathToVolume)
+        {
+            ForEachInstance(entry.Key, instance => instance.setVolume(entry.Value));
+        }
+    }
+
+    private static void ForEachInstance(string path, Action<EventInstance> action)
     {
         if (!Events.IsEventAvailable(path))
         {
@@ -43,16 +66,8 @@ public static class Mixer
         {
             for (int i = 0; i < instanceArray.Length; i++)
             {
-                instanceArray[i].setVolume(volume / 10f);
+                action(instanceArray[i]);
             }
-        }
-    }
-
-    public static void MixExistingInstances(IEnumerable<string> paths, int volume)
-    {
-        foreach (string path in paths)
-        {
-            MixExistingInstances(path, volume);
         }
     }
 }

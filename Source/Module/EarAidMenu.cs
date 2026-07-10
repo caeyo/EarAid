@@ -1,10 +1,8 @@
-﻿using Celeste.Mod.EarAid.EarAid;
-using Celeste.Mod.EarAid.UI;
+﻿using Celeste.Mod.EarAid.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Monocle;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Celeste.Mod.EarAid.Module;
@@ -17,9 +15,10 @@ public static class EarAidMenu
         {
             EarAidModule.Settings.Enabled = value;
 
-            foreach (KeyValuePair<string, int> kvp in Events.PathToVolume)
+            foreach (SoundGroup group in EarAidModule.Settings.SoundGroups)
             {
-                Mixer.MixExistingInstances(kvp.Key, value ? kvp.Value : 10);
+                int volume = value ? group.Volume : VolumeConstants.DefaultVolume;
+                Mixer.MixExistingInstances(group.EventPaths, volume);
             }
 
             if (value)
@@ -39,7 +38,7 @@ public static class EarAidMenu
             menu.Add(new VolumeSlider(group.DisplayName, group.Volume).Change(value =>
             {
                 capturedGroup.Volume = value;
-                Events.RebuildRegistry(EarAidModule.Settings.SoundGroups);
+                Events.SetGroupVolume(capturedGroup);
                 Mixer.MixExistingInstances(capturedGroup.EventPaths, value);
             }));
         }
@@ -66,7 +65,7 @@ internal class VolumeSlider : TextMenuExt.IntSlider
     private static readonly FieldInfo intSliderMin = typeof(TextMenuExt.IntSlider).GetField("min", BindingFlags.NonPublic | BindingFlags.Instance);
     private static readonly FieldInfo intSliderMax = typeof(TextMenuExt.IntSlider).GetField("max", BindingFlags.NonPublic | BindingFlags.Instance);
 
-    public VolumeSlider(string label, int value) : base(label, 0, 20, value) { }
+    public VolumeSlider(string label, int value) : base(label, VolumeConstants.MinVolume, VolumeConstants.MaxVolume, value) { }
 
     public override float RightWidth()
     {

@@ -1,29 +1,72 @@
 ﻿using Celeste.Mod.EarAid.Module;
 using FMOD.Studio;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Celeste.Mod.EarAid.EarAid;
+namespace Celeste.Mod.EarAid;
 
 public static class Events
 {
-    public static readonly Dictionary<string, int> PathToVolume = new();
+    public static readonly Dictionary<string, float> PathToVolume = new();
+    public static readonly Dictionary<EventDescription, float> DescriptionToVolume = new();
+
+    private static List<string> cachedSortedPaths;
+
+    public static bool HasRegisteredPaths => PathToVolume.Count > 0;
+
+    public static IReadOnlyList<string> SortedKnownPaths => cachedSortedPaths ??= BuildSortedPaths();
+
+    public static void InvalidateCatalog() => cachedSortedPaths = null;
 
     public static void RebuildRegistry(IEnumerable<SoundGroup> groups)
     {
+        int pathCount = 0;
+        foreach (SoundGroup group in groups)
+        {
+            pathCount += group.EventPaths.Count;
+        }
+
         PathToVolume.Clear();
+        DescriptionToVolume.Clear();
+
+        if (pathCount > 0)
+        {
+            PathToVolume.EnsureCapacity(pathCount);
+            DescriptionToVolume.EnsureCapacity(pathCount);
+        }
 
         foreach (SoundGroup group in groups)
         {
+            float volume = VolumeConstants.ToFloat(group.Volume);
+
             foreach (string path in group.EventPaths)
             {
-                if (PathToVolume.ContainsKey(path))
+                if (!PathToVolume.TryAdd(path, volume))
                 {
                     Logger.Warn(nameof(Events), $"Duplicate event path in SoundGroups: {path}");
                     continue;
                 }
 
-                PathToVolume[path] = group.Volume;
+                EventDescription description = Audio.GetEventDescription(path);
+                if (description != null)
+                {
+                    DescriptionToVolume[description] = volume;
+                }
+            }
+        }
+    }
+
+    public static void SetGroupVolume(SoundGroup group)
+    {
+        float volume = VolumeConstants.ToFloat(group.Volume);
+
+        foreach (string path in group.EventPaths)
+        {
+            PathToVolume[path] = volume;
+
+            EventDescription description = Audio.GetEventDescription(path);
+            if (description != null)
+            {
+                DescriptionToVolume[description] = volume;
             }
         }
     }
@@ -46,7 +89,7 @@ public static class Events
         return assigned;
     }
 
-    public static HashSet<string> GetAllKnownEventPaths()
+    private static List<string> BuildSortedPaths()
     {
         HashSet<string> paths = new();
 
@@ -63,6 +106,9 @@ public static class Events
             paths.Add(path);
         }
 
-        return paths;
+        List<string> sorted = new(paths.Count);
+        sorted.AddRange(paths);
+        sorted.Sort();
+        return sorted;
     }
 }

@@ -1,4 +1,3 @@
-using Celeste.Mod.EarAid.EarAid;
 using Celeste.Mod.EarAid.Module;
 using FMOD;
 using FMOD.Studio;
@@ -7,7 +6,6 @@ using Microsoft.Xna.Framework.Input;
 using Monocle;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Celeste.Mod.EarAid.UI;
 
@@ -30,6 +28,7 @@ public class EarAidEventSearchUI : Entity
     private string searchQuery = "";
     private string displayName = "";
     private List<string> filteredPaths = new();
+    private List<string> filteredDisplayPaths = new();
     private readonly HashSet<string> selectedPaths = new();
     private HashSet<string> assignedPaths = new();
 
@@ -38,7 +37,7 @@ public class EarAidEventSearchUI : Entity
     private EventInstance previewInstance;
     private string previewPath;
 
-    private Dictionary<EventInstance, float> silencedBackgroundAudio = new();
+    private Dictionary<EventInstance, float> silencedBackgroundAudio = new(64);
     private readonly Queue<char> inputQueue = new();
 
     private bool searchTyping;
@@ -46,6 +45,13 @@ public class EarAidEventSearchUI : Entity
     private bool textInputHooked;
     private bool previousEngineCommandsEnabled;
     private bool groupSaved;
+
+    private string cachedSearchTitle;
+    private string cachedSearchHints;
+    private string cachedSearchTypingHints;
+    private string cachedNamingTitle;
+    private string cachedNamingHints;
+    private string cachedSearchQueryDisplay = "";
 
     private bool IsAcceptingTextInput => searchTyping || namingTyping;
 
@@ -58,6 +64,7 @@ public class EarAidEventSearchUI : Entity
     public override void Added(Scene scene)
     {
         base.Added(scene);
+        CacheDialogStrings();
         RefreshAssignedPaths();
         Refilter();
         SilenceAllEvents();
@@ -197,13 +204,13 @@ public class EarAidEventSearchUI : Entity
     {
         Vector2 topLeft = new(120f, 80f);
 
-        ActiveFont.DrawOutline(Dialog.Clean("EAR_AID_SEARCH_TITLE"), topLeft, Vector2.Zero, Vector2.One, Color.White, 2f, Color.Black);
+        ActiveFont.DrawOutline(cachedSearchTitle, topLeft, Vector2.Zero, Vector2.One, Color.White, 2f, Color.Black);
 
         Color queryColor = searchTyping ? Color.Yellow : Color.White;
-        ActiveFont.DrawOutline(searchQuery + (searchTyping ? "_" : ""), topLeft + new Vector2(0f, 60f), Vector2.Zero, Vector2.One * 0.9f, queryColor, 2f, Color.Black);
+        ActiveFont.DrawOutline(cachedSearchQueryDisplay, topLeft + new Vector2(0f, 60f), Vector2.Zero, Vector2.One * 0.9f, queryColor, 2f, Color.Black);
 
-        string hintsKey = searchTyping ? "EAR_AID_SEARCH_TYPING_HINTS" : "EAR_AID_SEARCH_HINTS";
-        ActiveFont.Draw(Dialog.Clean(hintsKey), topLeft + new Vector2(0f, 130f), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
+        string hints = searchTyping ? cachedSearchTypingHints : cachedSearchHints;
+        ActiveFont.Draw(hints, topLeft + new Vector2(0f, 130f), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
 
         Vector2 listTop = topLeft + new Vector2(480f, 130f);
         bool hasAbove = listScroll > 0;
@@ -234,8 +241,8 @@ public class EarAidEventSearchUI : Entity
                 : assigned ? Color.DarkSlateGray
                 : staged ? Calc.HexToColor("84FF54")
                 : Color.White;
-            string prefix = staged ? "+ " : "  ";
-            ActiveFont.DrawOutline(prefix + FormatEventPathForDisplay(path), listTop + new Vector2(0f, row * RowHeight), Vector2.Zero, Vector2.One * 0.75f, color, 2f, Color.Black);
+
+            ActiveFont.DrawOutline(filteredDisplayPaths[pathIndex], listTop + new Vector2(0f, row * RowHeight), Vector2.Zero, Vector2.One * 0.75f, color, 2f, Color.Black);
             row++;
         }
 
@@ -249,9 +256,9 @@ public class EarAidEventSearchUI : Entity
     {
         Vector2 center = new(960f, 400f);
 
-        ActiveFont.DrawOutline(Dialog.Clean("EAR_AID_NAMING_TITLE"), center - new Vector2(0f, 80f), new Vector2(0.5f, 0f), Vector2.One, Color.White, 2f, Color.Black);
+        ActiveFont.DrawOutline(cachedNamingTitle, center - new Vector2(0f, 80f), new Vector2(0.5f, 0f), Vector2.One, Color.White, 2f, Color.Black);
         ActiveFont.DrawOutline(displayName + "_", center, new Vector2(0.5f, 0f), Vector2.One * 1.2f, Color.Yellow, 2f, Color.Black);
-        ActiveFont.Draw(Dialog.Clean("EAR_AID_NAMING_HINTS"), center + new Vector2(0f, 80f), new Vector2(0.5f, 0f), Vector2.One * 0.8f, Color.Gray);
+        ActiveFont.Draw(cachedNamingHints, center + new Vector2(0f, 80f), new Vector2(0.5f, 0f), Vector2.One * 0.8f, Color.Gray);
     }
 
     private void ProcessInputQueue()
@@ -337,6 +344,7 @@ public class EarAidEventSearchUI : Entity
         }
 
         searchTyping = true;
+        UpdateSearchQueryDisplay();
         HookTextInput();
     }
 
@@ -349,6 +357,7 @@ public class EarAidEventSearchUI : Entity
 
         searchTyping = false;
         inputQueue.Clear();
+        UpdateSearchQueryDisplay();
         UnhookTextInputIfIdle();
     }
 
@@ -373,23 +382,47 @@ public class EarAidEventSearchUI : Entity
     private void Refilter()
     {
         string query = searchQuery.Trim();
-        List<string> allPaths = Events.GetAllKnownEventPaths().ToList();
-        allPaths.Sort();
+        filteredPaths.Clear();
 
-        if (query.Length == 0)
+        foreach (string path in Events.SortedKnownPaths)
         {
-            filteredPaths = allPaths;
-        }
-        else
-        {
-            filteredPaths = allPaths
-                .Where(path => path.Contains(query, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            if (query.Length == 0 || path.Contains(query, StringComparison.OrdinalIgnoreCase))
+            {
+                filteredPaths.Add(path);
+            }
         }
 
         listIndex = 0;
         listScroll = 0;
         UpdateListScroll();
+        RebuildFilteredDisplayPaths();
+        UpdateSearchQueryDisplay();
+    }
+
+    private void RebuildFilteredDisplayPaths()
+    {
+        filteredDisplayPaths.Clear();
+        filteredDisplayPaths.Capacity = filteredPaths.Count;
+
+        foreach (string path in filteredPaths)
+        {
+            string prefix = selectedPaths.Contains(path) ? "+ " : "  ";
+            filteredDisplayPaths.Add(prefix + FormatEventPathForDisplay(path));
+        }
+    }
+
+    private void UpdateSearchQueryDisplay()
+    {
+        cachedSearchQueryDisplay = searchQuery + (searchTyping ? "_" : "");
+    }
+
+    private void CacheDialogStrings()
+    {
+        cachedSearchTitle = Dialog.Clean("EAR_AID_SEARCH_TITLE");
+        cachedSearchHints = Dialog.Clean("EAR_AID_SEARCH_HINTS");
+        cachedSearchTypingHints = Dialog.Clean("EAR_AID_SEARCH_TYPING_HINTS");
+        cachedNamingTitle = Dialog.Clean("EAR_AID_NAMING_TITLE");
+        cachedNamingHints = Dialog.Clean("EAR_AID_NAMING_HINTS");
     }
 
     private void MoveListSelection(int delta)
@@ -480,6 +513,8 @@ public class EarAidEventSearchUI : Entity
         {
             selectedPaths.Remove(path);
         }
+
+        RebuildFilteredDisplayPaths();
     }
 
     private void SaveGroup()
@@ -500,8 +535,8 @@ public class EarAidEventSearchUI : Entity
         EarAidModule.Settings.SoundGroups.Add(new Module.SoundGroup
         {
             DisplayName = name,
-            Volume = 10,
-            EventPaths = selectedPaths.ToList()
+            Volume = VolumeConstants.DefaultVolume,
+            EventPaths = new List<string>(selectedPaths)
         });
 
         Events.RebuildRegistry(EarAidModule.Settings.SoundGroups);
@@ -537,14 +572,20 @@ public class EarAidEventSearchUI : Entity
     private void SilenceAllEvents()
     {
         silencedBackgroundAudio.Clear();
-        foreach (string path in Events.GetAllKnownEventPaths())
+
+        foreach (string path in Events.SortedKnownPaths)
         {
             EventDescription evt = Audio.GetEventDescription(path);
-            if (evt.getInstanceList(out EventInstance[] instances) != FMOD.RESULT.OK) 
+            if (evt == null
+                || evt.getInstanceList(out EventInstance[] instances) != RESULT.OK
+                || instances.Length == 0)
+            {
                 continue;
+            }
+
             foreach (EventInstance instance in instances)
             {
-                if (instance.isValid() && instance.getVolume(out float vol, out float finalvolume) == FMOD.RESULT.OK)
+                if (instance.isValid() && instance.getVolume(out float vol, out float finalvolume) == RESULT.OK)
                 {
                     if (vol > 0f)
                     {
@@ -555,10 +596,10 @@ public class EarAidEventSearchUI : Entity
             }
         }
     }
-    
+
     private void RestoreAllEvents()
     {
-        foreach (var kvp in silencedBackgroundAudio)
+        foreach (KeyValuePair<EventInstance, float> kvp in silencedBackgroundAudio)
         {
             EventInstance instance = kvp.Key;
             float originalVolume = kvp.Value;
@@ -568,7 +609,7 @@ public class EarAidEventSearchUI : Entity
                 instance.setVolume(originalVolume);
             }
         }
-    
+
         silencedBackgroundAudio.Clear();
     }
 

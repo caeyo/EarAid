@@ -1,10 +1,6 @@
-﻿using Celeste.Mod.EarAid.EarAid;
-using Celeste.Mod.EarAid.Module.Migration;
+﻿using Celeste.Mod.EarAid.Module.Migration;
 using FMOD.Studio;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Celeste.Mod.EarAid.Module;
 
@@ -17,18 +13,11 @@ public class EarAidModule : EverestModule
 
     public static bool Loaded { get; private set; }
 
-    private readonly IEnumerable<MethodInfo> hookLoaders;
-    private readonly IEnumerable<MethodInfo> hookUnloaders;
+    private static bool gameLoadEventsScheduled;
 
     public EarAidModule()
     {
         Instance = this;
-
-        hookLoaders = getMethods("LoadHooks");
-        hookUnloaders = getMethods("UnloadHooks");
-        IEnumerable<MethodInfo> getMethods(string methodName) => typeof(EarAidModule).Assembly.GetTypesSafe()
-            .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-            .Where(methodInfo => methodInfo.Name == methodName));
     }
 
     public override void Load()
@@ -39,14 +28,11 @@ public class EarAidModule : EverestModule
             SaveSettings();
         }
 
-        Events.RebuildRegistry(Settings.SoundGroups);
+        ScheduleGameLoadEvents();
 
         if (!Loaded && Settings.Enabled)
         {
-            foreach (MethodInfo hookLoader in hookLoaders)
-            {
-                hookLoader.Invoke(null, null);
-            }
+            Mixer.LoadHooks();
             Loaded = true;
         }
     }
@@ -55,10 +41,7 @@ public class EarAidModule : EverestModule
     {
         if (Loaded)
         {
-            foreach (MethodInfo hookUnloader in hookUnloaders)
-            {
-                hookUnloader.Invoke(null, null);
-            }
+            Mixer.UnloadHooks();
             Loaded = false;
         }
     }
@@ -67,5 +50,27 @@ public class EarAidModule : EverestModule
     {
         CreateModMenuSectionHeader(menu, inGame, snapshot);
         EarAidMenu.CreateMenu(menu, inGame);
+    }
+
+    private static void ScheduleGameLoadEvents()
+    {
+        if (gameLoadEventsScheduled)
+        {
+            return;
+        }
+
+        // Audio.Init runs on the GameLoader background thread, after module Load/Initialize.
+        Everest.Events.GameLoader.OnLoadThread += GameLoadEvents;
+        gameLoadEventsScheduled = true;
+    }
+
+    private static void GameLoadEvents()
+    {
+        Events.RebuildRegistry(Settings.SoundGroups);
+
+        if (Settings.Enabled)
+        {
+            Mixer.MixAllRegisteredInstances();
+        }
     }
 }
