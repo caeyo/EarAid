@@ -1,6 +1,4 @@
 using Celeste.Mod.EarAid.Module;
-using FMOD;
-using FMOD.Studio;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Monocle;
@@ -9,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Celeste.Mod.EarAid.UI;
 
-public class EarAidEventSearchUI : Entity
+public class EarAidEventSearchUI : EarAidOverlayUI
 {
     private enum UiState
     {
@@ -17,33 +15,29 @@ public class EarAidEventSearchUI : Entity
         Naming
     }
 
-    private const int VisibleListRows = 20;
-    private const float RowHeight = 36f;
+    private const int MaxNameLength = 48;
+    private const int MaxQueryLength = 64;
 
-    public Action OnClose;
+    private static readonly Color StagedColor = Calc.HexToColor("84FF54");
 
-    private readonly TextMenu parentMenu;
+    private readonly SoundGroup addingToGroup;
+    private readonly HashSet<string> existingGroupPaths = new();
+
     private UiState state = UiState.Search;
+    private UiState previousState = (UiState)(-1);
 
     private string searchQuery = "";
     private string displayName = "";
-    private List<string> filteredPaths = new();
-    private List<string> filteredDisplayPaths = new();
+    private readonly List<string> filteredPaths = new();
+    private readonly List<string> filteredDisplayPaths = new();
     private readonly HashSet<string> selectedPaths = new();
     private HashSet<string> assignedPaths = new();
 
     private int listIndex;
     private int listScroll;
-    private EventInstance previewInstance;
-    private string previewPath;
-
-    private Dictionary<EventInstance, float> silencedBackgroundAudio = new(64);
-    private readonly Queue<char> inputQueue = new();
 
     private bool searchTyping;
     private bool namingTyping;
-    private bool textInputHooked;
-    private bool previousEngineCommandsEnabled;
     private bool groupSaved;
 
     private string cachedSearchTitle;
@@ -53,35 +47,32 @@ public class EarAidEventSearchUI : Entity
     private string cachedNamingHints;
     private string cachedSearchQueryDisplay = "";
 
-    private bool IsAcceptingTextInput => searchTyping || namingTyping;
-
-    public EarAidEventSearchUI(TextMenu parentMenu)
+    public EarAidEventSearchUI(TextMenu parentMenu, SoundGroup addingToGroup = null) : base(parentMenu)
     {
-        this.parentMenu = parentMenu;
-        Tag = Tags.HUD | Tags.PauseUpdate;
+        this.addingToGroup = addingToGroup;
     }
 
-    public override void Added(Scene scene)
+    protected override bool IsAcceptingTextInput => searchTyping || namingTyping;
+
+    private bool IsAddEventsMode => addingToGroup != null;
+
+    protected override void OnOpen()
     {
-        base.Added(scene);
         CacheDialogStrings();
-        RefreshAssignedPaths();
-        Refilter();
-        SilenceAllEvents();
+        assignedPaths = Events.GetAssignedEventPaths(EarAidModule.Settings.SoundGroups, addingToGroup);
 
-        parentMenu.Focused = false;
-        previousEngineCommandsEnabled = Engine.Commands.Enabled;
-        Engine.Commands.Enabled = false;
+        if (IsAddEventsMode)
+        {
+            existingGroupPaths.UnionWith(addingToGroup.EventPaths);
+        }
+
+        Refilter();
     }
 
-    public override void Removed(Scene scene)
+    protected override void OnClosing()
     {
         StopSearchTyping();
         StopNamingTyping();
-        Engine.Commands.Enabled = previousEngineCommandsEnabled;
-        StopPreview();
-        RestoreAllEvents();
-        base.Removed(scene);
     }
 
     public override void Update()
@@ -90,14 +81,13 @@ public class EarAidEventSearchUI : Entity
 
         parentMenu.Focused = false;
         ConsumeVirtualMenuInput();
-
         ProcessInputQueue();
+        EarAidAudioMute.UpdatePreview();
 
-        if (previewInstance != null
-            && previewInstance.getPlaybackState(out PLAYBACK_STATE playbackState) == RESULT.OK
-            && playbackState == PLAYBACK_STATE.STOPPED)
+        if (state != previousState)
         {
-            StopPreview();
+            listInput.Reset();
+            previousState = state;
         }
 
         if (state == UiState.Search)
@@ -128,6 +118,8 @@ public class EarAidEventSearchUI : Entity
     {
         if (searchTyping)
         {
+            listInput.Reset();
+
             if (KeyPressed(Keys.Enter) || KeyPressed(Keys.Escape))
             {
                 StopSearchTyping();
@@ -136,15 +128,9 @@ public class EarAidEventSearchUI : Entity
             return;
         }
 
-        if (KeyPressed(Keys.Up))
-        {
-            MoveListSelection(-1);
-        }
-        else if (KeyPressed(Keys.Down))
-        {
-            MoveListSelection(1);
-        }
-        else if (KeyPressed(Keys.R))
+        listInput.UpdateVertical(MoveListSelection);
+
+        if (KeyPressed(Keys.R))
         {
             StartSearchTyping();
         }
@@ -154,16 +140,11 @@ public class EarAidEventSearchUI : Entity
         }
         else if (KeyPressed(Keys.A))
         {
-            AddCurrentToSelection();
+            ToggleCurrentSelection();
         }
         else if (KeyPressed(Keys.Enter))
         {
-            if (selectedPaths.Count > 0)
-            {
-                state = UiState.Naming;
-                displayName = "";
-                StartNamingTyping();
-            }
+            ConfirmSearch();
         }
         else if (KeyPressed(Keys.Escape))
         {
@@ -173,31 +154,25 @@ public class EarAidEventSearchUI : Entity
 
     private void UpdateNaming()
     {
-        if (!namingTyping)
-        {
-            return;
-        }
-
-        if (KeyPressed(Keys.Escape))
+        if (namingTyping && KeyPressed(Keys.Escape))
         {
             StopNamingTyping();
             state = UiState.Search;
         }
     }
 
-    private static bool KeyPressed(Keys key) => MInput.Keyboard.Pressed(key);
-
-    private static void ConsumeVirtualMenuInput()
+    private void ConfirmSearch()
     {
-        Input.MenuUp.ConsumePress();
-        Input.MenuDown.ConsumePress();
-        Input.MenuLeft.ConsumePress();
-        Input.MenuRight.ConsumePress();
-        Input.MenuConfirm.ConsumePress();
-        Input.MenuCancel.ConsumePress();
-        Input.ESC.ConsumePress();
-        Input.QuickRestart.ConsumePress();
-        Input.Pause.ConsumePress();
+        if (IsAddEventsMode)
+        {
+            SaveAddedEvents();
+        }
+        else if (selectedPaths.Count > 0)
+        {
+            state = UiState.Naming;
+            displayName = "";
+            StartNamingTyping();
+        }
     }
 
     private void RenderSearch()
@@ -213,43 +188,18 @@ public class EarAidEventSearchUI : Entity
         ActiveFont.Draw(hints, topLeft + new Vector2(0f, 130f), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
 
         Vector2 listTop = topLeft + new Vector2(480f, 130f);
-        bool hasAbove = listScroll > 0;
-        int contentRows = GetVisibleContentRowCount();
-        bool hasBelow = listScroll + contentRows < filteredPaths.Count;
-
-        int row = 0;
-        if (hasAbove)
+        EarAidListRenderer.Draw(listTop, filteredPaths.Count, listScroll, VisibleListRows, RowHeight, (index, pos) =>
         {
-            ActiveFont.DrawOutline("  ^", listTop + new Vector2(0f, row * RowHeight), Vector2.Zero, Vector2.One * 0.75f, Color.Gray, 2f, Color.Black);
-            row++;
-        }
+            string path = filteredPaths[index];
+            bool blocked = assignedPaths.Contains(path) || existingGroupPaths.Contains(path);
 
-        for (int i = 0; i < contentRows; i++)
-        {
-            int pathIndex = listScroll + i;
-            if (pathIndex >= filteredPaths.Count)
-            {
-                break;
-            }
-
-            string path = filteredPaths[pathIndex];
-            bool highlighted = pathIndex == listIndex;
-            bool staged = selectedPaths.Contains(path);
-            bool assigned = assignedPaths.Contains(path);
-
-            Color color = highlighted && !searchTyping ? Color.Yellow
-                : assigned ? Color.DarkSlateGray
-                : staged ? Calc.HexToColor("84FF54")
+            Color color = index == listIndex && !searchTyping ? Color.Yellow
+                : blocked ? Color.DarkSlateGray
+                : selectedPaths.Contains(path) ? StagedColor
                 : Color.White;
 
-            ActiveFont.DrawOutline(filteredDisplayPaths[pathIndex], listTop + new Vector2(0f, row * RowHeight), Vector2.Zero, Vector2.One * 0.75f, color, 2f, Color.Black);
-            row++;
-        }
-
-        if (hasBelow)
-        {
-            ActiveFont.DrawOutline("  v", listTop + new Vector2(0f, row * RowHeight), Vector2.Zero, Vector2.One * 0.75f, Color.Gray, 2f, Color.Black);
-        }
+            ActiveFont.DrawOutline(filteredDisplayPaths[index], pos, Vector2.Zero, Vector2.One * 0.75f, color, 2f, Color.Black);
+        });
     }
 
     private void RenderNaming()
@@ -261,28 +211,15 @@ public class EarAidEventSearchUI : Entity
         ActiveFont.Draw(cachedNamingHints, center + new Vector2(0f, 80f), new Vector2(0.5f, 0f), Vector2.One * 0.8f, Color.Gray);
     }
 
-    private void ProcessInputQueue()
+    protected override void HandleTextInput(char c)
     {
-        while (inputQueue.Count > 0 && IsAcceptingTextInput)
+        if (searchTyping)
         {
-            char c = inputQueue.Dequeue();
-
-            if (searchTyping)
-            {
-                HandleSearchTextInput(c);
-            }
-            else if (namingTyping)
-            {
-                HandleNamingTextInput(c);
-            }
+            HandleSearchTextInput(c);
         }
-    }
-
-    private void OnTextInput(char c)
-    {
-        if (IsAcceptingTextInput)
+        else if (namingTyping)
         {
-            inputQueue.Enqueue(c);
+            HandleNamingTextInput(c);
         }
     }
 
@@ -305,7 +242,7 @@ public class EarAidEventSearchUI : Entity
             return;
         }
 
-        if (!char.IsControl(c) && searchQuery.Length < 64)
+        if (!char.IsControl(c) && searchQuery.Length < MaxQueryLength)
         {
             searchQuery += c;
             Refilter();
@@ -330,7 +267,7 @@ public class EarAidEventSearchUI : Entity
             return;
         }
 
-        if (!char.IsControl(c) && displayName.Length < 48 && ActiveFont.FontSize.Characters.ContainsKey(c))
+        if (!char.IsControl(c) && displayName.Length < MaxNameLength && ActiveFont.FontSize.Characters.ContainsKey(c))
         {
             displayName += c;
         }
@@ -356,7 +293,7 @@ public class EarAidEventSearchUI : Entity
         }
 
         searchTyping = false;
-        inputQueue.Clear();
+        ClearInputQueue();
         UpdateSearchQueryDisplay();
         UnhookTextInputIfIdle();
     }
@@ -375,7 +312,7 @@ public class EarAidEventSearchUI : Entity
         }
 
         namingTyping = false;
-        inputQueue.Clear();
+        ClearInputQueue();
         UnhookTextInputIfIdle();
     }
 
@@ -394,7 +331,7 @@ public class EarAidEventSearchUI : Entity
 
         listIndex = 0;
         listScroll = 0;
-        UpdateListScroll();
+        EarAidListScroll.EnsureIndexVisible(ref listScroll, listIndex, filteredPaths.Count, VisibleListRows);
         RebuildFilteredDisplayPaths();
         UpdateSearchQueryDisplay();
     }
@@ -402,7 +339,7 @@ public class EarAidEventSearchUI : Entity
     private void RebuildFilteredDisplayPaths()
     {
         filteredDisplayPaths.Clear();
-        filteredDisplayPaths.Capacity = filteredPaths.Count;
+        filteredDisplayPaths.Capacity = Math.Max(filteredDisplayPaths.Capacity, filteredPaths.Count);
 
         foreach (string path in filteredPaths)
         {
@@ -418,8 +355,8 @@ public class EarAidEventSearchUI : Entity
 
     private void CacheDialogStrings()
     {
-        cachedSearchTitle = Dialog.Clean("EAR_AID_SEARCH_TITLE");
-        cachedSearchHints = Dialog.Clean("EAR_AID_SEARCH_HINTS");
+        cachedSearchTitle = Dialog.Clean(IsAddEventsMode ? "EAR_AID_SEARCH_ADD_TITLE" : "EAR_AID_SEARCH_TITLE");
+        cachedSearchHints = Dialog.Clean(IsAddEventsMode ? "EAR_AID_SEARCH_ADD_HINTS" : "EAR_AID_SEARCH_HINTS");
         cachedSearchTypingHints = Dialog.Clean("EAR_AID_SEARCH_TYPING_HINTS");
         cachedNamingTitle = Dialog.Clean("EAR_AID_NAMING_TITLE");
         cachedNamingHints = Dialog.Clean("EAR_AID_NAMING_HINTS");
@@ -433,70 +370,18 @@ public class EarAidEventSearchUI : Entity
         }
 
         listIndex = (listIndex + delta + filteredPaths.Count) % filteredPaths.Count;
-        UpdateListScroll();
-    }
-
-    private int GetVisibleContentRowCount()
-    {
-        int contentRows = VisibleListRows;
-        if (listScroll > 0)
-        {
-            contentRows--;
-        }
-
-        if (listScroll + contentRows < filteredPaths.Count)
-        {
-            contentRows--;
-        }
-
-        return Math.Max(contentRows, 1);
-    }
-
-    private void UpdateListScroll()
-    {
-        int contentRows = GetVisibleContentRowCount();
-
-        if (listIndex < listScroll)
-        {
-            listScroll = listIndex;
-        }
-        else if (listIndex >= listScroll + contentRows)
-        {
-            listScroll = listIndex - contentRows + 1;
-        }
+        EarAidListScroll.EnsureIndexVisible(ref listScroll, listIndex, filteredPaths.Count, VisibleListRows);
     }
 
     private void PlayPreview()
     {
-        if (filteredPaths.Count == 0)
+        if (filteredPaths.Count > 0)
         {
-            return;
+            EarAidAudioMute.TogglePreview(filteredPaths[listIndex]);
         }
-
-        string path = filteredPaths[listIndex];
-
-        if (IsPreviewPlaying() && previewPath == path)
-        {
-            StopPreview();
-            return;
-        }
-
-        if (!Events.IsEventAvailable(path))
-        {
-            return;
-        }
-
-        StopPreview();
-        previewInstance = Audio.Play(path);
-        previewPath = path;
     }
 
-    private bool IsPreviewPlaying()
-    {
-        return Audio.IsPlaying(previewInstance);
-    }
-
-    private void AddCurrentToSelection()
+    private void ToggleCurrentSelection()
     {
         if (filteredPaths.Count == 0)
         {
@@ -504,7 +389,7 @@ public class EarAidEventSearchUI : Entity
         }
 
         string path = filteredPaths[listIndex];
-        if (assignedPaths.Contains(path))
+        if (assignedPaths.Contains(path) || existingGroupPaths.Contains(path))
         {
             return;
         }
@@ -515,6 +400,28 @@ public class EarAidEventSearchUI : Entity
         }
 
         RebuildFilteredDisplayPaths();
+    }
+
+    private void SaveAddedEvents()
+    {
+        if (groupSaved || selectedPaths.Count == 0)
+        {
+            return;
+        }
+
+        groupSaved = true;
+
+        List<string> mergedPaths = new(addingToGroup.EventPaths);
+        foreach (string path in selectedPaths)
+        {
+            if (!existingGroupPaths.Contains(path))
+            {
+                mergedPaths.Add(path);
+            }
+        }
+
+        SoundGroupOperations.UpdateGroup(addingToGroup, addingToGroup.DisplayName, mergedPaths);
+        Close();
     }
 
     private void SaveGroup()
@@ -532,7 +439,7 @@ public class EarAidEventSearchUI : Entity
 
         groupSaved = true;
 
-        EarAidModule.Settings.SoundGroups.Add(new Module.SoundGroup
+        EarAidModule.Settings.SoundGroups.Add(new SoundGroup
         {
             DisplayName = name,
             Volume = VolumeConstants.DefaultVolume,
@@ -540,94 +447,15 @@ public class EarAidEventSearchUI : Entity
         });
 
         Events.RebuildRegistry(EarAidModule.Settings.SoundGroups);
+
+        if (EarAidModule.Settings.Enabled)
+        {
+            Mixer.MixExistingInstances(selectedPaths, VolumeConstants.DefaultVolume);
+        }
+
+        EarAidModule.Instance.SaveSettings();
         Close();
     }
 
-    private static string FormatEventPathForDisplay(string path)
-    {
-        const string eventPrefix = "event:/";
-        return path.StartsWith(eventPrefix) ? path[eventPrefix.Length..] : path;
-    }
-
-    private void Close()
-    {
-        StopSearchTyping();
-        StopNamingTyping();
-        OnClose?.Invoke();
-        RemoveSelf();
-    }
-
-    private void RefreshAssignedPaths()
-    {
-        assignedPaths = Events.GetAssignedEventPaths(EarAidModule.Settings.SoundGroups);
-    }
-
-    private void StopPreview()
-    {
-        Audio.Stop(previewInstance, false);
-        previewInstance = null;
-        previewPath = null;
-    }
-
-    private void SilenceAllEvents()
-    {
-        silencedBackgroundAudio.Clear();
-
-        foreach (string path in Events.SortedKnownPaths)
-        {
-            EventDescription evt = Audio.GetEventDescription(path);
-            if (evt == null
-                || evt.getInstanceList(out EventInstance[] instances) != RESULT.OK
-                || instances.Length == 0)
-            {
-                continue;
-            }
-
-            foreach (EventInstance instance in instances)
-            {
-                if (instance.isValid() && instance.getVolume(out float vol, out float finalvolume) == RESULT.OK)
-                {
-                    if (vol > 0f)
-                    {
-                        silencedBackgroundAudio[instance] = vol;
-                        instance.setVolume(0f);
-                    }
-                }
-            }
-        }
-    }
-
-    private void RestoreAllEvents()
-    {
-        foreach (KeyValuePair<EventInstance, float> kvp in silencedBackgroundAudio)
-        {
-            EventInstance instance = kvp.Key;
-            float originalVolume = kvp.Value;
-
-            if (instance.isValid())
-            {
-                instance.setVolume(originalVolume);
-            }
-        }
-
-        silencedBackgroundAudio.Clear();
-    }
-
-    private void HookTextInput()
-    {
-        if (!textInputHooked)
-        {
-            TextInput.OnInput += OnTextInput;
-            textInputHooked = true;
-        }
-    }
-
-    private void UnhookTextInputIfIdle()
-    {
-        if (textInputHooked && !IsAcceptingTextInput)
-        {
-            TextInput.OnInput -= OnTextInput;
-            textInputHooked = false;
-        }
-    }
+    private void Close() => CloseOverlay();
 }

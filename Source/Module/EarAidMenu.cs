@@ -1,17 +1,74 @@
 ﻿using Celeste.Mod.EarAid.UI;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Monocle;
-using System;
-using System.Reflection;
 
 namespace Celeste.Mod.EarAid.Module;
 
 public static class EarAidMenu
 {
+    private static int sectionStartIndex = -1;
+    private static int sectionLength;
+    private static TextMenu trackedMenu;
+    private static bool trackedInGame;
+    private static TextMenu.Item enabledItem;
+    private static TextMenu.Item manageItem;
+
     public static void CreateMenu(TextMenu menu, bool inGame)
     {
-        menu.Add(new TextMenu.OnOff(Dialog.Clean("EAR_AID_ENABLED"), EarAidModule.Settings.Enabled).Change(value =>
+        trackedMenu = menu;
+        trackedInGame = inGame;
+        sectionStartIndex = menu.Items.Count;
+        sectionLength = AppendSection(menu, inGame);
+    }
+
+    public static void RefreshMenu()
+    {
+        if (trackedMenu == null || sectionStartIndex < 0)
+        {
+            return;
+        }
+
+        int selection = trackedMenu.Selection;
+        if (selection >= sectionStartIndex && selection < sectionStartIndex + sectionLength)
+        {
+            trackedMenu.Items[selection].OnLeave?.Invoke();
+        }
+
+        for (int i = 0; i < sectionLength; i++)
+        {
+            EarAidMenuSection.RemoveItem(trackedMenu, sectionStartIndex);
+        }
+
+        sectionLength = InsertSection(trackedMenu, sectionStartIndex, trackedInGame);
+        EarAidMenuSection.ApplySelection(trackedMenu, manageItem);
+    }
+
+    private static int AppendSection(TextMenu menu, bool inGame)
+    {
+        int startCount = menu.Items.Count;
+        BuildSection(menu, inGame, (item) => menu.Add(item), (button, description) =>
+        {
+            button.AddDescription(menu, description);
+        });
+        return menu.Items.Count - startCount;
+    }
+
+    private static int InsertSection(TextMenu menu, int startIndex, bool inGame)
+    {
+        int index = startIndex;
+        BuildSection(menu, inGame,
+            (item) => index = EarAidMenuSection.InsertItem(menu, index, item),
+            (button, description) => index = EarAidMenuSection.InsertDescription(menu, index, button, description));
+        return index - startIndex;
+    }
+
+    private static void BuildSection(
+        TextMenu menu,
+        bool inGame,
+        System.Action<TextMenu.Item> addItem,
+        System.Action<TextMenu.Item, string> addDescription)
+    {
+        enabledItem = new TextMenu.OnOff(Dialog.Clean("EAR_AID_ENABLED"), EarAidModule.Settings.Enabled);
+        ((TextMenu.OnOff)enabledItem).Change(value =>
         {
             EarAidModule.Settings.Enabled = value;
 
@@ -29,75 +86,51 @@ public static class EarAidMenu
             {
                 EarAidModule.Instance.Unload();
             }
-        }));
+        });
+        addItem(enabledItem);
+
+        TextMenu.Button manageButton = new(Dialog.Clean("EAR_AID_OPEN_MANAGE"));
+        manageButton.Pressed(() => OpenOverlay(menu, new EarAidGroupManageUI(menu)));
+        manageItem = manageButton;
+        addItem(manageButton);
+        addDescription(manageButton, Dialog.Clean("EAR_AID_OPEN_MANAGE_SUBTEXT"));
 
         foreach (SoundGroup group in EarAidModule.Settings.SoundGroups)
         {
             SoundGroup capturedGroup = group;
 
-            menu.Add(new VolumeSlider(group.DisplayName, group.Volume).Change(value =>
+            VolumeSlider slider = new VolumeSlider(group.DisplayName, group.Volume);
+            slider.Change(value =>
             {
                 capturedGroup.Volume = value;
                 Events.SetGroupVolume(capturedGroup);
                 Mixer.MixExistingInstances(capturedGroup.EventPaths, value);
-            }));
-        }
-
-        TextMenu.Button searchButton = new(Dialog.Clean("EAR_AID_OPEN_SEARCH"));
-        searchButton.Pressed(() =>
-        {
-            menu.Focused = false;
-            Engine.Scene.Add(new EarAidEventSearchUI(menu)
-            {
-                OnClose = () => menu.Focused = true
             });
-            Engine.Scene.OnEndOfFrame += () => Engine.Scene.Entities.UpdateLists();
-        });
-        menu.Add(searchButton);
-        searchButton.AddDescription(menu, Dialog.Clean("EAR_AID_OPEN_SEARCH_SUBTEXT"));
-    }
-}
-
-internal class VolumeSlider : TextMenuExt.IntSlider
-{
-    private static readonly FieldInfo intSliderSine = typeof(TextMenuExt.IntSlider).GetField("sine", BindingFlags.NonPublic | BindingFlags.Instance);
-    private static readonly FieldInfo intSliderLastDir = typeof(TextMenuExt.IntSlider).GetField("lastDir", BindingFlags.NonPublic | BindingFlags.Instance);
-    private static readonly FieldInfo intSliderMin = typeof(TextMenuExt.IntSlider).GetField("min", BindingFlags.NonPublic | BindingFlags.Instance);
-    private static readonly FieldInfo intSliderMax = typeof(TextMenuExt.IntSlider).GetField("max", BindingFlags.NonPublic | BindingFlags.Instance);
-
-    public VolumeSlider(string label, int value) : base(label, VolumeConstants.MinVolume, VolumeConstants.MaxVolume, value) { }
-
-    public override float RightWidth()
-    {
-        return ActiveFont.Measure(((int)intSliderMax.GetValue(this)).ToString() + "0%").X + 120f;
-    }
-
-    public override void Render(Vector2 position, bool highlighted)
-    {
-        float sine = (float)intSliderSine.GetValue(this);
-        int lastDir = (int)intSliderLastDir.GetValue(this);
-        int min = (int)intSliderMin.GetValue(this);
-        int max = (int)intSliderMax.GetValue(this);
-
-        float alpha = Container.Alpha;
-
-        Color strokeColor = Color.Black * (alpha * alpha * alpha);
-        Color color = Disabled ? Color.DarkSlateGray : ((highlighted ? Container.HighlightColor : Color.White) * alpha);
-        ActiveFont.DrawOutline(Label, position, new Vector2(0f, 0.5f), Vector2.One, color, 2f, strokeColor);
-
-        if ((max - min) > 0)
-        {
-            float rWidth = RightWidth();
-
-            ActiveFont.DrawOutline(Index.ToString() + (Index > 0 ? "0%" : "%"), position + new Vector2(Container.Width - rWidth * 0.5f + lastDir * ValueWiggler.Value * 8f, 0f), new Vector2(0.5f, 0.5f), Vector2.One * 0.8f, color, 2f, strokeColor);
-
-            Vector2 vector = Vector2.UnitX * (float)(highlighted ? (Math.Sin(sine * 4f) * 4f) : 0f);
-
-            Vector2 position2 = position + new Vector2(Container.Width - rWidth + 40f + ((lastDir < 0) ? (-ValueWiggler.Value * 8f) : 0f), 0f) - (Index > min ? vector : Vector2.Zero);
-            ActiveFont.DrawOutline("<", position2, new Vector2(0.5f, 0.5f), Vector2.One, Index > min ? color : (Color.DarkSlateGray * alpha), 2f, strokeColor);
-
-            position2 = position + new Vector2(Container.Width - 40f + ((lastDir > 0) ? (ValueWiggler.Value * 8f) : 0f), 0f) + (Index < max ? vector : Vector2.Zero);
-            ActiveFont.DrawOutline(">", position2, new Vector2(0.5f, 0.5f), Vector2.One, Index < max ? color : (Color.DarkSlateGray * alpha), 2f, strokeColor);
+            addItem(slider);
         }
+
+    }
+
+    private static void OpenOverlay(TextMenu menu, Entity overlay)
+    {
+        menu.Focused = false;
+
+        if (overlay is EarAidEventSearchUI searchUi)
+        {
+            searchUi.OnClose = () => CloseOverlay(menu);
+        }
+        else if (overlay is EarAidGroupManageUI manageUi)
+        {
+            manageUi.OnClose = () => CloseOverlay(menu);
+        }
+
+        Engine.Scene.Add(overlay);
+        Engine.Scene.OnEndOfFrame += () => Engine.Scene.Entities.UpdateLists();
+    }
+
+    private static void CloseOverlay(TextMenu menu)
+    {
+        RefreshMenu();
+        menu.Focused = true;
     }
 }

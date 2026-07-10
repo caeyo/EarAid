@@ -35,12 +35,38 @@ EAR_AID=								EarAid
 
 EAR_AID_ENABLED=						Enabled
 
-EAR_AID_OPEN_SEARCH=					Search Sounds
-EAR_AID_OPEN_SEARCH_SUBTEXT=			Find and group sounds to be adjusted. Close and reopen Mod Options to see newly added sounds.
+EAR_AID_OPEN_MANAGE=					Manage Sounds
+EAR_AID_OPEN_MANAGE_SUBTEXT=			Add to, edit, or delete your saved sounds.
 
-EAR_AID_SEARCH_TITLE=					Search Sounds
-EAR_AID_SEARCH_HINTS=					(R) Search
-										(Up/Down) Navigate
+EAR_AID_MANAGE_TITLE=					Manage Sounds
+EAR_AID_MANAGE_LIST_HINTS=				(Up/Down) Navigate
+										(A) Add Sound
+										(Enter) Open Sound
+										(D) Delete Sound
+										(Esc) Back
+EAR_AID_MANAGE_EMPTY=					No sounds saved yet.
+EAR_AID_MANAGE_DETAIL_HINTS=			(Up/Down) Navigate
+										(P) Play/Stop
+										(A) Add Events
+										(X) Remove Event
+										(R) Rename Sound
+										(D) Delete Sound
+										(Esc) Back
+EAR_AID_MANAGE_DELETE_CONFIRM=			Delete
+EAR_AID_MANAGE_DELETE_HINTS=			(Enter) Confirm  (Esc) Cancel
+EAR_AID_MANAGE_RENAME_TITLE=			Rename Sound
+EAR_AID_MANAGE_RENAME_HINTS=			(Enter) Save  (Esc) Back
+
+EAR_AID_SEARCH_TITLE=					Add Sound
+EAR_AID_SEARCH_ADD_TITLE=				Add Events
+EAR_AID_SEARCH_HINTS=					(Up/Down)
+										(R) Search
+										(P) Play/Stop
+										(A) Add/Remove
+										(Enter) Confirm
+										(Esc) Back
+EAR_AID_SEARCH_ADD_HINTS=				(Up/Down) Navigate
+										(R) Search
 										(P) Play/Stop
 										(A) Add/Remove
 										(Enter) Confirm

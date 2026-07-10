@@ -76,11 +76,16 @@ public static class Events
         return Audio.GetEventDescription(path) != null;
     }
 
-    public static HashSet<string> GetAssignedEventPaths(IEnumerable<SoundGroup> groups)
+    public static HashSet<string> GetAssignedEventPaths(IEnumerable<SoundGroup> groups, SoundGroup excludeGroup = null)
     {
         HashSet<string> assigned = new();
         foreach (SoundGroup group in groups)
         {
+            if (group == excludeGroup)
+            {
+                continue;
+            }
+
             foreach (string path in group.EventPaths)
             {
                 assigned.Add(path);
