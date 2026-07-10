@@ -27,6 +27,10 @@ public class EarAidGroupManageUI : EarAidOverlayUI
     private int listScroll;
     private int eventListIndex;
     private int eventListScroll;
+    private readonly List<string[]> soundDisplayLines = new();
+    private float[] soundItemHeights = Array.Empty<float>();
+    private readonly List<string[]> eventDisplayLines = new();
+    private float[] eventItemHeights = Array.Empty<float>();
 
     private SoundGroup selectedGroup;
     private SoundGroup pendingDeleteGroup;
@@ -54,6 +58,7 @@ public class EarAidGroupManageUI : EarAidOverlayUI
     protected override void OnOpen()
     {
         CacheDialogStrings();
+        RebuildSoundDisplayLines();
         ClampListIndex();
     }
 
@@ -134,7 +139,11 @@ public class EarAidGroupManageUI : EarAidOverlayUI
         }
         else if (KeyPressed(Keys.A))
         {
-            OpenSearch(new EarAidEventSearchUI(parentMenu), ClampListIndex);
+            OpenSearch(new EarAidEventSearchUI(parentMenu), () =>
+            {
+                RebuildSoundDisplayLines();
+                ClampListIndex();
+            });
         }
         else if (KeyPressed(Keys.D) && ListItemCount > 0)
         {
@@ -155,6 +164,8 @@ public class EarAidGroupManageUI : EarAidOverlayUI
             EarAidAudioMute.StopPreview();
             state = UiState.List;
             selectedGroup = null;
+            RebuildSoundDisplayLines();
+            ClampListIndex();
             return;
         }
 
@@ -166,7 +177,7 @@ public class EarAidGroupManageUI : EarAidOverlayUI
         }
         else if (KeyPressed(Keys.A))
         {
-            OpenSearch(new EarAidEventSearchUI(parentMenu, selectedGroup));
+            OpenSearch(new EarAidEventSearchUI(parentMenu, selectedGroup), RebuildEventDisplayLines);
         }
         else if (KeyPressed(Keys.R))
         {
@@ -213,39 +224,46 @@ public class EarAidGroupManageUI : EarAidOverlayUI
 
     private void RenderList()
     {
-        Vector2 topLeft = new(120f, 80f);
+        Vector2 topLeft = new(ContentLeft, ContentTop);
         List<SoundGroup> groups = EarAidModule.Settings.SoundGroups;
 
         ActiveFont.DrawOutline(cachedListTitle, topLeft, Vector2.Zero, Vector2.One, Color.White, 2f, Color.Black);
-        ActiveFont.Draw(cachedListHints, topLeft + new Vector2(0f, 130f), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
+        ActiveFont.Draw(cachedListHints, topLeft + new Vector2(0f, HintsOffsetY), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
 
-        Vector2 listTop = topLeft + new Vector2(480f, 130f);
-        int rows = EarAidListRenderer.Draw(listTop, groups.Count, listScroll, VisibleListRows, RowHeight, (index, pos) =>
-        {
-            Color color = index == listIndex ? Color.Yellow : Color.White;
-            ActiveFont.DrawOutline(groups[index].DisplayName, pos, Vector2.Zero, Vector2.One * 0.75f, color, 2f, Color.Black);
-        });
+        Vector2 listTop = topLeft + new Vector2(ListColumnOffsetX, HintsOffsetY);
+        EarAidWrappedList.Draw(
+            listTop,
+            soundDisplayLines,
+            soundItemHeights,
+            listScroll,
+            ListViewportHeight,
+            WrappedLineStep,
+            ListRowScale,
+            index => index == listIndex ? Color.Yellow : Color.White);
 
         if (groups.Count == 0)
         {
-            ActiveFont.DrawOutline(cachedEmptyHint, listTop + new Vector2(0f, (rows + 1) * RowHeight), Vector2.Zero, Vector2.One, Color.DarkSlateGray, 2f, Color.Black);
+            ActiveFont.DrawOutline(cachedEmptyHint, listTop + new Vector2(0f, WrappedLineStep), Vector2.Zero, Vector2.One, Color.DarkSlateGray, 2f, Color.Black);
         }
     }
 
     private void RenderDetail()
     {
-        Vector2 topLeft = new(120f, 80f);
-        List<string> events = selectedGroup.EventPaths;
+        Vector2 topLeft = new(ContentLeft, ContentTop);
 
         ActiveFont.DrawOutline(selectedGroup.DisplayName, topLeft, Vector2.Zero, Vector2.One * 1.1f, Color.White, 2f, Color.Black);
-        ActiveFont.Draw(cachedDetailHints, topLeft + new Vector2(0f, 130f), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
+        ActiveFont.Draw(cachedDetailHints, topLeft + new Vector2(0f, HintsOffsetY), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
 
-        Vector2 listTop = topLeft + new Vector2(480f, 130f);
-        EarAidListRenderer.Draw(listTop, events.Count, eventListScroll, VisibleListRows, RowHeight, (index, pos) =>
-        {
-            Color color = index == eventListIndex ? Color.Yellow : Color.White;
-            ActiveFont.DrawOutline(FormatEventPathForDisplay(events[index]), pos, Vector2.Zero, Vector2.One * 0.75f, color, 2f, Color.Black);
-        });
+        Vector2 listTop = topLeft + new Vector2(ListColumnOffsetX, HintsOffsetY);
+        EarAidWrappedList.Draw(
+            listTop,
+            eventDisplayLines,
+            eventItemHeights,
+            eventListScroll,
+            ListViewportHeight,
+            WrappedLineStep,
+            ListRowScale,
+            index => index == eventListIndex ? Color.Yellow : Color.White);
     }
 
     private void RenderDeleteConfirm()
@@ -272,6 +290,7 @@ public class EarAidGroupManageUI : EarAidOverlayUI
         selectedGroup = group;
         eventListIndex = 0;
         eventListScroll = 0;
+        RebuildEventDisplayLines();
         state = UiState.Detail;
     }
 
@@ -310,6 +329,7 @@ public class EarAidGroupManageUI : EarAidOverlayUI
         SoundGroupOperations.DeleteGroup(pendingDeleteGroup);
         pendingDeleteGroup = null;
         selectedGroup = null;
+        RebuildSoundDisplayLines();
         ClampListIndex();
         state = UiState.List;
         EarAidMenu.RefreshMenu();
@@ -327,7 +347,7 @@ public class EarAidGroupManageUI : EarAidOverlayUI
 
         int remaining = selectedGroup.EventPaths.Count;
         eventListIndex = Math.Min(eventListIndex, remaining - 1);
-        EarAidListScroll.EnsureIndexVisible(ref eventListScroll, eventListIndex, remaining, VisibleListRows);
+        RebuildEventDisplayLines();
         EarAidMenu.RefreshMenu();
     }
 
@@ -355,7 +375,7 @@ public class EarAidGroupManageUI : EarAidOverlayUI
         }
 
         listIndex = (listIndex + delta + count) % count;
-        EarAidListScroll.EnsureIndexVisible(ref listScroll, listIndex, count, VisibleListRows);
+        EarAidWrappedList.EnsureIndexVisible(ref listScroll, listIndex, soundItemHeights, ListViewportHeight, WrappedLineStep);
     }
 
     private void MoveEventListSelection(int delta)
@@ -367,7 +387,25 @@ public class EarAidGroupManageUI : EarAidOverlayUI
         }
 
         eventListIndex = (eventListIndex + delta + count) % count;
-        EarAidListScroll.EnsureIndexVisible(ref eventListScroll, eventListIndex, count, VisibleListRows);
+        EarAidWrappedList.EnsureIndexVisible(ref eventListScroll, eventListIndex, eventItemHeights, ListViewportHeight, WrappedLineStep);
+    }
+
+    private void RebuildEventDisplayLines()
+    {
+        eventDisplayLines.Clear();
+        if (selectedGroup == null)
+        {
+            eventItemHeights = Array.Empty<float>();
+            return;
+        }
+
+        foreach (string path in selectedGroup.EventPaths)
+        {
+            eventDisplayLines.Add(EarAidText.WrapToLines(FormatEventPathForDisplay(path), ListMaxWidth, ListRowScale));
+        }
+
+        eventItemHeights = EarAidWrappedList.ComputeHeights(eventDisplayLines, WrappedLineStep);
+        EarAidWrappedList.EnsureIndexVisible(ref eventListScroll, eventListIndex, eventItemHeights, ListViewportHeight, WrappedLineStep);
     }
 
     private void ClampListIndex()
@@ -381,7 +419,18 @@ public class EarAidGroupManageUI : EarAidOverlayUI
         }
 
         listIndex = Math.Min(listIndex, count - 1);
-        EarAidListScroll.EnsureIndexVisible(ref listScroll, listIndex, count, VisibleListRows);
+        EarAidWrappedList.EnsureIndexVisible(ref listScroll, listIndex, soundItemHeights, ListViewportHeight, WrappedLineStep);
+    }
+
+    private void RebuildSoundDisplayLines()
+    {
+        soundDisplayLines.Clear();
+        foreach (SoundGroup group in EarAidModule.Settings.SoundGroups)
+        {
+            soundDisplayLines.Add(EarAidText.WrapToLines(group.DisplayName, ListMaxWidth, ListRowScale));
+        }
+
+        soundItemHeights = EarAidWrappedList.ComputeHeights(soundDisplayLines, WrappedLineStep);
     }
 
     protected override void HandleTextInput(char c)

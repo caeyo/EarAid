@@ -29,7 +29,8 @@ public class EarAidEventSearchUI : EarAidOverlayUI
     private string searchQuery = "";
     private string displayName = "";
     private readonly List<string> filteredPaths = new();
-    private readonly List<string> filteredDisplayPaths = new();
+    private readonly List<string[]> filteredDisplayLines = new();
+    private float[] filteredItemHeights = Array.Empty<float>();
     private readonly HashSet<string> selectedPaths = new();
     private HashSet<string> assignedPaths = new();
 
@@ -53,6 +54,8 @@ public class EarAidEventSearchUI : EarAidOverlayUI
     }
 
     protected override bool IsAcceptingTextInput => searchTyping || namingTyping;
+
+    private const string SearchContinuationIndent = "  ";
 
     private bool IsAddEventsMode => addingToGroup != null;
 
@@ -177,7 +180,7 @@ public class EarAidEventSearchUI : EarAidOverlayUI
 
     private void RenderSearch()
     {
-        Vector2 topLeft = new(120f, 80f);
+        Vector2 topLeft = new(ContentLeft, ContentTop);
 
         ActiveFont.DrawOutline(cachedSearchTitle, topLeft, Vector2.Zero, Vector2.One, Color.White, 2f, Color.Black);
 
@@ -185,21 +188,27 @@ public class EarAidEventSearchUI : EarAidOverlayUI
         ActiveFont.DrawOutline(cachedSearchQueryDisplay, topLeft + new Vector2(0f, 60f), Vector2.Zero, Vector2.One * 0.9f, queryColor, 2f, Color.Black);
 
         string hints = searchTyping ? cachedSearchTypingHints : cachedSearchHints;
-        ActiveFont.Draw(hints, topLeft + new Vector2(0f, 130f), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
+        ActiveFont.Draw(hints, topLeft + new Vector2(0f, HintsOffsetY), Vector2.Zero, Vector2.One * 0.8f, Color.Gray);
 
-        Vector2 listTop = topLeft + new Vector2(480f, 130f);
-        EarAidListRenderer.Draw(listTop, filteredPaths.Count, listScroll, VisibleListRows, RowHeight, (index, pos) =>
-        {
-            string path = filteredPaths[index];
-            bool blocked = assignedPaths.Contains(path) || existingGroupPaths.Contains(path);
+        Vector2 listTop = topLeft + new Vector2(ListColumnOffsetX, HintsOffsetY);
+        EarAidWrappedList.Draw(
+            listTop,
+            filteredDisplayLines,
+            filteredItemHeights,
+            listScroll,
+            ListViewportHeight,
+            WrappedLineStep,
+            ListRowScale,
+            index =>
+            {
+                string path = filteredPaths[index];
+                bool blocked = assignedPaths.Contains(path) || existingGroupPaths.Contains(path);
 
-            Color color = index == listIndex && !searchTyping ? Color.Yellow
-                : blocked ? Color.DarkSlateGray
-                : selectedPaths.Contains(path) ? StagedColor
-                : Color.White;
-
-            ActiveFont.DrawOutline(filteredDisplayPaths[index], pos, Vector2.Zero, Vector2.One * 0.75f, color, 2f, Color.Black);
-        });
+                return index == listIndex && !searchTyping ? Color.Yellow
+                    : blocked ? Color.DarkSlateGray
+                    : selectedPaths.Contains(path) ? StagedColor
+                    : Color.White;
+            });
     }
 
     private void RenderNaming()
@@ -331,21 +340,24 @@ public class EarAidEventSearchUI : EarAidOverlayUI
 
         listIndex = 0;
         listScroll = 0;
-        EarAidListScroll.EnsureIndexVisible(ref listScroll, listIndex, filteredPaths.Count, VisibleListRows);
-        RebuildFilteredDisplayPaths();
+        RebuildFilteredDisplayLines();
         UpdateSearchQueryDisplay();
     }
 
-    private void RebuildFilteredDisplayPaths()
+    private void RebuildFilteredDisplayLines()
     {
-        filteredDisplayPaths.Clear();
-        filteredDisplayPaths.Capacity = Math.Max(filteredDisplayPaths.Capacity, filteredPaths.Count);
+        filteredDisplayLines.Clear();
+        filteredDisplayLines.Capacity = Math.Max(filteredDisplayLines.Capacity, filteredPaths.Count);
 
         foreach (string path in filteredPaths)
         {
             string prefix = selectedPaths.Contains(path) ? "+ " : "  ";
-            filteredDisplayPaths.Add(prefix + FormatEventPathForDisplay(path));
+            string label = prefix + FormatEventPathForDisplay(path);
+            filteredDisplayLines.Add(EarAidText.WrapToLines(label, ListMaxWidth, ListRowScale, SearchContinuationIndent));
         }
+
+        filteredItemHeights = EarAidWrappedList.ComputeHeights(filteredDisplayLines, WrappedLineStep);
+        EarAidWrappedList.EnsureIndexVisible(ref listScroll, listIndex, filteredItemHeights, ListViewportHeight, WrappedLineStep);
     }
 
     private void UpdateSearchQueryDisplay()
@@ -370,7 +382,7 @@ public class EarAidEventSearchUI : EarAidOverlayUI
         }
 
         listIndex = (listIndex + delta + filteredPaths.Count) % filteredPaths.Count;
-        EarAidListScroll.EnsureIndexVisible(ref listScroll, listIndex, filteredPaths.Count, VisibleListRows);
+        EarAidWrappedList.EnsureIndexVisible(ref listScroll, listIndex, filteredItemHeights, ListViewportHeight, WrappedLineStep);
     }
 
     private void PlayPreview()
@@ -399,7 +411,7 @@ public class EarAidEventSearchUI : EarAidOverlayUI
             selectedPaths.Remove(path);
         }
 
-        RebuildFilteredDisplayPaths();
+        RebuildFilteredDisplayLines();
     }
 
     private void SaveAddedEvents()

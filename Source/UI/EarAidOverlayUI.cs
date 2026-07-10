@@ -16,6 +16,17 @@ public abstract class EarAidOverlayUI : Entity
     protected const float RowHeight = 36f;
     protected const string EventPrefix = "event:/";
 
+    protected const float ContentLeft = 120f;
+    protected const float ContentTop = 80f;
+    protected const float HintsOffsetY = 130f;
+    protected const float ListColumnOffsetX = 480f;
+    protected const float ContentRight = 1800f;
+    protected const float ListRowScale = 0.75f;
+    protected const float ListMaxWidth = ContentRight - ContentLeft - ListColumnOffsetX;
+    protected const float ListViewportBottomMargin = 50f;
+    protected static float ListViewportHeight => 1080f - (ContentTop + HintsOffsetY) - ListViewportBottomMargin;
+    protected static float WrappedLineStep => EarAidWrappedList.LineStep(ListRowScale);
+
     public Action OnClose;
 
     protected readonly TextMenu parentMenu;
