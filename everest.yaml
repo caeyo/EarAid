@@ -3,4 +3,4 @@
   DLL: bin/EarAid.dll
   Dependencies:
     - Name: EverestCore
-      Version: 1.5935.0
+      Version: 1.6314.0
