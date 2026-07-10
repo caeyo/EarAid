@@ -59,7 +59,7 @@ EAR_AID_MANAGE_RENAME_HINTS=			(Enter) Save  (Esc) Back
 
 EAR_AID_SEARCH_TITLE=					Add Sound
 EAR_AID_SEARCH_ADD_TITLE=				Add Events
-EAR_AID_SEARCH_HINTS=					(Up/Down)
+EAR_AID_SEARCH_HINTS=					(Up/Down) Navigate
 										(R) Search
 										(P) Play/Stop
 										(A) Add/Remove
